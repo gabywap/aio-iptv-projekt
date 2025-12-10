@@ -23,22 +23,26 @@
         /* NAGŁÓWEK */
         header {
             text-align: center;
-            padding: 30px 20px;
+            /* Zwiększony padding z góry (60px), aby obniżyć logo i opis */
+            padding: 60px 20px 30px;
             background-color: #0f1219;
             border-bottom: 2px solid #3b82f6;
         }
 
-        header h1 {
-            color: #e2e8f0;
-            font-size: 2.5rem;
-            margin: 0;
-            font-weight: 700;
+        /* STYL DLA LOGO (GŁÓWNY TYTUŁ) */
+        .site-logo {
+            max-width: 280px;
+            height: auto;
+            /* Zmniejszony odstęp dolny, aby logo było tuż nad opisem */
+            margin-bottom: 2px; 
+            display: inline-block;
         }
 
         header p {
             color: #94a3b8;
             font-size: 1.1rem;
-            margin-top: 5px;
+            /* Zmniejszony odstęp górny */
+            margin-top: 2px;
             margin-bottom: 25px;
         }
 
@@ -313,8 +317,9 @@
 <body>
 
     <header>
-        <h1>AIO-IPTV.pl</h1>
-        <p>Autorskie wtyczki Enigma2, listy, porady – PawełPawełek</p>
+        <img src="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/logo.png" alt="Logo AIO-IPTV" class="site-logo">
+        
+        <p>Autorskie Wtyczki Enigma 2, Listy Kanałów, Porady - Paweł Pawełek</p>
         
         <div class="nav-buttons">
             <a href="#wtyczki" class="nav-btn">Moje Wtyczki</a>
