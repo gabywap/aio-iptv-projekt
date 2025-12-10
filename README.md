@@ -22,13 +22,3 @@ To repozytorium to kompletny niezbędnik dla użytkowników tunerów z systemem 
 * **Listy Kanałów** – Aktualizowane paczki (Bzyk83, JakiTaki) dla 13°E i 19°E.
 * **Updatery** – MyUpdater oraz PiconUpdater.
 * **Skrypty** – Instalatory pakietów systemowych (ffmpeg, exteplayer3, serviceapp).
-
-## ⚡ Szybka instalacja (Terminal / SSH)
-Chcesz zainstalować AIO Panel jedną komendą? Wpisz w konsoli:
-
-```bash
-wget -qO- --no-check-certificate "[https://raw.githubusercontent.com/OliOli2013/PanelAIO-Plugin/main/installer.sh](https://raw.githubusercontent.com/OliOli2013/PanelAIO-Plugin/main/installer.sh)" | bash
-☕ Wsparcie projektu
-Jeśli moje wtyczki ułatwiają Ci życie, możesz postawić mi wirtualną kawę:
-
-© 2025 PawełPawełek | AIO-IPTV
