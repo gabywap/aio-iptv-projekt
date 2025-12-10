@@ -125,11 +125,10 @@
         /* SPECJALNY STYL PRZEWIJANIA DLA AKTUALNOŚCI */
         #aktualnosci .file-list {
             max-height: 450px; /* Maksymalna wysokość listy */
-            overflow-y: auto;  /* Włącz przewijanie, gdy treść jest za długa */
-            padding-right: 10px; /* Odstęp na suwak */
+            overflow-y: auto;  /* Włącz przewijanie */
+            padding-right: 10px; 
         }
 
-        /* Stylizacja paska przewijania (Chrome/Edge/Safari) */
         #aktualnosci .file-list::-webkit-scrollbar {
             width: 8px;
         }
@@ -228,7 +227,6 @@
             font-weight: bold;
         }
 
-        /* Kod wewnątrz porad */
         .code-snippet {
             display: block;
             background: #0d1117;
@@ -237,6 +235,7 @@
             font-family: 'Courier New', Courier, monospace;
             margin: 2px 0;
             color: #a5d6ff;
+            font-size: 0.9em;
         }
 
         /* STYLE DLA FORMULARZA KONTAKTOWEGO */
@@ -416,12 +415,46 @@
         <div class="card" id="aktualnosci">
             <h2>Aktualności</h2>
             <ul class="file-list">
+                
+                <li style="margin-bottom: 20px;">
+                    <div style="color: #d29922; font-weight: bold;">[Mini-INFORMATOR] IPTV (Enigma2 / OpenATV / Streamlink / DRM)</div>
+                    <div style="color: #8b949e; font-size: 0.9em; margin-top: 5px;">
+                        <strong>Ważne:</strong> Przed wpisaniem komend wykonaj: <span class="code-snippet">opkg update</span><br><br>
+
+                        <strong>1. Streamlinkproxy</strong><br>
+                        Przekierowuje streamy wideo z różnych serwisów do odtwarzania w tunerze.<br>
+                        Instalacja: <span class="code-snippet">opkg install streamlink</span><br><br>
+
+                        <strong>2. streamlinksrv</strong><br>
+                        Serwer (demon) działający w tle, obsługuje żądania odtwarzania.<br>
+                        Instalacja: <span class="code-snippet">opkg install streamlinksrv</span><br><br>
+
+                        <strong>3. Wrappers (OpenATV)</strong><br>
+                        Funkcje-opakowania (część systemu OpenATV). Aby mieć pewność, że masz najnowsze:<br>
+                        Instalacja: <span class="code-snippet">opkg update && opkg upgrade</span><br><br>
+
+                        <strong>4. ServiceApp</strong><br>
+                        Pozwala zmienić player na <strong>Exteplayer3</strong> (zalecany do IPTV).<br>
+                        Instalacja: <span class="code-snippet">opkg install enigma2-plugin-systemplugins-serviceapp exteplayer3</span><br>
+                        (Wymagany restart GUI i zmiana ustawień w menu ServiceApp).<br><br>
+
+                        <strong>5-7. DRM / Widevine</strong><br>
+                        Klucze do odtwarzania treści szyfrowanych (VOD).<br>
+                        Instalacja bibliotek (jeśli dostępne w feedzie): <span class="code-snippet">opkg install libwidevinecdm</span><br>
+                        Alternatywnie dla HiSilicon: <span class="code-snippet">opkg install enigma2-plugin-extensions-chromium</span><br><br>
+
+                        <strong>PODSUMOWANIE (Komenda zbiorcza na start):</strong><br>
+                        Jeśli chcesz przygotować tuner "na gotowo":
+                        <div class="command-box" style="margin-top: 5px;">opkg update && opkg install streamlinksrv enigma2-plugin-systemplugins-serviceapp exteplayer3 && opkg upgrade</div>
+                        Obsługę DRM najlepiej doinstalować z poziomu menu konkretnej wtyczki VOD.
+                    </div>
+                </li>
+
                 <li style="margin-bottom: 20px;">
                     <div style="color: #d29922; font-weight: bold;">[Porada] Jak uruchomić kanały IPTV, kamery z list kanałów</div>
                     <div style="color: #8b949e; font-size: 0.9em; margin-top: 5px;">
-                        <strong>NIEZBĘDNIK IPTV:</strong> Instrukcja instalacji pakietów przez Terminal (Telnet/SSH).<br><br>
-                        <strong>KROK 1: Instalacja pakietów</strong><br>
-                        Zaloguj się do terminala i wpisz komendy (zatwierdzając Enterem):<br>
+                        <strong>NIEZBĘDNIK IPTV:</strong> Instrukcja instalacji pakietów.<br>
+                        <strong>KROK 1:</strong> Zaloguj się do terminala i wpisz:<br>
                         <span class="code-snippet">opkg update</span>
                         <span class="code-snippet">opkg install enigma2-plugin-systemplugins-serviceapp</span>
                         <span class="code-snippet">opkg install exteplayer3</span>
@@ -433,13 +466,7 @@
                         <span class="code-snippet">opkg install enigma2-plugin-extensions-streamlinkwrapper</span>
                         <span class="code-snippet">opkg install streamlinksrv</span><br>
                         
-                        <strong>KROK 2: Konfiguracja</strong><br>
-                        1. Zrób <strong>pełny restart tunera</strong> (Menu → Czuwanie/Restart → Restart).<br>
-                        2. Wejdź w: Menu → Ustawienia → Obsługa i Interfejs → ServiceApp.<br>
-                        3. Zmień ustawienia:<br>
-                        - System odtwarzania Enigma2: <strong>serviceapp</strong><br>
-                        - Player: <strong>exteplayer3</strong><br>
-                        4. Naciśnij Zielony (Zapisz) i zatwierdź restart GUI.
+                        <strong>KROK 2:</strong> Zmień w ServiceApp player na <strong>exteplayer3</strong> i zrestartuj GUI.
                     </div>
                 </li>
 
