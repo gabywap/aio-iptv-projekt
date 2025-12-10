@@ -32,29 +32,3 @@ wget -qO- --no-check-certificate "[https://raw.githubusercontent.com/OliOli2013/
 Jeśli moje wtyczki ułatwiają Ci życie, możesz postawić mi wirtualną kawę:
 
 © 2025 PawełPawełek | AIO-IPTV
-
-
----
-
-### Opcja 2: Minimalistyczna (Konkretna)
-
-```markdown
-# AIO-IPTV Repository
-
-Witaj w oficjalnym repozytorium projektu **AIO-IPTV**. Znajdziesz tutaj moje autorskie wtyczki, skrypty oraz listy kanałów dla dekoderów Enigma2.
-
-## 🌐 Strona domowa
-Wszystkie pliki, opisy oraz poradniki znajdziesz na mojej stronie:
-**[https://olioli2013.github.io/aio-iptv-projekt/](https://olioli2013.github.io/aio-iptv-projekt/)**
-
-## 📦 Zawartość
-* **Plugins:** AIO Panel (Py2/Py3), IPTV Dream, Simple IPTV EPG.
-* **Tools:** Picon Updater, MyUpdater.
-* **Lists:** Listy kanałów satelitarnych (HotBird/Astra).
-
-## 📥 Instalacja
-Skopiuj poniższą komendę do terminala, aby zainstalować główny panel:
-`wget -qO- --no-check-certificate "https://raw.githubusercontent.com/OliOli2013/PanelAIO-Plugin/main/installer.sh" | bash`
-
----
-**Kontakt:** [Telegram](https://t.me/PawelPawelek) | **Wsparcie:** [BuyCoffee](https://buycoffee.to/pawelpawelek)
