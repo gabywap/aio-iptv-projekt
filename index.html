@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIO-IPTV.pl</title>
     <style>
-        /* Płynne przewijanie strony po kliknięciu w menu */
+        /* Płynne przewijanie strony */
         html {
             scroll-behavior: smooth;
         }
@@ -19,7 +19,7 @@
             line-height: 1.6;
         }
 
-        /* NAGŁÓWEK Z PRZYCISKAMI */
+        /* NAGŁÓWEK */
         header {
             text-align: center;
             padding: 30px 20px;
@@ -41,7 +41,7 @@
             margin-bottom: 25px;
         }
 
-        /* Kontener na niebieskie przyciski nawigacyjne */
+        /* PRZYCISKI NAWIGACYJNE */
         .nav-buttons {
             display: flex;
             justify-content: center;
@@ -49,17 +49,16 @@
             flex-wrap: wrap;
         }
 
-        /* Styl wspólny dla linków i przycisku udostępniania */
         .nav-btn {
-            background-color: #3b82f6; /* Niebieski kolor przycisków */
+            background-color: #3b82f6;
             color: white;
             padding: 10px 20px;
             text-decoration: none;
             border-radius: 4px;
             font-weight: 500;
             transition: background-color 0.2s;
-            border: none; /* Usunięcie obramowania dla buttona */
-            cursor: pointer; /* Kursor rączki */
+            border: none;
+            cursor: pointer;
             font-size: 1rem;
             font-family: inherit;
         }
@@ -68,24 +67,24 @@
             background-color: #2563eb;
         }
 
-        /* USTAWIENIA SIATKI (GRID) */
+        /* SIATKA (GRID) */
         .container {
             max-width: 1500px;
             margin: 40px auto;
             padding: 0 20px;
             display: grid;
-            grid-template-columns: 1fr; /* Domyślnie 1 kolumna (telefon) */
+            grid-template-columns: 1fr;
             gap: 20px;
         }
 
-        /* Reguła dla komputerów: WYMUSZA 4 RÓWNE KOLUMNY */
+        /* 4 KOLUMNY NA PC */
         @media (min-width: 1100px) {
             .container {
                 grid-template-columns: repeat(4, 1fr);
             }
         }
         
-        /* Reguła dla tabletów */
+        /* 2 KOLUMNY NA TABLECIE */
         @media (min-width: 700px) and (max-width: 1099px) {
             .container {
                 grid-template-columns: repeat(2, 1fr);
@@ -176,7 +175,6 @@
             text-align: center;
         }
         
-        /* STYL DLA KODU QR */
         .qr-code {
             display: block;
             margin: 15px auto;
@@ -185,6 +183,19 @@
             background: white;
             border-radius: 4px;
             max-width: 150px;
+        }
+
+        /* STYL DLA OKNA KOMEND */
+        .command-box {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            color: #e2e8f0;
+            font-size: 0.9em;
+            word-break: break-all;
+            margin-bottom: 10px;
         }
 
         footer {
@@ -216,6 +227,7 @@
             <a href="#wtyczki" class="nav-btn">Moje Wtyczki</a>
             <a href="#listy" class="nav-btn">Listy kanałów</a>
             <a href="#aktualnosci" class="nav-btn">Porady / Newsy</a>
+            <a href="#terminal" class="nav-btn">Terminal</a>
             <a href="#pliki" class="nav-btn">Pliki (ogólne)</a>
             <a href="#wsparcie" class="nav-btn">Wsparcie</a>
             <button class="nav-btn" onclick="sharePage()">Udostępnij 🔗</button>
@@ -229,35 +241,35 @@
             <p>Najnowsze wersje moich aplikacji.</p>
             <ul class="file-list">
                 <li>
-                    <a class="file-link" href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-panelaio_4.4_all.ipk">
+                    <a class="file-link" href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-panelaio_4.4_all.ipk" title="Wielofunkcyjny panel zarządzania dla Enigma2">
                         <span class="icon">📥</span> AIO Panel 4.4 <span class="badge">Python 3</span>
                     </a>
                     <span class="file-desc">Wersja standardowa</span>
                 </li>
                 <li>
-                    <a class="file-link" href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-panelaio_4.4_py2py3_init_all.ipk">
+                    <a class="file-link" href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-panelaio_4.4_py2py3_init_all.ipk" title="Wersja kompatybilna ze starszymi softami">
                         <span class="icon">📥</span> AIO Panel 4.4 <span class="badge badge-warning">Wylacznie Python 2</span>
                     </a>
                     <span class="file-desc">Starsze systemy</span>
                 </li>
                 <li>
-                    <a class="file-link" href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-iptvdream_5.0_all.ipk">
+                    <a class="file-link" href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-iptvdream_5.0_all.ipk" title="Odtwarzacz IPTV z obsługą EPG">
                         <span class="icon">📥</span> IPTV Dream 5.0
                     </a>
                 </li>
                 <li>
-                    <a class="file-link" href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-piconupdater_1.2_all.ipk">
+                    <a class="file-link" href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-piconupdater_1.2_all.ipk" title="Narzędzie do aktualizacji pikon kanałów">
                         <span class="icon">📥</span> Picon Updater 1.2
                     </a>
                 </li>
                 <li>
-                    <a class="file-link" href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-myupdater_5.1_all.ipk">
+                    <a class="file-link" href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-myupdater_5.1_all.ipk" title="Modyfikowana wersja updatera">
                         <span class="icon">📥</span> MyUpdater v5.1 <span class="badge">Py2/Py3</span>
                     </a>
                     <span class="file-desc">(Modyfikacja)</span>
                 </li>
                  <li>
-                    <a class="file-link" href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-simpleiptvepg_1.3_all.ipk">
+                    <a class="file-link" href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-simpleiptvepg_1.3_all.ipk" title="Proste EPG dla list IPTV">
                         <span class="icon">📥</span> Simple IPTV EPG 1.3
                     </a>
                 </li>
@@ -280,7 +292,6 @@
                     </a>
                     <span class="file-desc">(Aktualizacja: 08.12.2025)</span>
                 </li>
-                
                 <li>
                     <a class="file-link" href="https://github.com/OliOli2013/PanelAIO-Lists/raw/main/archives/jakitaki_1x1_2025-11-30.zip">
                         <span class="icon">📥</span> JakiTaki 13°E
@@ -331,13 +342,30 @@
         <div class="card support-section" id="wsparcie">
             <h2>Wsparcie</h2>
             <p>Wesprzyj moją pracę – Dziękuję za każdą kawę! ☕</p>
-            
             <div style="margin-bottom: 15px;">
                 <a href="https://buycoffee.to/pawelpawelek" target="_blank"><img src="https://buycoffee.to/static/img/share/share-button-dark.png" style="width: 322px; height: 84px; max-width: 100%;" alt="Postaw mi kawę na buycoffee.to"></a>
             </div>
-
             <img src="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/QR_buycoffee.png" alt="Kod QR BuyCoffee" class="qr-code">
         </div>
+
+        <div class="card full-width" id="terminal">
+            <h2>Terminal / Konsola (Komendy SSH)</h2>
+            <p>Skopiuj i wklej w terminalu (Putty), aby zainstalować:</p>
+            
+            <div style="margin-bottom: 15px;">
+                <strong style="color: #58a6ff;">Instalacja AIO Panel (One-Line):</strong>
+                <div class="command-box">
+                    wget -qO- --no-check-certificate "https://github.com/OliOli2013/aio-iptv-projekt/raw/main/installer.sh" | bash
+                </div>
+            </div>
+
+            <div>
+                <strong style="color: #58a6ff;">Instalacja MyUpdater (Przykład):</strong>
+                <div class="command-box">
+                    opkg install https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-myupdater_5.1_all.ipk
+                </div>
+            </div>
+            </div>
 
         <div class="card full-width" id="pliki">
             <h2>Pliki (pozostałe)</h2>
@@ -368,7 +396,6 @@
     <script>
         function sharePage() {
             if (navigator.share) {
-                // Udostępnianie natywne (telefon/tablet)
                 navigator.share({
                     title: 'AIO-IPTV.pl',
                     text: 'Autorskie wtyczki Enigma2, listy, porady – PawełPawełek',
@@ -376,7 +403,6 @@
                 })
                 .catch((error) => console.log('Błąd udostępniania', error));
             } else {
-                // Fallback dla komputerów (kopiowanie do schowka)
                 navigator.clipboard.writeText(window.location.href).then(function() {
                     alert('Link do strony został skopiowany do schowka!');
                 }, function(err) {
