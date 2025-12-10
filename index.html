@@ -5,335 +5,282 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIO-IPTV Repository</title>
     <style>
-        :root {
-            --bg-color: #0d1117;
-            --card-bg: #161b22;
-            --text-main: #c9d1d9;
-            --text-muted: #8b949e;
-            --accent: #58a6ff;
-            --border: #30363d;
-            --highlight: #238636;
-            --warning: #d29922;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f1219; /* Ciemne tło jak na screenie */
+            color: #b0b8c4;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            line-height: 1.6;
         }
 
+        /* NAGŁÓWEK - Poprawiony zgodnie ze zrzutem nr 2 */
         header {
-            background-color: var(--card-bg);
-            border-bottom: 1px solid var(--border);
-            padding: 20px;
             text-align: center;
+            padding: 40px 20px;
+            background-color: #0f1219;
+            border-bottom: 2px solid #3b82f6; /* Niebieska linia */
         }
 
-        h1 {
+        header h1 {
+            color: #e2e8f0;
+            font-size: 2.5rem;
             margin: 0;
-            font-size: 24px;
-            color: var(--accent);
             font-weight: 700;
         }
 
-        .subtitle {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-top: 5px;
-            font-weight: normal;
+        header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            margin-top: 10px;
         }
 
         .container {
-            max-width: 1400px;
-            margin: 20px auto;
-            padding: 0 15px;
-            flex: 1;
-        }
-
-        /* Układ 4 kolumn */
-        .grid-layout {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        @media (max-width: 1100px) {
-            .grid-layout { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 600px) {
-            .grid-layout { grid-template-columns: 1fr; }
         }
 
         .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
+            background-color: #161b22; /* Ciemniejsze tło kart */
+            border: 1px solid #30363d;
             border-radius: 6px;
             padding: 20px;
         }
 
         .card h2 {
+            color: #58a6ff; /* Niebieski nagłówek sekcji */
+            font-size: 1.2rem;
             margin-top: 0;
-            font-size: 18px;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid #30363d;
             padding-bottom: 10px;
-            color: var(--accent);
+            margin-bottom: 15px;
         }
 
-        .list-group {
+        .card p {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        /* Lista plików */
+        .file-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
 
-        .list-item {
+        .file-list li {
             padding: 10px 0;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid #21262d;
             display: flex;
             align-items: center;
-            font-size: 14px;
+        }
+        
+        .file-list li:last-child {
+            border-bottom: none;
         }
 
-        .list-item:last-child { border-bottom: none; }
+        .file-list li a {
+            color: #58a6ff;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .file-list li a:hover {
+            text-decoration: underline;
+        }
 
         .icon {
             margin-right: 10px;
-            font-size: 18px;
+            font-size: 1.2em;
         }
 
-        a {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        a:hover {
-            text-decoration: underline;
-            color: #79c0ff;
-        }
-
-        .date {
-            color: var(--text-muted);
-            font-size: 12px;
-            margin-left: 5px;
-        }
-
-        .tag-info {
-            font-size: 11px;
+        /* Badges (Python 3 etc) */
+        .badge {
+            background-color: #1f6feb;
+            color: white;
             padding: 2px 6px;
             border-radius: 4px;
-            margin-left: 8px;
-            font-weight: bold;
-        }
-        .tag-py3 { background-color: rgba(56, 139, 253, 0.15); color: #58a6ff; }
-        .tag-py2 { background-color: rgba(210, 153, 34, 0.15); color: #d29922; }
-        
-        .qr-section { 
-            text-align: center; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            font-size: 0.75rem;
+            margin-left: 10px;
         }
         
-        /* Styl dla QR kodu */
-        .qr-img {
-            max-width: 150px; /* Nieco mniejszy, żeby zmieścił się z przyciskiem */
-            border-radius: 8px;
-            margin: 15px 0;
-            border: 2px solid var(--border);
+        .badge-warning {
+            background-color: #d29922;
+            color: black;
         }
 
-        /* Styl dla przycisku kawy (responsywny) */
-        .coffee-btn img {
-            max-width: 100%;
-            height: auto;
-            margin-top: 10px;
-        }
-
-        .support-text {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-        }
-
-        footer {
-            background-color: var(--card-bg);
-            border-top: 1px solid var(--border);
-            padding: 20px;
+        /* Sekcja wsparcia */
+        .support-section {
             text-align: center;
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: auto;
         }
-
-        .footer-email {
-            margin-top: 5px;
-            color: var(--accent);
-        }
-
-        .counter-box {
+        
+        .coffee-btn {
+            display: inline-block;
+            background-color: #238636;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
             margin-top: 15px;
-            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
+
+        .qr-code {
+            margin-top: 20px;
+            border: 1px solid #30363d;
+            padding: 5px;
+            background: white; /* Białe tło pod kod QR żeby był czytelny */
+            border-radius: 4px;
+            max-width: 150px;
+            height: auto;
+        }
+
+        /* Stopka */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            font-size: 0.9rem;
+            color: #8b949e;
+            border-top: 1px solid #30363d;
+            margin-top: 40px;
+        }
+        
+        footer a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+
+        /* Sekcja "Pliki pozostałe" na pełną szerokość */
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
     </style>
 </head>
 <body>
 
-<header>
-    <h1>AIO-IPTV Repository</h1>
-    <div class="subtitle">by Paweł Pawełek</div>
-</header>
+    <header>
+        <h1>AIO-IPTV.pl</h1>
+        <p>Autorskie wtyczki Enigma2, listy, porady – PawełPawełek</p>
+    </header>
 
-<div class="container">
-    
-    <div class="grid-layout">
+    <div class="container">
         
         <div class="card">
             <h2>Wtyczki (Plugins)</h2>
-            <p style="font-size: 12px; color: #8b949e; margin-bottom: 15px;">
-                Najnowsze wersje moich aplikacji.
-            </p>
-            <ul class="list-group">
-                
-                <li class="list-item">
-                    <span class="icon">📥</span>
-                    <div>
-                        <a href="enigma2-plugin-extensions-panelaio_4.4_all.ipk">AIO Panel 4.4</a>
-                        <span class="tag-info tag-py3">Python 3</span>
-                        <div style="font-size:11px; color:#8b949e;">Wersja standardowa</div>
-                    </div>
+            <p>Najnowsze wersje moich aplikacji.</p>
+            <ul class="file-list">
+                <li>
+                    <a href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-panelaio_4.4_all.ipk">
+                        <span class="icon">📥</span> AIO Panel 4.4 <span class="badge">Python 3</span>
+                    </a>
+                    <div style="font-size: 0.8em; color: #7d8590; margin-left: 35px;">Wersja standardowa</div>
                 </li>
-
-                <li class="list-item">
-                    <span class="icon">📥</span>
-                    <div>
-                        <a href="enigma2-plugin-extensions-panelaio_4.4_py2py3_init_all.ipk">AIO Panel 4.4</a>
-                        <span class="tag-info tag-py2">Wyłącznie Python 2</span>
-                        <div style="font-size:11px; color:#8b949e;">Starsze dekodery</div>
-                    </div>
+                <li>
+                     <a href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-panelaio_4.4_py2py3_init_all.ipk">
+                        <span class="icon">📥</span> AIO Panel 4.4 <span class="badge badge-warning">Wylacznie Python 2</span>
+                    </a>
+                    <div style="font-size: 0.8em; color: #7d8590; margin-left: 35px;">Starsze dekodery</div>
                 </li>
-
-                <li class="list-item">
-                    <span class="icon">📥</span>
-                    <a href="enigma2-plugin-extensions-iptvdream_5.0_all.ipk">IPTV Dream 5.0</a>
+                <li>
+                    <a href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-iptvdream_5.0_all.ipk">
+                        <span class="icon">📥</span> IPTV Dream 5.0
+                    </a>
                 </li>
-                
-                <li class="list-item">
-                    <span class="icon">📥</span>
-                    <a href="enigma2-plugin-extensions-piconupdater_1.2_all.ipk">Picon Updater 1.2</a>
+                <li>
+                    <a href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-piconupdater_1.2_all.ipk">
+                        <span class="icon">📥</span> Picon Updater 1.2
+                    </a>
                 </li>
-
-                <li class="list-item">
-                    <span class="icon">📥</span>
-                    <a href="enigma2-plugin-extensions-myupdater_5.1_all.ipk">MyUpdater v5.1 <span style="font-size:11px; color:#79c0ff">(Modyfikacja)</span></a>
+                <li>
+                    <a href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-myupdater_5.1_all.ipk">
+                        <span class="icon">📥</span> MyUpdater v5.1 <span style="font-size:0.8em; color:#7d8590;">(Modyfikacja)</span>
+                    </a>
                 </li>
-
-                <li class="list-item">
-                    <span class="icon">📥</span>
-                    <a href="enigma2-plugin-extensions-simpleiptvepg_1.3_all.ipk">Simple IPTV EPG 1.3</a>
+                 <li>
+                    <a href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/enigma2-plugin-extensions-simpleiptvepg_1.3_all.ipk">
+                        <span class="icon">📥</span> Simple IPTV EPG 1.3
+                    </a>
                 </li>
             </ul>
         </div>
 
         <div class="card">
             <h2>Listy kanałów</h2>
-            <p style="font-size: 12px; color: #8b949e; margin-bottom: 15px;">
-                Paczki kanałów (Enigma2).
-            </p>
-            <ul class="list-group">
-                <li class="list-item">
-                    <span class="icon">📥</span>
-                    <a href="https://github.com/OliOli2013/PanelAIO-Lists/raw/main/archives/bzyk83_hb_13E_2025-12-08.zip">Bzyk83 HotBird 13°E <span class="date">(08.12.2025)</span></a>
+            <p>Paczki kanałów (Enigma2).</p>
+            <ul class="file-list">
+                <li>
+                    <a href="#">
+                        <span class="icon">📥</span> Bzyk83 HotBird 13°E <span style="font-size: 0.8em; color:#7d8590;">(08.12.2025)</span>
+                    </a>
                 </li>
-                <li class="list-item">
-                    <span class="icon">📥</span>
-                    <a href="https://github.com/OliOli2013/PanelAIO-Lists/raw/main/archives/bzyk83_dual_13e_19e_2025-12-08.zip">Bzyk83 Dual 13°E + 19°E <span class="date">(08.12.2025)</span></a>
+                <li>
+                    <a href="#">
+                        <span class="icon">📥</span> Bzyk83 Dual 13°E + 19°E <span style="font-size: 0.8em; color:#7d8590;">(08.12.2025)</span>
+                    </a>
                 </li>
-                <li class="list-item">
-                    <span class="icon">📥</span>
-                    <a href="https://github.com/OliOli2013/PanelAIO-Lists/raw/main/archives/jakitaki_1x1_2025-11-30.zip">JakiTaki 13°E <span class="date">(30.11.2025)</span></a>
-                </li>
-                <li class="list-item">
-                    <span class="icon">📥</span>
-                    <a href="https://github.com/OliOli2013/PanelAIO-Lists/raw/main/archives/jakitaki_1x1uhd_2025-11-30.zip">JakiTaki 13°E UHD <span class="date">(30.11.2025)</span></a>
-                </li>
-                <li class="list-item">
-                    <span class="icon">📥</span>
-                    <a href="https://github.com/OliOli2013/PanelAIO-Lists/raw/main/archives/jakitaki_2x1_2025-11-30.zip">JakiTaki 13°E + 19°E <span class="date">(30.11.2025)</span></a>
-                </li>
-                 <li class="list-item">
-                    <span class="icon">📥</span>
-                    <a href="https://github.com/OliOli2013/PanelAIO-Lists/raw/main/archives/jakitaki_2x1uhd_2025-11-30.zip">JakiTaki 13°E + 19°E UHD <span class="date">(30.11.2025)</span></a>
+                <li>
+                    <a href="#">
+                        <span class="icon">📥</span> JakiTaki 13°E (30.11.2025)
+                    </a>
                 </li>
             </ul>
         </div>
 
         <div class="card">
             <h2>Aktualności</h2>
-            <ul class="list-group">
-                <li class="list-item" style="align-items: flex-start;">
-                    <span class="icon" style="color: var(--accent);">➠</span>
-                    <div>
-                        <strong>[10.12.2025]</strong> Aktualizacja repozytorium.<br>
-                        <span style="font-size: 12px; color: #8b949e;">Dodano listy Bzyk83 i JakiTaki.</span>
-                    </div>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 15px;">
+                    <strong style="color: #58a6ff;">[10.12.2025]</strong> Aktualizacja repozytorium.<br>
+                    <span style="color: #8b949e;">Dodano listy Bzyk83 i JakiTaki.</span>
                 </li>
-                <li class="list-item" style="align-items: flex-start;">
-                    <span class="icon" style="color: var(--accent);">➠</span>
-                    <div>
-                        <strong>[Porada]</strong> Jak wgrać wtyczkę?<br>
-                        <span style="font-size: 12px; color: #8b949e;">Wrzuć plik .ipk do folderu /tmp na dekoderze i zainstaluj z menu.</span>
-                    </div>
+                <li>
+                    <strong style="color: #d29922;">[Porada]</strong> Jak wgrać wtyczkę?<br>
+                    <span style="color: #8b949e;">Wrzuć plik .ipk do folderu /tmp na dekoderze i zainstaluj z menu.</span>
                 </li>
             </ul>
         </div>
 
-        <div class="card qr-section">
+        <div class="card support-section">
             <h2>Wsparcie</h2>
-            <div class="support-text">Wesprzyj moją pracę – Dziękuję za każdą kawę! ☕</div>
+            <p>Wesprzyj moją pracę – Dziękuję za każdą kawę! ☕</p>
             
-            <div class="coffee-btn">
-                <a href="https://buycoffee.to/pawelpawelek" target="_blank">
-                    <img src="https://buycoffee.to/static/img/share/share-button-dark.png" style="width: 254px; height: 66px" alt="Postaw mi kawę na buycoffee.to">
-                </a>
-            </div>
+            <a href="https://buycoffee.to/twoja-nazwa" class="coffee-btn" target="_blank">
+                ☕ Postaw kawę
+            </a>
 
-            <img src="QR_buycoffee.png" alt="Kod QR BuyCoffee" class="qr-img">
-            
+            <img src="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/QR_buycoffee.png" alt="Kod QR BuyCoffee" class="qr-code">
+        </div>
+
+        <div class="card full-width">
+            <h2>Pliki (pozostałe)</h2>
+            <ul class="file-list">
+                <li>
+                    <a href="https://github.com/OliOli2013/PanelAIO-Plugin/raw/main/Picony.zip">
+                        <span class="icon">📥</span> Picony Transparent 13°E <span style="font-size: 0.8em; color:#7d8590;">(Paczka ZIP)</span>
+                    </a>
+                </li>
+            </ul>
         </div>
 
     </div>
 
-    <div class="card" style="margin-bottom: 20px;">
-        <h2>Pliki (pozostałe)</h2>
-        <ul class="list-group">
-            <li class="list-item">
-                <span class="icon">📥</span>
-                <a href="picony_transparent_13e.zip">Picony Transparent 13°E <span class="date">(Paczka ZIP)</span></a>
-            </li>
-        </ul>
-    </div>
-
-</div>
-
-<footer>
-    <div>&copy; 2025 AIO-IPTV.pl | PawełPawełek</div>
-    <div class="footer-email">Kontakt: <a href="mailto:msisystem@t.pl" style="color:inherit;">msisystem@t.pl</a></div>
-    
-    <div style="font-size: 11px; color: #555; margin-top: 10px;">Liczba odwiedzin strony:</div>
-    
-    <div class="counter-box">
-        <a href="https://www.hitwebcounter.com/" target="_blank">
-            <img src="https://hitwebcounter.com/counter/counter.php?page=21462572&style=0024&nbdigits=5&type=page&initCount=0" title="Free Tools" Alt="Free Tools" border="0" />
-        </a>
-    </div>
-</footer>
+    <footer>
+        <p>&copy; 2025 AIO-IPTV.pl | PawełPawełek</p>
+        <p>Kontakt: <a href="mailto:msisystem@t.pl">msisystem@t.pl</a></p>
+        <div style="font-family: monospace; letter-spacing: 5px; margin-top: 10px; color: #30363d;">00055</div>
+    </footer>
 
 </body>
 </html>
