@@ -134,6 +134,28 @@
 
         <div class="card" id="aktualnosci" data-aos="fade-up" data-aos-delay="200">
             <h2>Poradniki</h2>
+
+            <div class="accordion-item">
+                <button class="accordion-header">Jak wybrać właściwy plik systemowy (Recovery vs Multi)</button>
+                <div class="accordion-content">
+                    <p>Na stronach wydawców (np. OpenATV) znajdziesz różne wersje plików dla swojego tunera, np.: <span class="code-snippet">_recovery_emmc.zip</span> oraz <span class="code-snippet">_multi.zip</span>. Wybór odpowiedniego jest kluczowy.</p>
+                    <hr style="border-color: #30363d; margin: 15px 0;">
+
+                    <strong style="color: #d29922;">1. Plik recovery_emmc.zip (Pełna instalacja)</strong><br>
+                    <p>To obraz ratunkowy do <strong>czystej instalacji</strong> w pamięci wewnętrznej (eMMC).<br>
+                    <strong>Użyj, jeśli:</strong> instalujesz system po raz pierwszy, chcesz całkowicie usunąć stary system i wgrać nowy, lub Twój dekoder ma błędy i chcesz go przywrócić do działania.<br>
+                    <em>Instalacja: Z pendrive'a w trybie Recovery.</em></p>
+
+                    <strong style="color: #d29922;">2. Plik multi.zip (Dla Multiboot)</strong><br>
+                    <p>Wersja przeznaczona dla użytkowników mających zainstalowany <strong>multiboot</strong> (np. OpenMultiboot lub Barry Allen).<br>
+                    <strong>Użyj, jeśli:</strong> chcesz wgrać system "obok" głównego (np. na USB) i testować różne oprogramowanie (Egami, OpenPLi) bez usuwania obecnego.</p>
+
+                    <strong style="color: #d29922;">3. Co oznacza data? (np. 20251106)</strong><br>
+                    <p>Ciąg cyfr to data kompilacji w formacie: <strong>ROK MIESIĄC DZIEŃ</strong>.<br>
+                    <span class="code-snippet">20251106</span> = 6 listopada 2025.<br>
+                    Wybieraj najnowsze daty (tzw. Nightly build), aby mieć ostatnie poprawki.</p>
+                </div>
+            </div>
             
             <div class="accordion-item">
                 <button class="accordion-header">Powiększenie pamięci w Zgemma H9S / H9.2S (OpenATV 7.6)</button>
