@@ -23,28 +23,20 @@
             line-height: 1.6;
         }
 
-        /* NAGŁÓWEK (Wersja Desktop - domyślna) */
+        /* NAGŁÓWEK (Desktop) */
         header {
             text-align: center;
-            padding: 60px 20px 30px;
+            padding: 40px 20px 20px;
             background-color: #0f1219;
             border-bottom: 2px solid #3b82f6;
         }
 
-        /* STYL DLA LOGO (GŁÓWNY TYTUŁ) */
+        /* STYL DLA LOGO */
         .site-logo {
             max-width: 280px;
             height: auto;
-            margin-bottom: 5px; 
             display: inline-block;
             transition: all 0.3s ease;
-        }
-
-        header p {
-            color: #94a3b8;
-            font-size: 1.1rem;
-            margin-top: 2px;
-            margin-bottom: 25px;
         }
 
         /* PRZYCISKI NAWIGACYJNE */
@@ -53,19 +45,20 @@
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
+            margin-top: 15px;
         }
 
         .nav-btn {
             background-color: #3b82f6;
             color: white;
-            padding: 10px 20px;
+            padding: 8px 16px;
             text-decoration: none;
             border-radius: 4px;
             font-weight: 500;
             transition: background-color 0.2s, transform 0.2s;
             border: none;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-family: inherit;
         }
 
@@ -86,19 +79,14 @@
 
         /* 4 KOLUMNY NA PC */
         @media (min-width: 1100px) {
-            .container {
-                grid-template-columns: repeat(4, 1fr);
-            }
+            .container { grid-template-columns: repeat(4, 1fr); }
         }
-        
         /* 2 KOLUMNY NA TABLECIE */
         @media (min-width: 700px) and (max-width: 1099px) {
-            .container {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .container { grid-template-columns: repeat(2, 1fr); }
         }
 
-        /* 📱 MAŁE EKRANY – kompaktowy nagłówek (NOWOŚĆ) */
+        /* 📱 MAŁE EKRANY – KOMPAKTOWY NAGŁÓWEK & FIX WYSZUKIWARKI */
         @media (max-width: 600px) {
             header {
                 padding: 10px 10px 12px;
@@ -106,19 +94,22 @@
                 top: 0;
                 z-index: 1000;
                 box-shadow: 0 2px 10px rgba(0,0,0,0.4);
-                background-color: #0f1219; /* Zapewnia brak prześwitywania */
+                background-color: #0f1219;
             }
 
             .site-logo {
-                max-width: 140px;
+                max-width: 120px; /* Mniejsze logo */
             }
 
-            header p {
-                display: none; /* ukrywamy opis */
+            /* Mniejszy opis pod logo */
+            header > div > p {
+                font-size: 0.85rem !important;
+                margin-top: 2px !important;
             }
 
             .nav-buttons {
                 gap: 6px;
+                margin-top: 10px;
             }
 
             .nav-btn {
@@ -126,9 +117,13 @@
                 font-size: 0.85rem;
             }
 
-            /* mniejsze odstępy w kartach (poprawka scrollowania) */
             .card {
                 scroll-margin-top: 100px;
+            }
+
+            /* Miejsce pod klawiaturę */
+            .search-container {
+                margin-bottom: 120px; 
             }
         }
 
@@ -195,27 +190,17 @@
             flex-grow: 1;
         }
 
-        /* SPECJALNY STYL PRZEWIJANIA DLA AKTUALNOŚCI */
+        /* PRZEWIJANIE DLA AKTUALNOŚCI */
         #aktualnosci .file-list {
             max-height: 750px; 
             overflow-y: auto;
             padding-right: 10px; 
         }
 
-        #aktualnosci .file-list::-webkit-scrollbar {
-            width: 8px;
-        }
-        #aktualnosci .file-list::-webkit-scrollbar-track {
-            background: #0d1117; 
-            border-radius: 4px;
-        }
-        #aktualnosci .file-list::-webkit-scrollbar-thumb {
-            background: #30363d; 
-            border-radius: 4px;
-        }
-        #aktualnosci .file-list::-webkit-scrollbar-thumb:hover {
-            background: #58a6ff; 
-        }
+        #aktualnosci .file-list::-webkit-scrollbar { width: 8px; }
+        #aktualnosci .file-list::-webkit-scrollbar-track { background: #0d1117; border-radius: 4px; }
+        #aktualnosci .file-list::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+        #aktualnosci .file-list::-webkit-scrollbar-thumb:hover { background: #58a6ff; }
 
         .file-list li {
             padding: 10px 0;
@@ -224,10 +209,7 @@
             flex-direction: column; 
             scroll-margin-top: 10px;
         }
-        
-        .file-list li:last-child {
-            border-bottom: none;
-        }
+        .file-list li:last-child { border-bottom: none; }
 
         .file-link {
             color: #58a6ff;
@@ -237,11 +219,7 @@
             align-items: center;
             transition: color 0.2s;
         }
-
-        .file-link:hover {
-            text-decoration: underline;
-            color: #79c0ff;
-        }
+        .file-link:hover { text-decoration: underline; color: #79c0ff; }
 
         .file-desc {
             font-size: 0.8em; 
@@ -250,10 +228,7 @@
             margin-top: 2px;
         }
 
-        .icon {
-            margin-right: 10px;
-            font-size: 1.2em;
-        }
+        .icon { margin-right: 10px; font-size: 1.2em; }
 
         .badge {
             background-color: #1f6feb;
@@ -263,15 +238,9 @@
             font-size: 0.75rem;
             margin-left: 10px;
         }
-        
-        .badge-warning {
-            background-color: #d29922;
-            color: black;
-        }
+        .badge-warning { background-color: #d29922; color: black; }
 
-        .support-section {
-            text-align: center;
-        }
+        .support-section { text-align: center; }
         
         .qr-code {
             display: block;
@@ -293,7 +262,6 @@
             text-align: justify;
         }
 
-        /* NAWIGACJA W AKTUALNOŚCIACH */
         .news-nav {
             background-color: #0d1117;
             padding: 10px;
@@ -321,13 +289,7 @@
             user-select: all;
             border-left: 3px solid #238636; 
         }
-        
-        .cmd-title {
-            color: #58a6ff;
-            font-size: 0.9em;
-            font-weight: bold;
-        }
-
+        .cmd-title { color: #58a6ff; font-size: 0.9em; font-weight: bold; }
         .code-snippet {
             display: block;
             background: #0d1117;
@@ -339,7 +301,7 @@
             font-size: 0.9em;
         }
 
-        /* STYLE DLA FORMULARZA KONTAKTOWEGO */
+        /* FORMULARZ */
         .contact-form input, .contact-form textarea {
             width: 100%;
             padding: 12px;
@@ -352,17 +314,8 @@
             font-family: inherit;
             transition: border-color 0.3s;
         }
-
-        .contact-form input:focus, .contact-form textarea:focus {
-            outline: none;
-            border-color: #3b82f6;
-        }
-
-        .contact-form textarea {
-            height: 120px;
-            resize: vertical;
-        }
-
+        .contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: #3b82f6; }
+        .contact-form textarea { height: 120px; resize: vertical; }
         .contact-btn {
             background-color: #238636;
             color: white;
@@ -375,12 +328,8 @@
             width: 100%;
             transition: background-color 0.3s;
         }
+        .contact-btn:hover { background-color: #2ea043; }
 
-        .contact-btn:hover {
-            background-color: #2ea043;
-        }
-
-        /* Styl dla przycisku Telegram */
         .telegram-btn {
             display: inline-block;
             background-color: #0088cc;
@@ -395,7 +344,6 @@
         }
         .telegram-btn:hover { background-color: #006699; }
 
-        /* PRZYCISK "WRÓĆ NA GÓRĘ" */
         #topBtn {
             display: none;
             position: fixed;
@@ -413,10 +361,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             transition: background-color 0.3s, transform 0.3s;
         }
-        #topBtn:hover {
-            background-color: #2563eb;
-            transform: scale(1.1);
-        }
+        #topBtn:hover { background-color: #2563eb; transform: scale(1.1); }
 
         footer {
             text-align: center;
@@ -426,15 +371,9 @@
             border-top: 1px solid #30363d;
             margin-top: 40px;
         }
-        
-        footer a {
-            color: #58a6ff;
-            text-decoration: none;
-        }
+        footer a { color: #58a6ff; text-decoration: none; }
 
-        .full-width {
-            grid-column: 1 / -1; 
-        }
+        .full-width { grid-column: 1 / -1; }
     </style>
 </head>
 <body>
@@ -442,9 +381,10 @@
     <button onclick="topFunction()" id="topBtn" title="Wróć na górę">⬆️</button>
 
     <header>
-        <img src="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/logo.png" alt="Logo AIO-IPTV" class="site-logo">
-        
-        <p>Autorskie Wtyczki Enigma 2, Listy Kanałów, Porady - Paweł Pawełek</p>
+        <div style="text-align:center; line-height: 1.2;">
+            <img src="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/logo.png" alt="Logo AIO-IPTV" class="site-logo">
+            <p style="margin: 4px 0 0; font-size: 0.95rem;">Autorskie Wtyczki Enigma 2, Listy Kanałów, Porady - Paweł Pawełek</p>
+        </div>
         
         <div class="nav-buttons">
             <a href="#wtyczki" class="nav-btn">Moje Wtyczki</a>
@@ -792,6 +732,15 @@
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
         }
+
+        // 🔍 Przewijanie do pola wyszukiwania na małych ekranach
+        document.getElementById('searchBox').addEventListener('focus', function () {
+            if (window.innerWidth <= 600) {
+                setTimeout(() => {
+                    this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            }
+        });
     </script>
 
 </body>
