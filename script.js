@@ -43,7 +43,7 @@ function sharePage() {
     }
 }
 
-// Funkcja Kopiowania Komend (Nowość)
+// Funkcja Kopiowania Komend
 function copyToClipboard(elementId) {
     const element = document.getElementById(elementId);
     if (!element) return;
@@ -73,48 +73,54 @@ function copyToClipboard(elementId) {
     });
 }
 
-// Pobieranie daty ostatniej aktualizacji z GitHub (Nowość)
-async function fetchGitHubDate() {
+// POBIERANIE STATYSTYK Z GITHUB (Nowość)
+async function fetchGithubStats() {
+    const user = 'OliOli2013';
+    const repo = 'aio-iptv-projekt';
+    
     try {
-        // Sprawdzamy commity dla głównego folderu z plikami
-        const response = await fetch('https://api.github.com/repos/OliOli2013/aio-iptv-projekt/commits?per_page=1');
-        if (!response.ok) return;
+        // 1. Pobierz info o repozytorium (gwiazdki, rozmiar)
+        const repoRes = await fetch(`https://api.github.com/repos/${user}/${repo}`);
+        if (!repoRes.ok) return; // Jeśli błąd, przerywamy cicho
 
-        const data = await response.json();
-        if (data && data.length > 0) {
-            const dateStr = data[0].commit.author.date;
-            const dateObj = new Date(dateStr);
+        const repoData = await repoRes.json();
+        
+        // Wypełnij pola statystyk (jeśli istnieją w HTML)
+        const elStars = document.getElementById('repo-stars');
+        const elWatchers = document.getElementById('repo-watchers');
+        const elSize = document.getElementById('repo-size');
+        const elDate = document.getElementById('repo-date');
+
+        if(elStars) elStars.innerText = repoData.stargazers_count || 0;
+        if(elWatchers) elWatchers.innerText = repoData.watchers_count || 0;
+        if(elSize) elSize.innerText = (repoData.size / 1024).toFixed(1) + ' MB';
+
+        // 2. Data aktualizacji (używamy push_at dla dokładności)
+        if(elDate && repoData.pushed_at) {
+            const dateObj = new Date(repoData.pushed_at);
             const formattedDate = dateObj.toLocaleDateString('pl-PL', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
+                day: '2-digit', month: '2-digit', year: 'numeric'
             });
-            
-            const infoEl = document.getElementById('repo-date');
-            if (infoEl) {
-                infoEl.innerHTML = `Ostatnia aktualizacja repozytorium: <strong>${formattedDate}</strong>`;
-            }
+            elDate.innerHTML = `Ostatnia aktualizacja repozytorium: <strong>${formattedDate}</strong>`;
         }
-    } catch (error) {
-        console.log("Nie udało się pobrać daty z GitHub", error);
+
+    } catch (e) {
+        console.log('Błąd pobierania statystyk GitHub:', e);
     }
 }
+// Uruchom pobieranie po załadowaniu
+document.addEventListener('DOMContentLoaded', fetchGithubStats);
 
-// Uruchom pobieranie daty po załadowaniu
-document.addEventListener('DOMContentLoaded', fetchGitHubDate);
 
-
-// ULEPSZONA WYSZUKIWARKA (Szuka też w poradach!)
+// ULEPSZONA WYSZUKIWARKA
 function filterList() {
     const input = document.getElementById('searchBox');
     const filter = input.value.toLowerCase();
 
-    // 1. Filtruj listy plików (Wtyczki, Listy kanałów)
+    // 1. Filtruj listy plików
     const lists = document.querySelectorAll('.file-list li');
     lists.forEach(item => {
-        // Pomijamy te wewnątrz akordeonu, bo obsłużymy je niżej
         if (item.closest('.accordion-content')) return;
-
         const txtValue = item.textContent || item.innerText;
         if (txtValue.toLowerCase().indexOf(filter) > -1) {
             item.style.display = "";
@@ -123,7 +129,7 @@ function filterList() {
         }
     });
 
-    // 2. Filtruj Akordeony (Porady/Aktualności)
+    // 2. Filtruj Akordeony
     const accordions = document.querySelectorAll('.accordion-item');
     accordions.forEach(item => {
         const header = item.querySelector('.accordion-header');
@@ -132,12 +138,10 @@ function filterList() {
 
         if (text.indexOf(filter) > -1) {
             item.style.display = "";
-            // Jeśli coś wpisano i znaleziono -> otwórz akordeon
             if (filter !== "") {
                 item.classList.add("active");
                 content.style.maxHeight = content.scrollHeight + "px";
             } else {
-                // Jak wyczyszczono szukanie -> zamknij
                 item.classList.remove("active");
                 content.style.maxHeight = null;
             }
@@ -164,7 +168,7 @@ function topFunction() {
     document.documentElement.scrollTop = 0;
 }
 
-// Auto-hide header na małych ekranach
+// Auto-hide header
 let lastScroll = 0;
 const header = document.querySelector('header');
 
@@ -172,22 +176,19 @@ window.addEventListener('scroll', () => {
     if (window.innerWidth > 600) return; 
 
     const currentScroll = window.pageYOffset;
-
     if (currentScroll <= 0) {
         header.classList.remove('hide');
         return;
     }
-
     if (currentScroll > lastScroll && currentScroll > 50) {
         header.classList.add('hide');
     } else {
         header.classList.remove('hide');
     }
-
     lastScroll = currentScroll;
 });
 
-// Przewijanie do pola wyszukiwania (Fix klawiatury)
+// Przewijanie do pola wyszukiwania
 document.getElementById('searchBox').addEventListener('focus', function () {
     if (window.innerWidth <= 600) {
         setTimeout(() => {
@@ -196,7 +197,7 @@ document.getElementById('searchBox').addEventListener('focus', function () {
     }
 });
 
-// Prosty lokalny licznik wizyt (tylko na tym urządzeniu/przeglądarce)
+// Prosty lokalny licznik wizyt
 document.addEventListener('DOMContentLoaded', () => {
     const counterElement = document.getElementById('local-visit-counter');
     if (!counterElement) return;
