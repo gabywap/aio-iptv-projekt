@@ -29,7 +29,7 @@
             padding: 40px 20px 20px;
             background-color: #0f1219;
             border-bottom: 2px solid #3b82f6;
-            transition: transform 0.3s ease; /* Płynne chowanie */
+            transition: transform 0.3s ease;
         }
 
         .site-logo {
@@ -84,7 +84,7 @@
         @media (max-width: 600px) {
             header {
                 padding: 10px 10px 12px;
-                position: fixed; /* Zmiana na fixed */
+                position: fixed;
                 top: 0;
                 left: 0;
                 right: 0;
@@ -94,31 +94,16 @@
                 transform: translateY(0);
             }
 
-            /* Klasa ukrywająca nagłówek */
-            header.hide {
-                transform: translateY(-100%);
-            }
-
-            /* Dodatkowe miejsce na górze, aby treść nie wjeżdżała pod nagłówek */
-            body {
-                padding-top: 160px; 
-            }
-
+            header.hide { transform: translateY(-100%); }
+            body { padding-top: 160px; }
             .site-logo { max-width: 120px; }
-
-            header > div > p {
-                font-size: 0.85rem !important;
-                margin-top: 2px !important;
-            }
-
+            header > div > p { font-size: 0.85rem !important; margin-top: 2px !important; }
             .nav-buttons { gap: 6px; margin-top: 10px; }
             .nav-btn { padding: 6px 12px; font-size: 0.85rem; }
-
-            /* Miejsce pod klawiaturę w wyszukiwarce */
             .search-container { margin-bottom: 120px; }
         }
 
-        /* KARTA - EFEKTY */
+        /* KARTA */
         .card {
             background-color: #161b22;
             border: 1px solid #30363d;
@@ -126,7 +111,7 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            scroll-margin-top: 120px; /* Dostosowane do fixed header */
+            scroll-margin-top: 120px; 
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
@@ -146,6 +131,71 @@
         }
 
         .card p { font-size: 0.9rem; margin-bottom: 15px; }
+
+        /* AKORDEON (AKTUALNOŚCI) - NOWE STYLE */
+        .accordion-item {
+            border-bottom: 1px solid #21262d;
+        }
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+
+        .accordion-header {
+            width: 100%;
+            padding: 15px 10px;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #d29922; /* Kolor tytułów */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .accordion-header:hover {
+            background-color: #1f242c;
+            color: #e2b714;
+        }
+
+        .accordion-header.blue-header {
+            color: #58a6ff; /* Kolor dla newsów */
+        }
+        .accordion-header.blue-header:hover {
+            color: #79c0ff;
+        }
+
+        /* Strzałka */
+        .accordion-header::after {
+            content: '▼';
+            font-size: 0.7em;
+            transition: transform 0.3s ease;
+            margin-left: 10px;
+            color: #8b949e;
+        }
+
+        /* Obrót strzałki gdy aktywne */
+        .accordion-item.active .accordion-header::after {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            padding: 0 10px;
+            background-color: #0d1117; /* Ciemniejsze tło treści */
+            border-radius: 4px;
+        }
+
+        .accordion-content p, .accordion-content div {
+            margin: 15px 0;
+            font-size: 0.9em;
+            color: #b0b8c4;
+        }
 
         /* WYSZUKIWARKA */
         .search-container {
@@ -168,24 +218,13 @@
         }
         #searchBox:focus { border-color: #3b82f6; }
 
+        /* Pozostałe style list (wtyczki/listy) */
         .file-list {
             list-style: none;
             padding: 0;
             margin: 0;
             flex-grow: 1;
         }
-
-        #aktualnosci .file-list {
-            max-height: 750px; 
-            overflow-y: auto;
-            padding-right: 10px; 
-        }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0d1117; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #58a6ff; }
-
         .file-list li {
             padding: 10px 0;
             border-bottom: 1px solid #21262d;
@@ -232,21 +271,8 @@
             text-align: justify;
         }
 
-        .news-nav {
-            background-color: #0d1117;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            border: 1px solid #30363d;
-            line-height: 1.8;
-        }
-        .news-nav strong { color: #d29922; display: block; margin-bottom: 5px; }
-        .news-nav a { color: #58a6ff; text-decoration: none; margin-right: 12px; display: inline-block; }
-        .news-nav a:hover { text-decoration: underline; color: #79c0ff; }
-
         .command-box {
-            background-color: #0d1117;
+            background-color: #161b22;
             border: 1px solid #30363d;
             padding: 10px;
             border-radius: 6px;
@@ -262,13 +288,14 @@
         .cmd-title { color: #58a6ff; font-size: 0.9em; font-weight: bold; }
         .code-snippet {
             display: block;
-            background: #0d1117;
+            background: #161b22;
             padding: 2px 5px;
             border-radius: 3px;
             font-family: 'Courier New', Courier, monospace;
             margin: 2px 0;
             color: #a5d6ff;
             font-size: 0.9em;
+            border: 1px solid #30363d;
         }
 
         .contact-form input, .contact-form textarea {
@@ -459,110 +486,71 @@
         <div class="card" id="aktualnosci" data-aos="fade-up" data-aos-delay="200">
             <h2>Aktualności</h2>
             
-            <div class="news-nav">
-                <strong>Szybka nawigacja:</strong>
-                <a href="#info-dns">1. DNS</a>
-                <a href="#info-mini-iptv">2. Mini-Informator IPTV</a>
-                <a href="#info-uruchom">3. Jak uruchomić IPTV</a>
-                <a href="#info-wgrac">4. Jak wgrać wtyczkę</a>
+            <div class="accordion-item">
+                <button class="accordion-header">[10.12.2025] Aktualizacja repozytorium</button>
+                <div class="accordion-content">
+                    <p style="color:#58a6ff;">Dodano nowe listy kanałów Bzyk83 i JakiTaki.</p>
+                </div>
             </div>
 
-            <ul class="file-list">
-                
-                <li style="margin-bottom: 20px;" id="info-dns">
-                    <div style="color: #d29922; font-weight: bold;">[Poradnik] Ustawienia DNS w tunerach Enigma 2 – pełny przewodnik</div>
-                    <div style="color: #8b949e; font-size: 0.9em; margin-top: 5px;">
-                        <strong>Co to jest DNS?</strong><br>
-                        To „książka telefoniczna internetu”. Zamienia adresy (np. google.pl) na numery IP.<br><br>
+            <div class="accordion-item">
+                <button class="accordion-header">[Poradnik] Ustawienia DNS w Enigma 2</button>
+                <div class="accordion-content">
+                    <strong>Co to jest DNS?</strong><br>
+                    To „książka telefoniczna internetu”. Zamienia adresy (np. google.pl) na numery IP.<br><br>
+                    <strong>Dlaczego warto zmienić DNS ręcznie?</strong><br>
+                    &bull; <strong>Szybkość:</strong> Szybsze wczytywanie list IPTV i okładek.<br>
+                    &bull; <strong>Bezpieczeństwo:</strong> Blokada phishingu (np. Quad9).<br>
+                    &bull; <strong>Geolokalizacja:</strong> Omijanie blokad (np. Smart DNS).<br><br>
+                    <strong>POPULARNE SERWERY DNS:</strong><br>
+                    &bull; <strong>Google:</strong> <span class="code-snippet">8.8.8.8</span> / <span class="code-snippet">8.8.4.4</span><br>
+                    &bull; <strong>Cloudflare:</strong> <span class="code-snippet">1.1.1.1</span> / <span class="code-snippet">1.0.0.1</span><br>
+                    &bull; <strong>Quad9:</strong> <span class="code-snippet">9.9.9.9</span> (Bezpieczeństwo)<br><br>
+                    <strong>TIP - Jak zmienić w Enigma2?</strong><br>
+                    Wejdź w: <span class="code-snippet">Menu > Ustawienia > Sieć > Ustawienia DNS</span>.<br>
+                    Zmień na wybrane adresy i zapisz. Działa od razu!
+                </div>
+            </div>
 
-                        <strong>Dlaczego warto zmienić DNS ręcznie?</strong><br>
-                        &bull; <strong>Szybkość:</strong> Szybsze wczytywanie list IPTV i okładek.<br>
-                        &bull; <strong>Bezpieczeństwo:</strong> Blokada phishingu (np. Quad9).<br>
-                        &bull; <strong>Prywatność:</strong> Mniejsze śledzenie przez operatora.<br>
-                        &bull; <strong>Geolokalizacja:</strong> Omijanie blokad (np. Smart DNS).<br><br>
+            <div class="accordion-item">
+                <button class="accordion-header">[Mini-INFORMATOR] IPTV (Streamlink / DRM)</button>
+                <div class="accordion-content">
+                    <strong>Ważne:</strong> Przed wpisaniem komend wykonaj: <span class="code-snippet">opkg update</span><br><br>
+                    <strong>1. Streamlinkproxy:</strong> Przekierowuje streamy wideo do odtwarzacza.<br>
+                    Instalacja: <span class="code-snippet">opkg install streamlink</span><br><br>
+                    <strong>2. streamlinksrv:</strong> Serwer (demon) działający w tle.<br>
+                    Instalacja: <span class="code-snippet">opkg install streamlinksrv</span><br><br>
+                    <strong>3. ServiceApp:</strong> Pozwala zmienić player na <strong>Exteplayer3</strong>.<br>
+                    Instalacja: <span class="code-snippet">opkg install enigma2-plugin-systemplugins-serviceapp exteplayer3</span><br><br>
+                    <strong>PODSUMOWANIE (Komenda zbiorcza na start):</strong><br>
+                    <div class="command-box" style="margin-top: 5px;">opkg update && opkg install streamlinksrv enigma2-plugin-systemplugins-serviceapp exteplayer3 && opkg upgrade</div>
+                </div>
+            </div>
 
-                        <strong>POPULARNE SERWERY DNS:</strong><br>
-                        &bull; <strong>Google:</strong> <span class="code-snippet">8.8.8.8</span> / <span class="code-snippet">8.8.4.4</span> (Szybkość)<br>
-                        &bull; <strong>Cloudflare:</strong> <span class="code-snippet">1.1.1.1</span> / <span class="code-snippet">1.0.0.1</span> (Prywatność)<br>
-                        &bull; <strong>Quad9:</strong> <span class="code-snippet">9.9.9.9</span> / <span class="code-snippet">9.9.9.11</span> (Bezpieczeństwo)<br>
-                        &bull; <strong>OpenDNS Home:</strong> <span class="code-snippet">208.67.222.222</span><br>
-                        &bull; <strong>OpenDNS Family:</strong> <span class="code-snippet">208.67.222.123</span> (Kontrola rodzicielska)<br><br>
+            <div class="accordion-item">
+                <button class="accordion-header">[Porada] Jak uruchomić kanały IPTV</button>
+                <div class="accordion-content">
+                    <strong>KROK 1:</strong> Zaloguj się do terminala i wpisz:<br>
+                    <span class="code-snippet">opkg update</span>
+                    <span class="code-snippet">opkg install enigma2-plugin-systemplugins-serviceapp</span>
+                    <span class="code-snippet">opkg install exteplayer3</span>
+                    <span class="code-snippet">opkg install ffmpeg</span>
+                    <span class="code-snippet">opkg install streamlinksrv</span><br>
+                    <strong>KROK 2:</strong> Zmień w ServiceApp player na <strong>exteplayer3</strong> i zrestartuj GUI.
+                </div>
+            </div>
 
-                        <strong>INNE WARTE UWAGI:</strong><br>
-                        &bull; <strong>AdGuard (Bez reklam):</strong> <span class="code-snippet">94.140.14.14</span><br>
-                        &bull; <strong>NextDNS:</strong> Pełna kontrola i własne profile.<br><br>
+            <div class="accordion-item">
+                <button class="accordion-header">[Porada] Jak wgrać wtyczkę?</button>
+                <div class="accordion-content">
+                    1. Skopiuj plik <strong>.ipk</strong> do folderu <span class="code-snippet">/tmp</span> lub na pendrive.<br>
+                    2. Na dekoderze wejdź w:<br>
+                    <strong>Menu → Ustawienia → Menedżer oprogramowania → Instalator lokalnych pakietów ipk</strong><br>
+                    3. Wybierz /tmp lub pendrive, zaznacz plik (OK) i wciśnij zielony przycisk (Instaluj).<br>
+                    4. Po zakończeniu instalacji zrestartuj GUI.
+                </div>
+            </div>
 
-                        <strong>TIP - Jak zmienić w Enigma2?</strong><br>
-                        Wejdź w: <span class="code-snippet">Menu > Ustawienia > Sieć > Ustawienia DNS</span>.<br>
-                        Zmień na wybrane adresy i zapisz. Działa od razu!
-                    </div>
-                </li>
-
-                <li style="margin-bottom: 20px;" id="info-mini-iptv">
-                    <div style="color: #d29922; font-weight: bold;">[Mini-INFORMATOR] IPTV (Enigma2 / OpenATV / Streamlink / DRM)</div>
-                    <div style="color: #8b949e; font-size: 0.9em; margin-top: 5px;">
-                        <strong>Ważne:</strong> Przed wpisaniem komend wykonaj: <span class="code-snippet">opkg update</span><br><br>
-
-                        <strong>1. Streamlinkproxy</strong><br>
-                        Przekierowuje streamy wideo z różnych serwisów do odtwarzania w tunerze.<br>
-                        Instalacja: <span class="code-snippet">opkg install streamlink</span><br><br>
-
-                        <strong>2. streamlinksrv</strong><br>
-                        Serwer (demon) działający w tle, obsługuje żądania odtwarzania.<br>
-                        Instalacja: <span class="code-snippet">opkg install streamlinksrv</span><br><br>
-
-                        <strong>3. Wrappers (OpenATV)</strong><br>
-                        Funkcje-opakowania (część systemu OpenATV). Aby mieć pewność, że masz najnowsze:<br>
-                        Instalacja: <span class="code-snippet">opkg update && opkg upgrade</span><br><br>
-
-                        <strong>4. ServiceApp</strong><br>
-                        Pozwala zmienić player na <strong>Exteplayer3</strong> (zalecany do IPTV).<br>
-                        Instalacja: <span class="code-snippet">opkg install enigma2-plugin-systemplugins-serviceapp exteplayer3</span><br>
-                        (Wymagany restart GUI i zmiana ustawień w menu ServiceApp).<br><br>
-
-                        <strong>5-7. DRM / Widevine</strong><br>
-                        Klucze do odtwarzania treści szyfrowanych (VOD).<br>
-                        Instalacja bibliotek (jeśli dostępne w feedzie): <span class="code-snippet">opkg install libwidevinecdm</span><br>
-                        Alternatywnie dla HiSilicon: <span class="code-snippet">opkg install enigma2-plugin-extensions-chromium</span><br><br>
-
-                        <strong>PODSUMOWANIE (Komenda zbiorcza na start):</strong><br>
-                        Jeśli chcesz przygotować tuner "na gotowo":
-                        <div class="command-box" style="margin-top: 5px;">opkg update && opkg install streamlinksrv enigma2-plugin-systemplugins-serviceapp exteplayer3 && opkg upgrade</div>
-                        Obsługę DRM najlepiej doinstalować z poziomu menu konkretnej wtyczki VOD.
-                    </div>
-                </li>
-
-                <li style="margin-bottom: 20px;" id="info-uruchom">
-                    <div style="color: #d29922; font-weight: bold;">[Porada] Jak uruchomić kanały IPTV, kamery z list kanałów</div>
-                    <div style="color: #8b949e; font-size: 0.9em; margin-top: 5px;">
-                        <strong>NIEZBĘDNIK IPTV:</strong> Instrukcja instalacji pakietów.<br>
-                        <strong>KROK 1:</strong> Zaloguj się do terminala i wpisz:<br>
-                        <span class="code-snippet">opkg update</span>
-                        <span class="code-snippet">opkg install enigma2-plugin-systemplugins-serviceapp</span>
-                        <span class="code-snippet">opkg install exteplayer3</span>
-                        <span class="code-snippet">opkg install ffmpeg</span>
-                        <span class="code-snippet">opkg install python3-youtube-dl</span>
-                        <span class="code-snippet">opkg install python3-yt-dlp</span>
-                        <span class="code-snippet">opkg install enigma2-plugin-extensions-ytdlpwrapper</span>
-                        <span class="code-snippet">opkg install enigma2-plugin-extensions-ytdlwrapper</span>
-                        <span class="code-snippet">opkg install enigma2-plugin-extensions-streamlinkwrapper</span>
-                        <span class="code-snippet">opkg install streamlinksrv</span><br>
-                        
-                        <strong>KROK 2:</strong> Zmień w ServiceApp player na <strong>exteplayer3</strong> i zrestartuj GUI.
-                    </div>
-                </li>
-
-                <li id="info-wgrac">
-                    <div style="color: #d29922; font-weight: bold;">[Porada] Jak wgrać wtyczkę?</div>
-                    <div style="color: #8b949e; font-size: 0.9em;">
-                        Skopiuj plik .ipk do folderu /tmp lub na pendrive.<br>
-                        Na dekoderze wejdź w:<br>
-                        Menu → Ustawienia → Menedżer oprogramowania → Instalator lokalnych pakietów ipk<br>
-                        Następnie wybierz /tmp lub pendrive, zaznacz plik (OK) i wciśnij zielony przycisk (Instaluj).<br>
-                        Po zakończeniu instalacji zrestartuj GUI.
-                    </div>
-                </li>
-            </ul>
         </div>
 
         <div class="card support-section" id="wsparcie" data-aos="fade-up" data-aos-delay="300">
@@ -648,7 +636,27 @@
     <script>
         AOS.init();
 
-        // Funkcja Udostępniania
+        // AKORDEON JS
+        const acc = document.getElementsByClassName("accordion-header");
+        for (let i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                // Zamknij wszystkie inne
+                const currentActive = document.querySelector(".accordion-item.active");
+                if (currentActive && currentActive !== this.parentElement) {
+                    currentActive.classList.remove("active");
+                    currentActive.querySelector(".accordion-content").style.maxHeight = null;
+                }
+
+                this.parentElement.classList.toggle("active");
+                const panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        }
+
         function sharePage() {
             if (navigator.share) {
                 navigator.share({
@@ -666,7 +674,6 @@
             }
         }
 
-        // Funkcja Filtrowania
         function filterList() {
             const input = document.getElementById('searchBox');
             const filter = input.value.toLowerCase();
@@ -685,7 +692,6 @@
             });
         }
 
-        // Funkcja Wróć na górę
         let mybutton = document.getElementById("topBtn");
         window.onscroll = function() {scrollFunction()};
 
@@ -702,33 +708,28 @@
             document.documentElement.scrollTop = 0;
         }
 
-        // Auto-hide header na małych ekranach (ULEPSZONA)
         let lastScroll = 0;
         const header = document.querySelector('header');
 
         window.addEventListener('scroll', () => {
-            if (window.innerWidth > 600) return; // tylko telefon
+            if (window.innerWidth > 600) return; 
 
             const currentScroll = window.pageYOffset;
 
-            // Bufor na górze (żeby nie chowało się od razu)
             if (currentScroll <= 0) {
                 header.classList.remove('hide');
                 return;
             }
 
             if (currentScroll > lastScroll && currentScroll > 50) {
-                // Scroll w dół – ukryj
                 header.classList.add('hide');
             } else {
-                // Scroll w górę – pokaż
                 header.classList.remove('hide');
             }
 
             lastScroll = currentScroll;
         });
 
-        // 🔍 Przewijanie do pola wyszukiwania
         document.getElementById('searchBox').addEventListener('focus', function () {
             if (window.innerWidth <= 600) {
                 setTimeout(() => {
