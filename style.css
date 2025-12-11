@@ -1,4 +1,4 @@
-/* style.css - Arkusz stylów dla AIO-IPTV.pl */
+/* style.css - Arkusz stylów dla AIO-IPTV.pl - WERSJA ULEPSZONA */
 
 html {
     scroll-behavior: smooth;
@@ -6,19 +6,21 @@ html {
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #0f1219;
+    background-color: #0d1117; /* Nieco głębsza czerń */
     color: #b0b8c4;
     margin: 0;
     padding: 0;
     line-height: 1.6;
+    background-image: radial-gradient(circle at 50% 0, #1f242c 0%, #0d1117 60%);
 }
 
 /* NAGŁÓWEK (Desktop) */
 header {
     text-align: center;
     padding: 40px 20px 20px;
-    background-color: #0f1219;
-    border-bottom: 2px solid #3b82f6;
+    background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
+    border-bottom: 1px solid #30363d;
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
     transition: transform 0.3s ease;
 }
 
@@ -27,6 +29,7 @@ header {
     height: auto;
     display: inline-block;
     transition: all 0.3s ease;
+    filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.2));
 }
 
 /* PRZYCISKI NAWIGACYJNE */
@@ -39,22 +42,25 @@ header {
 }
 
 .nav-btn {
-    background-color: #3b82f6;
-    color: white;
+    background-color: #21262d;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
     padding: 8px 16px;
     text-decoration: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-weight: 500;
-    transition: background-color 0.2s, transform 0.2s;
-    border: none;
+    transition: all 0.2s;
     cursor: pointer;
     font-size: 0.95rem;
     font-family: inherit;
 }
 
 .nav-btn:hover {
-    background-color: #2563eb;
-    transform: scale(1.05);
+    background-color: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
 /* SIATKA (GRID) */
@@ -93,21 +99,23 @@ header {
     .search-container { margin-bottom: 120px; }
 }
 
-/* KARTA */
+/* KARTA - EFEKT SZKŁA (GLASSMORPHISM) */
 .card {
-    background-color: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 6px;
+    background-color: rgba(22, 27, 34, 0.7); /* Półprzezroczystość */
+    backdrop-filter: blur(12px); /* Rozmycie tła */
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(48, 54, 61, 0.6);
+    border-radius: 8px;
     padding: 20px;
     display: flex;
     flex-direction: column;
     scroll-margin-top: 120px; 
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     border-color: #58a6ff;
 }
 
@@ -121,6 +129,31 @@ header {
 }
 
 .card p { font-size: 0.9rem; margin-bottom: 15px; }
+
+/* TERMINAL STYLING (Nowość) */
+.terminal-bar {
+    background: #0d1117;
+    border-bottom: 1px solid #30363d;
+    padding: 8px 10px;
+    margin: -20px -20px 15px -20px; /* Rozciągnięcie na całą szerokość karty */
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.terminal-dots { display: flex; gap: 6px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.red { background: #ff5f56; }
+.yellow { background: #ffbd2e; }
+.green { background: #27c93f; }
+
+.terminal-title {
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    color: #7d8590;
+    margin-right: 5px;
+}
 
 /* AKORDEON (AKTUALNOŚCI) */
 .accordion-item {
@@ -144,10 +177,11 @@ header {
     justify-content: space-between;
     align-items: center;
     transition: background-color 0.2s, color 0.2s;
+    border-radius: 4px;
 }
 
 .accordion-header:hover {
-    background-color: #1f242c;
+    background-color: rgba(255, 255, 255, 0.05);
     color: #e2b714;
 }
 
@@ -175,7 +209,7 @@ header {
     overflow: hidden;
     transition: max-height 0.4s ease-out;
     padding: 0 10px;
-    background-color: #0d1117;
+    background-color: rgba(13, 17, 23, 0.5); /* Ciemniejsze tło wewnątrz szkła */
     border-radius: 4px;
 }
 
@@ -202,9 +236,12 @@ header {
     background-color: #0d1117;
     color: #e2e8f0;
     outline: none;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
-#searchBox:focus { border-color: #3b82f6; }
+#searchBox:focus { 
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
 
 /* LISTY */
 .file-list {
@@ -260,21 +297,46 @@ header {
     text-align: justify;
 }
 
+/* KOMENDY Z PRZYCISKIEM KOPIOWANIA */
+.cmd-wrapper {
+    position: relative;
+    margin-bottom: 15px;
+}
+
 .command-box {
     background-color: #0d1117;
     border: 1px solid #30363d;
-    padding: 10px;
+    padding: 12px 80px 12px 12px; /* Miejsce na przycisk z prawej */
     border-radius: 6px;
     font-family: 'Courier New', Courier, monospace;
     color: #e2e8f0;
     font-size: 0.85em;
     word-break: break-all;
-    margin-bottom: 15px;
-    margin-top: 5px;
     user-select: all;
     border-left: 3px solid #238636; 
 }
-.cmd-title { color: #58a6ff; font-size: 0.9em; font-weight: bold; }
+
+.copy-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #21262d;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+}
+
+.copy-btn:hover {
+    background-color: #238636;
+    color: white;
+    border-color: #238636;
+}
+
+.cmd-title { color: #58a6ff; font-size: 0.9em; font-weight: bold; margin-bottom: 4px; }
 .code-snippet {
     display: block;
     background: #0d1117;
@@ -355,6 +417,7 @@ footer {
     color: #8b949e;
     border-top: 1px solid #30363d;
     margin-top: 40px;
+    background-color: #0d1117;
 }
 footer a { color: #58a6ff; text-decoration: none; }
 
