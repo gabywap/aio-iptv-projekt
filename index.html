@@ -18,7 +18,8 @@
     <link rel="icon" type="image/png" href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/logo.png">
     
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css"> </head>
+    <link rel="stylesheet" href="style.css"> 
+</head>
 <body>
 
     <button onclick="topFunction()" id="topBtn" title="Wróć na górę">⬆️</button>
@@ -237,18 +238,6 @@
             <div class="command-box">wget -qO - https://raw.githubusercontent.com/OliOli2013/SimpleIPTV_EPG/main/installer.sh | /bin/sh</div>
         </div>
 
-        <div class="card full-width" id="pliki" data-aos="fade-up">
-            <h2>Pliki (pozostałe)</h2>
-            <ul class="file-list">
-                <li>
-                    <a class="file-link" href="https://github.com/OliOli2013/PanelAIO-Plugin/raw/main/Picony.zip" title="Paczka pikon dla satelity HotBird 13E">
-                        <span class="icon">📥</span> Picony Transparent 13°E
-                    </a>
-                    <span class="file-desc">(Paczka ZIP)</span>
-                </li>
-            </ul>
-        </div>
-
         <div class="card full-width" id="kontakt" data-aos="fade-up">
             <h2>Kontakt</h2>
             <p>Masz pytania lub problem? Napisz do mnie.</p>
@@ -265,62 +254,83 @@
             </div>
         </div>
 
-        <div class="card full-width" id="polityka-prywatnosci" data-aos="fade-up">
-            <h2>Polityka prywatności</h2>
-            <p>
-                Niniejsza strona ma charakter informacyjny i hobbystyczny. Administratorem danych osobowych
-                w rozumieniu RODO jest właściciel projektu AIO-IPTV.pl – Paweł Pawełek, kontakt:
-                <a href="mailto:msisystem@t.pl">msisystem@t.pl</a>.
-            </p>
-            <p>
-                Na stronie nie są wykorzystywane przeze mnie własne pliki cookies do profilowania użytkowników
-                ani do celów reklamowych. Strona jest hostowana w serwisie GitHub Pages, który może przetwarzać
-                podstawowe dane techniczne (np. adres IP, nagłówki przeglądarki) w celu zapewnienia działania
-                i bezpieczeństwa serwisu – szczegółowe informacje znajdują się w polityce prywatności GitHub.
-            </p>
-            <p>
-                Linki zewnętrzne (np. do GitHuba, Telegrama, BuyCoffee, Formspree) prowadzą do innych serwisów,
-                które stosują własne zasady prywatności i cookies. Zachęcam do zapoznania się z ich politykami
-                przed skorzystaniem z tych usług.
-            </p>
+        <div class="card full-width" id="pliki" data-aos="fade-up">
+            <h2>Pliki (pozostałe)</h2>
+            <ul class="file-list">
+                <li>
+                    <a class="file-link" href="https://github.com/OliOli2013/PanelAIO-Plugin/raw/main/Picony.zip" title="Paczka pikon dla satelity HotBird 13E">
+                        <span class="icon">📥</span> Picony Transparent 13°E
+                    </a>
+                    <span class="file-desc">(Paczka ZIP)</span>
+                </li>
+            </ul>
         </div>
 
-        <div class="card full-width" id="rodo" data-aos="fade-up">
-            <h2>Informacja o przetwarzaniu danych (RODO)</h2>
-            <p>
-                1. <strong>Zakres przetwarzanych danych</strong><br>
-                Poprzez formularz kontaktowy przetwarzany jest podany przez Ciebie adres e-mail oraz treść
-                wiadomości. Dane te są niezbędne, aby udzielić odpowiedzi na Twoje zapytanie.
-            </p>
-            <p>
-                2. <strong>Cel i podstawa przetwarzania</strong><br>
-                Dane przetwarzane są wyłącznie w celu udzielenia odpowiedzi na przesłaną wiadomość
-                (art. 6 ust. 1 lit. f RODO – prawnie uzasadniony interes administratora w postaci
-                komunikacji z użytkownikami strony).
-            </p>
-            <p>
-                3. <strong>Odbiorcy danych</strong><br>
-                Formularz kontaktowy obsługuje zewnętrzny usługodawca Formspree (formspree.io), który działa
-                jako podmiot przetwarzający. Treść formularza trafia na serwery tego usługodawcy i dalej
-                na mój adres e-mail. Szczegóły dotyczące przetwarzania danych znajdują się w polityce
-                prywatności Formspree.
-            </p>
-            <p>
-                4. <strong>Okres przechowywania</strong><br>
-                Dane z korespondencji są przechowywane przez czas niezbędny do udzielenia odpowiedzi
-                i załatwienia sprawy, a następnie mogą zostać usunięte, jeżeli nie zachodzi potrzeba
-                dalszego ich przechowywania.
-            </p>
-            <p>
-                5. <strong>Twoje prawa</strong><br>
-                Przysługują Ci m.in. prawa: dostępu do swoich danych, ich sprostowania, żądania usunięcia
-                lub ograniczenia przetwarzania, a także wniesienia sprzeciwu wobec przetwarzania – poprzez
-                kontakt na adres: <a href="mailto:msisystem@t.pl">msisystem@t.pl</a>.
-            </p>
-            <p style="font-size:0.8em; color:#8b949e;">
-                Powyższa informacja ma charakter ogólny i nie stanowi porady prawnej. W razie wątpliwości
-                co do wymogów RODO w Twojej konkretnej sytuacji zalecam konsultację z prawnikiem.
-            </p>
+        <div class="card full-width" id="legal" data-aos="fade-up">
+            <h2>Informacje Prawne</h2>
+            <p>Kliknij poniżej, aby rozwinąć szczegóły dotyczące prywatności i RODO.</p>
+
+            <div class="accordion-item" id="polityka-prywatnosci">
+                <button class="accordion-header">Polityka prywatności</button>
+                <div class="accordion-content">
+                    <p>
+                        Niniejsza strona ma charakter informacyjny i hobbystyczny. Administratorem danych osobowych
+                        w rozumieniu RODO jest właściciel projektu AIO-IPTV.pl – Paweł Pawełek, kontakt:
+                        <a href="mailto:msisystem@t.pl">msisystem@t.pl</a>.
+                    </p>
+                    <p>
+                        Na stronie nie są wykorzystywane przeze mnie własne pliki cookies do profilowania użytkowników
+                        ani do celów reklamowych. Strona jest hostowana w serwisie GitHub Pages, który może przetwarzać
+                        podstawowe dane techniczne (np. adres IP, nagłówki przeglądarki) w celu zapewnienia działania
+                        i bezpieczeństwa serwisu – szczegółowe informacje znajdują się w polityce prywatności GitHub.
+                    </p>
+                    <p>
+                        Linki zewnętrzne (np. do GitHuba, Telegrama, BuyCoffee, Formspree) prowadzą do innych serwisów,
+                        które stosują własne zasady prywatności i cookies. Zachęcam do zapoznania się z ich politykami
+                        przed skorzystaniem z tych usług.
+                    </p>
+                </div>
+            </div>
+
+            <div class="accordion-item" id="rodo">
+                <button class="accordion-header">Informacja o przetwarzaniu danych (RODO)</button>
+                <div class="accordion-content">
+                    <p>
+                        <strong>1. Zakres przetwarzanych danych</strong><br>
+                        Poprzez formularz kontaktowy przetwarzany jest podany przez Ciebie adres e-mail oraz treść
+                        wiadomości. Dane te są niezbędne, aby udzielić odpowiedzi na Twoje zapytanie.
+                    </p>
+                    <p>
+                        <strong>2. Cel i podstawa przetwarzania</strong><br>
+                        Dane przetwarzane są wyłącznie w celu udzielenia odpowiedzi na przesłaną wiadomość
+                        (art. 6 ust. 1 lit. f RODO – prawnie uzasadniony interes administratora w postaci
+                        komunikacji z użytkownikami strony).
+                    </p>
+                    <p>
+                        <strong>3. Odbiorcy danych</strong><br>
+                        Formularz kontaktowy obsługuje zewnętrzny usługodawca Formspree (formspree.io), który działa
+                        jako podmiot przetwarzający. Treść formularza trafia na serwery tego usługodawcy i dalej
+                        na mój adres e-mail. Szczegóły dotyczące przetwarzania danych znajdują się w polityce
+                        prywatności Formspree.
+                    </p>
+                    <p>
+                        <strong>4. Okres przechowywania</strong><br>
+                        Dane z korespondencji są przechowywane przez czas niezbędny do udzielenia odpowiedzi
+                        i załatwienia sprawy, a następnie mogą zostać usunięte, jeżeli nie zachodzi potrzeba
+                        dalszego ich przechowywania.
+                    </p>
+                    <p>
+                        <strong>5. Twoje prawa</strong><br>
+                        Przysługują Ci m.in. prawa: dostępu do swoich danych, ich sprostowania, żądania usunięcia
+                        lub ograniczenia przetwarzania, a także wniesienia sprzeciwu wobec przetwarzania – poprzez
+                        kontakt na adres: <a href="mailto:msisystem@t.pl">msisystem@t.pl</a>.
+                    </p>
+                    <p style="font-size:0.8em; color:#8b949e; border-top: 1px solid #30363d; padding-top: 10px; margin-top: 10px;">
+                        Powyższa informacja ma charakter ogólny i nie stanowi porady prawnej. W razie wątpliwości
+                        co do wymogów RODO w Twojej konkretnej sytuacji zalecam konsultację z prawnikiem.
+                    </p>
+                </div>
+            </div>
         </div>
 
     </div>
