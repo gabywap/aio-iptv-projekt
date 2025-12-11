@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIO-IPTV.pl</title>
     <link rel="icon" type="image/png" href="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/logo.png">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
     <style>
         /* Płynne przewijanie strony */
         html {
@@ -20,27 +23,32 @@
             line-height: 1.6;
         }
 
-        /* NAGŁÓWEK */
+        /* NAGŁÓWEK - STICKY (Przyklejony) */
         header {
             text-align: center;
-            padding: 60px 20px 30px;
-            background-color: #0f1219;
+            padding: 20px 20px 20px; /* Zmniejszony padding, żeby nie zajmował za dużo miejsca */
+            background-color: #0f1219; /* Lekko przezroczyste tło */
             border-bottom: 2px solid #3b82f6;
+            position: sticky; /* Kluczowa zmiana */
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5); /* Cień pod nagłówkiem */
         }
 
-        /* STYL DLA LOGO (GŁÓWNY TYTUŁ) */
+        /* STYL DLA LOGO */
         .site-logo {
-            max-width: 280px;
+            max-width: 200px; /* Nieco mniejsze logo w sticky header */
             height: auto;
             margin-bottom: 5px; 
             display: inline-block;
+            transition: all 0.3s ease;
         }
 
         header p {
             color: #94a3b8;
-            font-size: 1.1rem;
+            font-size: 1rem;
             margin-top: 2px;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
 
         /* PRZYCISKI NAWIGACYJNE */
@@ -54,19 +62,20 @@
         .nav-btn {
             background-color: #3b82f6;
             color: white;
-            padding: 10px 20px;
+            padding: 8px 16px;
             text-decoration: none;
             border-radius: 4px;
             font-weight: 500;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.2s;
             border: none;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-family: inherit;
         }
 
         .nav-btn:hover {
             background-color: #2563eb;
+            transform: scale(1.05); /* Lekkie powiększenie przycisku */
         }
 
         /* SIATKA (GRID) */
@@ -79,20 +88,15 @@
             gap: 20px;
         }
 
-        /* 4 KOLUMNY NA PC */
+        /* RESPONSYWNOŚĆ */
         @media (min-width: 1100px) {
-            .container {
-                grid-template-columns: repeat(4, 1fr);
-            }
+            .container { grid-template-columns: repeat(4, 1fr); }
         }
-        
-        /* 2 KOLUMNY NA TABLECIE */
         @media (min-width: 700px) and (max-width: 1099px) {
-            .container {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .container { grid-template-columns: repeat(2, 1fr); }
         }
 
+        /* KARTA - NOWE EFEKTY */
         .card {
             background-color: #161b22;
             border: 1px solid #30363d;
@@ -100,7 +104,15 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            scroll-margin-top: 20px; 
+            scroll-margin-top: 180px; /* Poprawka na sticky header */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Płynne przejścia */
+        }
+
+        /* EFEKT HOVER NA KARCIE */
+        .card:hover {
+            transform: translateY(-5px); /* Uniesienie */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4); /* Cień */
+            border-color: #58a6ff; /* Zmiana koloru ramki */
         }
 
         .card h2 {
@@ -117,6 +129,31 @@
             margin-bottom: 15px;
         }
 
+        /* WYSZUKIWARKA */
+        .search-container {
+            grid-column: 1 / -1; /* Na całą szerokość */
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        #searchBox {
+            width: 100%;
+            max-width: 600px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 25px;
+            border: 2px solid #30363d;
+            background-color: #0d1117;
+            color: #e2e8f0;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #searchBox:focus {
+            border-color: #3b82f6;
+        }
+
+        /* LISTY I LINKI */
         .file-list {
             list-style: none;
             padding: 0;
@@ -124,66 +161,26 @@
             flex-grow: 1;
         }
 
-        /* SPECJALNY STYL PRZEWIJANIA DLA AKTUALNOŚCI */
         #aktualnosci .file-list {
             max-height: 750px; 
             overflow-y: auto;
             padding-right: 10px; 
-            scroll-behavior: smooth; /* Płynne przewijanie wewnątrz okna */
         }
-
-        #aktualnosci .file-list::-webkit-scrollbar {
-            width: 8px;
-        }
-        #aktualnosci .file-list::-webkit-scrollbar-track {
-            background: #0d1117; 
-            border-radius: 4px;
-        }
-        #aktualnosci .file-list::-webkit-scrollbar-thumb {
-            background: #30363d; 
-            border-radius: 4px;
-        }
-        #aktualnosci .file-list::-webkit-scrollbar-thumb:hover {
-            background: #58a6ff; 
-        }
-
-        /* NOWY STYL: SZYBKA NAWIGACJA W AKTUALNOŚCIACH */
-        .news-nav {
-            background-color: #0d1117;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            border: 1px solid #30363d;
-            line-height: 1.8;
-        }
-        .news-nav strong {
-            color: #d29922;
-            display: block;
-            margin-bottom: 5px;
-        }
-        .news-nav a {
-            color: #58a6ff;
-            text-decoration: none;
-            margin-right: 12px;
-            display: inline-block;
-        }
-        .news-nav a:hover {
-            text-decoration: underline;
-            color: #79c0ff;
-        }
+        /* Pasek przewijania */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0d1117; }
+        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #58a6ff; }
 
         .file-list li {
             padding: 10px 0;
             border-bottom: 1px solid #21262d;
             display: flex;
             flex-direction: column; 
-            scroll-margin-top: 10px; /* Margines przy skoku do kotwicy */
+            scroll-margin-top: 10px;
         }
         
-        .file-list li:last-child {
-            border-bottom: none;
-        }
+        .file-list li:last-child { border-bottom: none; }
 
         .file-link {
             color: #58a6ff;
@@ -191,10 +188,12 @@
             font-weight: 500;
             display: flex;
             align-items: center;
+            transition: color 0.2s;
         }
 
         .file-link:hover {
             text-decoration: underline;
+            color: #79c0ff;
         }
 
         .file-desc {
@@ -204,10 +203,7 @@
             margin-top: 2px;
         }
 
-        .icon {
-            margin-right: 10px;
-            font-size: 1.2em;
-        }
+        .icon { margin-right: 10px; font-size: 1.2em; }
 
         .badge {
             background-color: #1f6feb;
@@ -217,15 +213,10 @@
             font-size: 0.75rem;
             margin-left: 10px;
         }
-        
-        .badge-warning {
-            background-color: #d29922;
-            color: black;
-        }
+        .badge-warning { background-color: #d29922; color: black; }
 
-        .support-section {
-            text-align: center;
-        }
+        /* SEKCJA WSPARCIE */
+        .support-section { text-align: center; }
         
         .qr-code {
             display: block;
@@ -235,7 +226,9 @@
             background: white;
             border-radius: 4px;
             max-width: 150px;
+            transition: transform 0.3s;
         }
+        .qr-code:hover { transform: scale(1.05); }
 
         .support-text {
             font-size: 0.85rem;
@@ -245,6 +238,21 @@
             text-align: justify;
         }
 
+        /* NAWIGACJA W AKTUALNOŚCIACH */
+        .news-nav {
+            background-color: #0d1117;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            border: 1px solid #30363d;
+            line-height: 1.8;
+        }
+        .news-nav strong { color: #d29922; display: block; margin-bottom: 5px; }
+        .news-nav a { color: #58a6ff; text-decoration: none; margin-right: 12px; display: inline-block; }
+        .news-nav a:hover { text-decoration: underline; color: #79c0ff; }
+
+        /* TERMINAL */
         .command-box {
             background-color: #0d1117;
             border: 1px solid #30363d;
@@ -257,14 +265,9 @@
             margin-bottom: 15px;
             margin-top: 5px;
             user-select: all;
+            border-left: 3px solid #238636; /* Zielony pasek ozdobny */
         }
-        
-        .cmd-title {
-            color: #58a6ff;
-            font-size: 0.9em;
-            font-weight: bold;
-        }
-
+        .cmd-title { color: #58a6ff; font-size: 0.9em; font-weight: bold; }
         .code-snippet {
             display: block;
             background: #0d1117;
@@ -276,7 +279,7 @@
             font-size: 0.9em;
         }
 
-        /* STYLE DLA FORMULARZA KONTAKTOWEGO */
+        /* FORMULARZ */
         .contact-form input, .contact-form textarea {
             width: 100%;
             padding: 12px;
@@ -287,18 +290,13 @@
             border-radius: 4px;
             box-sizing: border-box; 
             font-family: inherit;
+            transition: border-color 0.3s;
         }
-
         .contact-form input:focus, .contact-form textarea:focus {
             outline: none;
             border-color: #3b82f6;
         }
-
-        .contact-form textarea {
-            height: 120px;
-            resize: vertical;
-        }
-
+        .contact-form textarea { height: 120px; resize: vertical; }
         .contact-btn {
             background-color: #238636;
             color: white;
@@ -309,12 +307,10 @@
             font-weight: bold;
             font-size: 1rem;
             width: 100%;
+            transition: background-color 0.3s;
         }
-
-        .contact-btn:hover {
-            background-color: #2ea043;
-        }
-
+        .contact-btn:hover { background-color: #2ea043; }
+        
         .telegram-btn {
             display: inline-block;
             background-color: #0088cc;
@@ -325,6 +321,31 @@
             font-weight: bold;
             margin-top: 10px;
             text-align: center;
+            transition: background-color 0.3s;
+        }
+        .telegram-btn:hover { background-color: #006699; }
+
+        /* PRZYCISK "WRÓĆ NA GÓRĘ" */
+        #topBtn {
+            display: none; /* Domyślnie ukryty */
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: #3b82f6;
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 50%;
+            font-size: 18px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        #topBtn:hover {
+            background-color: #2563eb;
+            transform: scale(1.1);
         }
 
         footer {
@@ -335,18 +356,14 @@
             border-top: 1px solid #30363d;
             margin-top: 40px;
         }
-        
-        footer a {
-            color: #58a6ff;
-            text-decoration: none;
-        }
+        footer a { color: #58a6ff; text-decoration: none; }
 
-        .full-width {
-            grid-column: 1 / -1; 
-        }
+        .full-width { grid-column: 1 / -1; }
     </style>
 </head>
 <body>
+
+    <button onclick="topFunction()" id="topBtn" title="Wróć na górę">⬆️</button>
 
     <header>
         <img src="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/logo.png" alt="Logo AIO-IPTV" class="site-logo">
@@ -366,7 +383,11 @@
 
     <div class="container">
         
-        <div class="card" id="wtyczki">
+        <div class="search-container" data-aos="fade-down">
+            <input type="text" id="searchBox" onkeyup="filterList()" placeholder="🔍 Szukaj wtyczki, listy lub porady...">
+        </div>
+
+        <div class="card" id="wtyczki" data-aos="fade-up">
             <h2>Wtyczki (Plugins)</h2>
             <p>Najnowsze wersje moich aplikacji.</p>
             <ul class="file-list">
@@ -406,7 +427,7 @@
             </ul>
         </div>
 
-        <div class="card" id="listy">
+        <div class="card" id="listy" data-aos="fade-up" data-aos-delay="100">
             <h2>Listy kanałów</h2>
             <p>Paczki kanałów (Enigma2).</p>
             <ul class="file-list">
@@ -449,7 +470,7 @@
             </ul>
         </div>
 
-        <div class="card" id="aktualnosci">
+        <div class="card" id="aktualnosci" data-aos="fade-up" data-aos-delay="200">
             <h2>Aktualności</h2>
             
             <div class="news-nav">
@@ -563,7 +584,7 @@
             </ul>
         </div>
 
-        <div class="card support-section" id="wsparcie">
+        <div class="card support-section" id="wsparcie" data-aos="fade-up" data-aos-delay="300">
             <h2>Wsparcie</h2>
             <p>Wesprzyj moją pracę – Dziękuję za każdą kawę! ☕</p>
             <div style="margin-bottom: 15px;">
@@ -580,7 +601,7 @@
             </p>
         </div>
 
-        <div class="card full-width" id="terminal">
+        <div class="card full-width" id="terminal" data-aos="fade-up">
             <h2>Terminal / Konsola (SSH)</h2>
             <p>Skopiuj komendę i wklej w terminalu (np. Putty), aby zainstalować:</p>
             
@@ -600,7 +621,7 @@
             <div class="command-box">wget -qO - https://raw.githubusercontent.com/OliOli2013/SimpleIPTV_EPG/main/installer.sh | /bin/sh</div>
         </div>
 
-        <div class="card full-width" id="kontakt">
+        <div class="card full-width" id="kontakt" data-aos="fade-up">
             <h2>Kontakt</h2>
             <p>Masz pytania lub problem? Napisz do mnie.</p>
             
@@ -616,7 +637,7 @@
             </div>
         </div>
 
-        <div class="card full-width" id="pliki">
+        <div class="card full-width" id="pliki" data-aos="fade-up">
             <h2>Pliki (pozostałe)</h2>
             <ul class="file-list">
                 <li>
@@ -642,7 +663,11 @@
         </div>
     </footer>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        AOS.init();
+
+        // Funkcja Udostępniania
         function sharePage() {
             if (navigator.share) {
                 navigator.share({
@@ -658,6 +683,42 @@
                     alert('Nie udało się skopiować linku.');
                 });
             }
+        }
+
+        // Funkcja Filtrowania
+        function filterList() {
+            const input = document.getElementById('searchBox');
+            const filter = input.value.toLowerCase();
+            const lists = document.querySelectorAll('.file-list');
+
+            lists.forEach(list => {
+                const items = list.getElementsByTagName('li');
+                for (let i = 0; i < items.length; i++) {
+                    const txtValue = items[i].textContent || items[i].innerText;
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                        items[i].style.display = "";
+                    } else {
+                        items[i].style.display = "none";
+                    }
+                }
+            });
+        }
+
+        // Funkcja Wróć na górę
+        let mybutton = document.getElementById("topBtn");
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
         }
     </script>
 
