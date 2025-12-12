@@ -1,5 +1,10 @@
 /* style.css - Arkusz stylów dla AIO-IPTV.pl - WERSJA ULEPSZONA */
 
+/* KLUCZOWA POPRAWKA RESPONSYWNOŚCI - Zapobiega rozjeżdżaniu się strony na mobile */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 html {
     scroll-behavior: smooth;
 }
