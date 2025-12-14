@@ -492,7 +492,7 @@
         <div class="header-stats-container">
             <div>
                 <span class="h-stat-val" id="real-downloads">...</span>
-                <span class="h-stat-label">POBRANIA</span>
+                <span class="h-stat-label">POBRANIA (RELEASE)</span>
             </div>
             <div>
                 <span class="h-stat-val" id="real-users">...</span>
@@ -538,17 +538,9 @@
         <div class="modal-content">
             <button class="modal-close" onclick="closeComments()">×</button>
             <h2 style="color: #58a6ff; margin-top: 0;">💬 Dyskusja (Beta)</h2>
-            <p style="font-size: 0.9em; color: #8b949e;">Dodaj komentarz lub zgłoś błąd. Komentarze są widoczne lokalnie.</p>
-            
-            <div class="comment-list" id="commentsList">
-                </div>
-
-            <div class="comment-form">
-                <input type="text" id="commentName" class="comment-input" placeholder="Twoje imię / Nick">
-                <textarea id="commentBody" class="comment-input" style="height: 80px; resize: vertical;" placeholder="Napisz komentarz..."></textarea>
-                <button class="comment-submit" onclick="addComment()">Wyślij komentarz</button>
-            </div>
-        </div>
+            <p style="font-size: 0.9em; color: #8b949e;">Dodaj komentarz lub zgłoś błąd. Komentarze są publiczne (GitHub Issues).</p>
+            <div id="utterances-container" style="margin-top: 14px;"></div>
+</div>
     </div>
 
     <div class="container">
@@ -1539,7 +1531,28 @@
                     <div class="project-stat-value skeleton" id="repo-size">...</div>
                 </div>
                 <div class="project-stat">
-                    <div class="project-stat-label">Ostatnia aktualizacja</div>
+                    
+                <div class="project-stat">
+                    <div class="project-stat-label">Forki</div>
+                    <div class="project-stat-value skeleton" id="repo-forks">...</div>
+                </div>
+                <div class="project-stat">
+                    <div class="project-stat-label">Otwarte zgłoszenia</div>
+                    <div class="project-stat-value skeleton" id="repo-open-issues">...</div>
+                </div>
+                <div class="project-stat">
+                    <div class="project-stat-label">Pobrania (releases)</div>
+                    <div class="project-stat-value skeleton" id="repo-downloads">...</div>
+                </div>
+                <div class="project-stat">
+                    <div class="project-stat-label">Pliki w repo</div>
+                    <div class="project-stat-value skeleton" id="repo-files">...</div>
+                </div>
+                <div class="project-stat">
+                    <div class="project-stat-label">Pakiety .ipk</div>
+                    <div class="project-stat-value skeleton" id="repo-ipk">...</div>
+                </div>
+<div class="project-stat-label">Ostatnia aktualizacja</div>
                     <div class="project-stat-value" id="repo-date">...</div>
                 </div>
                 <div class="project-stat">
@@ -1549,7 +1562,7 @@
             </div>
             
             <div class="project-stats-chart" style="margin-top: 20px;">
-                <h3 style="font-size: 1rem; color: #58a6ff; margin-bottom: 15px;">📊 Popularność wtyczek</h3>
+                <h3 style="font-size: 1rem; color: #58a6ff; margin-bottom: 15px;">📊 Struktura plików w repozytorium</h3>
                 <div style="max-width: 300px; margin: 0 auto;">
                     <canvas id="popularity-chart" width="300" height="300"></canvas>
                 </div>
@@ -1776,176 +1789,45 @@
         }
     }
 
-    // --- SYSTEM KOMENTARZY LOKALNYCH ---
+    // SYSTEM KOMENTARZY (Utterances - GitHub Issues)
     function openComments() {
         const modal = document.getElementById('commentsModal');
+        if (!modal) return;
         modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Blokuj przewijanie strony
-        renderComments();
-        
-        // Dla urządzeń mobilnych - fokus na pierwsze pole
-        if (window.innerWidth <= 600) {
-            setTimeout(() => {
-                document.getElementById('commentName').focus();
-            }, 300);
-        }
-        
-        // Dodaj event listener dla Escape
+        document.body.style.overflow = 'hidden';
+        loadUtterancesOnce();
         document.addEventListener('keydown', handleEscapeKey);
     }
 
     function closeComments() {
         const modal = document.getElementById('commentsModal');
+        if (!modal) return;
         modal.style.display = 'none';
-        document.body.style.overflow = ''; // Odblokuj przewijanie
+        document.body.style.overflow = '';
         document.removeEventListener('keydown', handleEscapeKey);
     }
-    
+
     function handleEscapeKey(event) {
-        if (event.key === 'Escape') {
-            closeComments();
-        }
-    }
-    
-    // Kliknięcie w tło modala zamyka okno (dla urządzeń mobilnych)
-    document.addEventListener('click', function(event) {
-        const modal = document.getElementById('commentsModal');
-        if (event.target === modal) {
-            closeComments();
-        }
-    });
-
-    function getComments() {
-        const stored = localStorage.getItem('aio_comments');
-        return stored ? JSON.parse(stored) : [
-            { name: "🛠️ Admin", text: "Witamy w sekcji komentarzy! Dajcie znać co myślicie o nowej wersji AIO Panel 4.4. Dzięki za wszystkie opinie! 🚀", date: new Date().toLocaleDateString() },
-            { name: "Krzysiek", text: "Super wtyczka! AIO Panel 4.4 działa świetnie na moim Zgemma H9S. Konfiguracja była prosta dzięki kreatorowi. Polecam! 👍", date: new Date(Date.now() - 86400000).toLocaleDateString() },
-            { name: "Mariusz", text: "IPTV Dream 6.0 to jest to! W końcu działają mi wszystkie kanały bez przycięć. Dzięki za całą robotę! 📺", date: new Date(Date.now() - 172800000).toLocaleDateString() },
-            { name: "Anonim", text: "Czy ktoś wie jak ustawić EPG dla kanałów IPTV? Mam problem z ramówką na niektórych stacjach.", date: new Date(Date.now() - 259200000).toLocaleDateString() },
-            { name: "Ewa", text: "Picon Updater 1.2 ściąga loga bardzo szybko! W końcu mam ładne ikonki do wszystkich kanałów. Dzięki! ✨", date: new Date(Date.now() - 345600000).toLocaleDateString() },
-            { name: "Robert", text: "MyUpdater 5.1 - genialne narzędzie! Wszystko aktualizowane automatycznie. Oszczędza mnóstwo czasu. 🔧", date: new Date(Date.now() - 432000000).toLocaleDateString() },
-            { name: "Piotr", text: "Poradniki są super napisane! Dzięki nim wgrałem OpenATV 7.6 na Zgemma H9S bez problemu. 📚", date: new Date(Date.now() - 518400000).toLocaleDateString() }
-        ];
+        if (event.key === 'Escape') closeComments();
     }
 
-    function addComment() {
-        const nameInput = document.getElementById('commentName');
-        const bodyInput = document.getElementById('commentBody');
-        const name = nameInput.value.trim() || "Anonim";
-        const text = bodyInput.value.trim();
+    function loadUtterancesOnce() {
+        const container = document.getElementById('utterances-container');
+        if (!container) return;
+        if (container.dataset.loaded === '1') return;
 
-        if(!text) { 
-            // Lepsze powiadomienie dla urządzeń mobilnych
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: #f85149;
-                color: white;
-                padding: 10px 20px;
-                border-radius: 6px;
-                z-index: 3000;
-                font-size: 0.9rem;
-                animation: slideDown 0.3s ease;
-            `;
-            notification.textContent = "Wpisz treść komentarza!";
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
-                }
-            }, 3000);
-            
-            bodyInput.focus();
-            return; 
-        }
+        const s = document.createElement('script');
+        s.src = 'https://utteranc.es/client.js';
+        s.async = true;
+        s.setAttribute('repo', 'OliOli2013/aio-iptv-projekt');
+        s.setAttribute('issue-term', 'pathname');
+        s.setAttribute('theme', 'github-dark');
+        s.setAttribute('crossorigin', 'anonymous');
+        container.appendChild(s);
 
-        const comments = getComments();
-        comments.unshift({ 
-            name: name, 
-            text: text, 
-            date: new Date().toLocaleString() 
-        });
-        
-        localStorage.setItem('aio_comments', JSON.stringify(comments));
-        renderComments();
-        bodyInput.value = "";
-        
-        // Sukces - przewiń do góry listy komentarzy
-        const commentList = document.getElementById('commentsList');
-        commentList.scrollTop = 0;
-        
-        // Opcjonalnie: pokaż powiadomienie o sukcesie
-        if (window.innerWidth <= 600) {
-            const successNote = document.createElement('div');
-            successNote.style.cssText = `
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                background: #238636;
-                color: white;
-                padding: 8px 15px;
-                border-radius: 6px;
-                font-size: 0.8rem;
-                animation: fadeInOut 2s ease;
-                z-index: 10;
-            `;
-            successNote.textContent = "✓ Komentarz dodany!";
-            document.querySelector('.modal-content').style.position = 'relative';
-            document.querySelector('.modal-content').appendChild(successNote);
-            
-            setTimeout(() => {
-                if (successNote.parentNode) {
-                    successNote.parentNode.removeChild(successNote);
-                }
-            }, 2000);
-        }
+        container.dataset.loaded = '1';
     }
 
-    function renderComments() {
-        const list = document.getElementById('commentsList');
-        const comments = getComments();
-        
-        if (comments.length === 0) {
-            list.innerHTML = `
-                <div style="text-align: center; padding: 20px; color: #8b949e; font-style: italic;">
-                    <span style="font-size: 2rem; display: block; margin-bottom: 10px;">💬</span>
-                    Brak komentarzy. Bądź pierwszy!
-                </div>
-            `;
-            return;
-        }
-        
-        list.innerHTML = comments.map((c, index) => `
-            <div class="comment-item" style="animation-delay: ${index * 0.1}s">
-                <div class="comment-header">
-                    <strong>${c.name}</strong>
-                    <span>${c.date}</span>
-                </div>
-                <div class="comment-text">${c.text}</div>
-            </div>
-        `).join('');
-        
-        // Dla urządzeń mobilnych - animuj liczbę komentarzy
-        if (window.innerWidth <= 600 && comments.length > 0) {
-            const commentCount = document.createElement('div');
-            commentCount.style.cssText = `
-                text-align: center;
-                color: #58a6ff;
-                font-size: 0.85rem;
-                margin-bottom: 15px;
-                font-weight: bold;
-            `;
-            commentCount.textContent = `${comments.length} komentarz${comments.length === 1 ? '' : comments.length < 5 ? 'e' : 'y'}`;
-            
-            if (list.firstChild) {
-                list.insertBefore(commentCount, list.firstChild);
-            }
-        }
-    }
 
     // --- FAKTYCZNE STATYSTYKI Z GITHUB API ---
     async function getRealStats() {

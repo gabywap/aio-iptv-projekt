@@ -7,6 +7,8 @@ html, body {
     overflow-x: hidden;
 }
 
+img, video, canvas { max-width: 100%; height: auto; }
+
 *, *::before, *::after {
     box-sizing: border-box;
 }
@@ -26,7 +28,7 @@ body {
 }
 
 /* NAGŁÓWEK */
-header {
+header:not(.hero-header) {
     text-align: center;
     padding: 40px 20px 20px;
     background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
@@ -110,7 +112,7 @@ header {
 
 /* MAŁE EKRANY */
 @media (max-width: 600px) {
-    header {
+    header.mobile-fixed {
         padding: 10px 10px 12px;
         position: fixed;
         top: 0;
@@ -121,9 +123,8 @@ header {
         background-color: #0f1219;
         transform: translateY(0);
     }
-
-    header.hide { transform: translateY(-100%); }
-    body { padding-top: 160px; }
+    header.mobile-fixed.hide { transform: translateY(-100%); }
+    body.fixed-header { padding-top: 160px; }
     
     .site-logo { max-width: 120px; }
     .xmas-decor { font-size: 1.5rem; gap: 5px; } /* Mniejsze ozdoby na telefonie */
@@ -132,6 +133,14 @@ header {
     .nav-buttons { gap: 6px; margin-top: 10px; }
     .nav-btn { padding: 6px 12px; font-size: 0.85rem; }
     .search-container { margin-bottom: 120px; }
+
+    /* RESPONSIVE TOP BAR / HERO */
+    .top-info-bar { flex-wrap: wrap; gap: 8px; }
+    .status-right { flex-wrap: wrap; justify-content: flex-end; }
+    .header-stats-container { flex-wrap: wrap; justify-content: center; gap: 14px; }
+    .header-stats-container > div { min-width: 120px; }
+    .comment-modal-content { width: min(520px, calc(100vw - 20px)); max-height: calc(100vh - 24px); overflow: auto; }
+    .ad-placeholder { min-height: auto !important; }
 }
 
 /* KARTA */

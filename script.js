@@ -93,47 +93,127 @@ function animateNumber(element, target) {
 async function fetchGithubStats() {
     const user = 'OliOli2013';
     const repo = 'aio-iptv-projekt';
-    
+
     const statusWrap = document.getElementById('github-status');
     const statusLabel = document.getElementById('github-status-label');
 
+    // Helpers
+    const setSkeletonOff = (el) => el && el.classList && el.classList.remove('skeleton');
+    const setText = (id, text) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        setSkeletonOff(el);
+        el.textContent = text;
+    };
+    const setNumber = (id, value) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        setSkeletonOff(el);
+        if (typeof animateNumber === 'function') {
+            animateNumber(el, Number(value) || 0);
+        } else {
+            el.textContent = String(Number(value) || 0);
+        }
+    };
+
     try {
         const repoRes = await fetch(`https://api.github.com/repos/${user}/${repo}`);
-        if (!repoRes.ok) {
-            throw new Error('HTTP ' + repoRes.status);
-        }
-
+        if (!repoRes.ok) throw new Error('HTTP ' + repoRes.status);
         const repoData = await repoRes.json();
-        
-        const elStars = document.getElementById('repo-stars');
-        const elWatchers = document.getElementById('repo-watchers');
-        const elSize = document.getElementById('repo-size');
-        const elDate = document.getElementById('repo-date');
 
-        if (elStars) {
-            elStars.classList.remove('skeleton');
-            animateNumber(elStars, repoData.stargazers_count || 0);
-        }
-        if (elWatchers) {
-            elWatchers.classList.remove('skeleton');
-            animateNumber(elWatchers, repoData.watchers_count || 0);
-        }
-        if (elSize) {
-            elSize.classList.remove('skeleton');
-            const sizeMb = (repoData.size / 1024);
-            elSize.textContent = sizeMb.toFixed(1) + ' MB';
+        // Releases downloads (real GitHub metric)
+        let totalDownloads = 0;
+        try {
+            const releasesRes = await fetch(`https://api.github.com/repos/${user}/${repo}/releases`);
+            if (releasesRes.ok) {
+                const releasesData = await releasesRes.json();
+                if (Array.isArray(releasesData)) {
+                    releasesData.forEach(release => {
+                        (release.assets || []).forEach(asset => {
+                            totalDownloads += Number(asset.download_count || 0);
+                        });
+                    });
+                }
+            }
+        } catch (_) { /* ignore */ }
+
+        // Repo core stats (cards)
+        setNumber('repo-stars', repoData.stargazers_count || 0);
+        // "watchers_count" == stars; subscribers_count is actual watchers (requires no extra scope and is returned)
+        setNumber('repo-watchers', (repoData.subscribers_count ?? repoData.watchers_count) || 0);
+        setNumber('repo-forks', repoData.forks_count || 0);
+        setNumber('repo-open-issues', repoData.open_issues_count || 0);
+        setNumber('repo-downloads', totalDownloads || 0);
+
+        // Size in MB
+        const sizeMb = (Number(repoData.size || 0) / 1024);
+        setText('repo-size', `${sizeMb.toFixed(2)} MB`);
+
+        // Updated date
+        if (repoData.updated_at) {
+            const d = new Date(repoData.updated_at);
+            const formatted = d.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: '2-digit' });
+            setText('repo-date', formatted);
         }
 
-        if (elDate && repoData.pushed_at) {
-            const dateObj = new Date(repoData.pushed_at);
-            const formattedDate = dateObj.toLocaleDateString('pl-PL', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
-            elDate.textContent = formattedDate;
+        // Header stats (hero)
+        const heroDownloads = document.getElementById('real-downloads');
+        const heroCommunity = document.getElementById('real-users');
+        const heroSupport = document.getElementById('real-support');
+
+        if (heroDownloads) heroDownloads.textContent = String(totalDownloads || 0);
+        if (heroCommunity) heroCommunity.textContent = String((repoData.stargazers_count || 0) + (repoData.forks_count || 0));
+        if (heroSupport) {
+            const openIssues = Number(repoData.open_issues_count || 0);
+            heroSupport.textContent = openIssues > 0 ? `${openIssues} ZGŁOSZEŃ` : '24/7 ONLINE';
         }
 
+        // File/tree stats + chart data
+        let fileCount = 0;
+        let ipkCount = 0;
+        const extMap = Object.create(null);
+
+        try {
+            const branch = repoData.default_branch || 'main';
+            const treeRes = await fetch(`https://api.github.com/repos/${user}/${repo}/git/trees/${branch}?recursive=1`);
+            if (treeRes.ok) {
+                const treeData = await treeRes.json();
+                const entries = Array.isArray(treeData.tree) ? treeData.tree : [];
+                entries.forEach(e => {
+                    if (e.type !== 'blob' || !e.path) return;
+                    fileCount += 1;
+                    const path = String(e.path);
+                    if (path.toLowerCase().endsWith('.ipk')) ipkCount += 1;
+
+                    const parts = path.split('/');
+                    const filename = parts[parts.length - 1];
+                    const dot = filename.lastIndexOf('.');
+                    const ext = (dot >= 0 ? filename.slice(dot + 1) : 'brak').toLowerCase();
+                    extMap[ext] = (extMap[ext] || 0) + 1;
+                });
+            }
+        } catch (_) { /* ignore */ }
+
+        if (fileCount > 0) setNumber('repo-files', fileCount);
+        if (ipkCount >= 0) setNumber('repo-ipk', ipkCount);
+
+        // Update chart: top 6 extensions + "inne"
+        const entries = Object.entries(extMap).sort((a, b) => b[1] - a[1]);
+        if (entries.length) {
+            const top = entries.slice(0, 6);
+            const rest = entries.slice(6).reduce((s, x) => s + x[1], 0);
+            const labels = top.map(x => x[0]);
+            const values = top.map(x => x[1]);
+            if (rest > 0) {
+                labels.push('inne');
+                values.push(rest);
+            }
+            if (typeof renderFileChart === 'function') {
+                renderFileChart(labels, values);
+            }
+        }
+
+        // Status badge
         if (statusWrap && statusLabel) {
             statusWrap.classList.remove('error');
             statusWrap.classList.add('ok');
@@ -149,6 +229,7 @@ async function fetchGithubStats() {
         }
     }
 }
+
 
 
 // ULEPSZONA WYSZUKIWARKA
@@ -324,6 +405,67 @@ async function checkServiceStatus() {
 }
 
 // Dodatkowe inicjalizacje po załadowaniu DOM
+
+
+async function fetchWeatherReal() {
+    const iconEl = document.getElementById('weather-icon');
+    const tempEl = document.getElementById('weather-temp');
+    if (!iconEl || !tempEl) return;
+
+    iconEl.textContent = '⏳';
+    tempEl.textContent = '...';
+
+    const getPosition = () => new Promise((resolve) => {
+        if (!navigator.geolocation) return resolve(null);
+        navigator.geolocation.getCurrentPosition(
+            (pos) => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+            () => resolve(null),
+            { enableHighAccuracy: false, timeout: 4000, maximumAge: 600000 }
+        );
+    });
+
+    const coords = (await getPosition()) || { lat: 52.2297, lon: 21.0122 }; // fallback: Warszawa
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(coords.lat)}&longitude=${encodeURIComponent(coords.lon)}&current_weather=true&timezone=auto`;
+
+    try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+
+        let temp = null;
+        let code = null;
+
+        if (data && data.current_weather) {
+            temp = data.current_weather.temperature;
+            code = data.current_weather.weathercode;
+        } else if (data && data.current) {
+            temp = data.current.temperature_2m;
+            code = data.current.weather_code;
+        }
+
+        if (temp === null || temp === undefined) throw new Error('No temperature');
+
+        tempEl.textContent = `${Math.round(Number(temp))}°C`;
+        iconEl.textContent = mapWeatherCodeToIcon(Number(code));
+
+    } catch (e) {
+        // Fallback: show unknown
+        iconEl.textContent = '☁️';
+        tempEl.textContent = '—';
+    }
+}
+
+function mapWeatherCodeToIcon(code) {
+    if (code === 0) return '☀️';
+    if (code >= 1 && code <= 3) return '🌤️';
+    if (code === 45 || code === 48) return '🌫️';
+    if ((code >= 51 && code <= 57) || (code >= 61 && code <= 67)) return '🌧️';
+    if (code >= 71 && code <= 77) return '❄️';
+    if (code >= 80 && code <= 82) return '🌦️';
+    if (code >= 95 && code <= 99) return '⛈️';
+    return '☁️';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Tryb jasny / ciemny
     const themeToggle = document.getElementById('themeToggle');
@@ -351,6 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Statystyki GitHuba + status usług
     fetchGithubStats();
+    fetchWeatherReal();
     checkServiceStatus();
 
     // Etykieta czasu dla przycisku "Wróć na górę"
@@ -472,7 +615,8 @@ function loadQuiz() {
     const questionEl = document.getElementById('quiz-question');
     const resultEl = document.getElementById('quiz-result');
     const progressEl = document.querySelector('.quiz-progress-fill');
-    
+
+    if (!questionEl || !resultEl || !progressEl) return;
     if (currentQuiz >= quizData.length) {
         showResult();
         return;
@@ -570,76 +714,60 @@ function restartQuiz() {
 
 // Initialize quiz when page loads
 document.addEventListener('DOMContentLoaded', () => {
-    loadQuiz();
+    if (document.getElementById('quiz-question')) {
+        loadQuiz();
+    }
     initRatings();
     initParticles();
     initChart();
 });
 
 // Chart.js initialization
-function initChart() {
-    if (typeof Chart !== 'undefined') {
-        const ctx = document.getElementById('popularity-chart');
-        if (ctx) {
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['AIO Panel', 'IPTV Dream', 'MyUpdater', 'Picon Updater', 'Simple EPG'],
-                    datasets: [{
-                        data: [45, 38, 32, 28, 15],
-                        backgroundColor: [
-                            'rgba(88, 166, 255, 0.8)',
-                            'rgba(35, 134, 54, 0.8)',
-                            'rgba(210, 153, 34, 0.8)',
-                            'rgba(248, 81, 73, 0.8)',
-                            'rgba(137, 87, 229, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(88, 166, 255, 1)',
-                            'rgba(35, 134, 54, 1)',
-                            'rgba(210, 153, 34, 1)',
-                            'rgba(248, 81, 73, 1)',
-                            'rgba(137, 87, 229, 1)'
-                        ],
-                        borderWidth: 2,
-                        hoverOffset: 10
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '60%',
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: '#8b949e',
-                                font: {
-                                    size: 12
-                                },
-                                padding: 15
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: '#161b22',
-                            titleColor: '#58a6ff',
-                            bodyColor: '#c9d1d9',
-                            borderColor: '#30363d',
-                            borderWidth: 1,
-                            callbacks: {
-                                label: function(context) {
-                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                    const percentage = ((context.parsed * 100) / total).toFixed(1);
-                                    return `${context.label}: ${context.parsed} tys. pobrań (${percentage}%)`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
+// Chart.js initialization
+let __aioFileChart = null;
+
+function renderFileChart(labels, values) {
+    if (typeof Chart === 'undefined') return;
+    const canvas = document.getElementById('popularity-chart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    if (__aioFileChart) {
+        try { __aioFileChart.destroy(); } catch (_) {}
+        __aioFileChart = null;
     }
+
+    __aioFileChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: values
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { color: '#c9d1d9' } },
+                tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.raw}` } }
+            }
+        }
+    });
 }
+
+function initChart() {
+    // Default chart (if GitHub file tree isn't available yet)
+    if (typeof Chart === 'undefined') return;
+    const canvas = document.getElementById('popularity-chart');
+    if (!canvas) return;
+
+    renderFileChart(
+        ['ipk', 'py', 'js', 'css', 'html', 'inne'],
+        [0, 0, 0, 0, 0, 0]
+    );
+}
+
 
 // Particles background
 function initParticles() {
