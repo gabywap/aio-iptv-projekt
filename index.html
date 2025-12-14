@@ -690,9 +690,26 @@
                 <button class="copy-btn" onclick="copyToClipboard('generator-output')">📋 Kopiuj</button>
             </div>
 
-            <p class="generator-note">
-                Tip: możesz wkleić tę jedną komendę w terminalu – kolejne instalatory uruchomią się po sobie dzięki operatorowi <code>&amp;&amp;</code>.
-            </p>
+            <div class="generator-note" style="margin-top: 20px; text-align: left; background: rgba(48, 54, 61, 0.4); padding: 15px; border-radius: 6px; border-left: 4px solid #58a6ff;">
+                <strong style="font-size: 1.1em; color: #58a6ff; display: block; margin-bottom: 10px;">💡 Poradnik instalacji wtyczek (Terminal / PuTTy)</strong>
+                
+                <strong style="color: #d29922;">A) Przez OpenWebif (Terminal)</strong>
+                <ol style="margin: 5px 0 15px 20px; padding: 0;">
+                    <li>Wpisz IP tunera w przeglądarce i wybierz zakładkę <strong>Terminal</strong>.</li>
+                    <li>Wprowadź Login: <strong>root</strong> (dla wszystkich tunerów). Hasło wpisujesz "w ciemno" (nie widać znaków).<br>
+                    <em style="font-size: 0.85em; opacity: 0.7;">(Jeśli nie znasz hasła: Menu → Ustawienia → Sieć → Hasło → Zapisz. Na czystym systemie logowanie bez hasła).</em></li>
+                    <li>Po zalogowaniu kliknij <strong>Prawym Przyciskiem Myszy</strong> i wybierz <strong>"Paste from browser"</strong>.</li>
+                    <li>Wklej skopiowane wcześniej polecenie, naciśnij <strong>OK</strong>, a następnie zatwierdź <strong>Enter</strong>.</li>
+                    <li>Rozpocznie się instalacja. Po zakończeniu możesz przejść w inne miejsce OpenWebif.</li>
+                </ol>
+
+                <strong style="color: #d29922;">B) Przez program PuTTy (np. dla OpenPLi)</strong>
+                <ul style="margin: 5px 0 0 20px; padding: 0;">
+                    <li>W programie PuTTy podaj IP tunera i połącz się.</li>
+                    <li>Tutaj <strong>Prawy Przycisk Myszy</strong> od razu wkleja skopiowane polecenie.</li>
+                    <li>Zatwierdź klawiszem <strong>Enter</strong>.</li>
+                </ul>
+            </div>
         </div>
 
         <div class="card support-section" id="wsparcie" data-aos="fade-up" data-aos-delay="300">
