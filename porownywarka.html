@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#0d1117">
     
     <title>Wielka Porównywarka Tunerów Enigma2 | AIO-IPTV.pl</title>
-    <meta name="description" content="Niezależny ranking i porównywarka tunerów satelitarnych 4K. Sprawdź specyfikację, ceny i możliwości.">
+    <meta name="description" content="Kompletna baza tunerów Enigma2. Porównaj modele Zgemma, VU+, Octagon, Dreambox i inne. Ranking 2025.">
     
     <link rel="icon" type="image/png" href="pliki/logo.png">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -36,7 +36,7 @@
     <header>
         <div style="text-align:center; line-height: 1.2;">
             <img src="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/logo.png" alt="Logo AIO-IPTV" class="site-logo">
-            <p style="margin: 4px 0 0; font-size: 0.95rem;">Centrum Wiedzy o Tunerach</p>
+            <p style="margin: 4px 0 0; font-size: 0.95rem;">Wielka Baza Tunerów Enigma2</p>
         </div>
         
         <div class="nav-buttons">
@@ -48,11 +48,11 @@
     <div class="container">
         
         <div class="card full-width" data-aos="fade-up">
-            <h2>🔍 Porównywarka Techniczna</h2>
-            <p>Wybierz dwa modele, aby zobaczyć szczegółowe różnice w sprzęcie (CPU, LAN, CI+).</p>
+            <h2>🔍 Porównywarka Sprzętowa</h2>
+            <p>Największa baza w Polsce. Wybierz dwa modele i porównaj CPU, pamięć, sieć i sloty.</p>
             
             <div class="comparison-search" style="margin: 14px 0 8px;">
-                <input id="tunerSearch" class="search-input" type="text" placeholder="🔍 Szukaj (np. Octagon, Zgemma, VU+, Dreambox)..." />
+                <input id="tunerSearch" class="search-input" type="text" placeholder="🔍 Wyszukaj tuner (np. Zgemma H9, Octagon SF8008, VU+)..." />
                 <select id="brandFilter" class="search-input" style="max-width: 220px;">
                     <option value="">Wszystkie marki</option>
                 </select>
@@ -60,18 +60,18 @@
             
             <div class="comparison-controls">
                 <div class="control-group">
-                    <label for="tuner1-select">Model A:</label>
+                    <label for="tuner1-select">Tuner A:</label>
                     <select id="tuner1-select" class="tuner-select"><option value="">Wybierz...</option></select>
                 </div>
                 <div class="control-group">
-                    <label for="tuner2-select">Model B:</label>
+                    <label for="tuner2-select">Tuner B:</label>
                     <select id="tuner2-select" class="tuner-select"><option value="">Wybierz...</option></select>
                 </div>
                 <button class="nav-btn" onclick="compareTuners()" style="align-self: flex-end;">Porównaj VS</button>
             </div>
             
             <div id="comparison-result" style="display: none;">
-                <h3>Wynik analizy</h3>
+                <h3>Specyfikacja techniczna</h3>
                 <div class="comparison-table-container">
                     <table class="comparison-table" id="comparison-table">
                         <thead>
@@ -85,15 +85,15 @@
                     </table>
                 </div>
                 <div class="comparison-verdict">
-                    <h4>Werdykt AIO-IPTV</h4>
+                    <h4>Analiza AIO-IPTV</h4>
                     <p id="verdict-text"></p>
                 </div>
             </div>
         </div>
         
         <div class="card full-width" data-aos="fade-up" data-aos-delay="100">
-            <h2>🏆 Ekspercki Ranking Tunerów 2025</h2>
-            <p>Zestawienie najciekawszych modeli na polskim rynku, wybranych na podstawie specyfikacji i opłacalności.</p>
+            <h2>🏆 Ranking Tunerów 2025 (Top 8)</h2>
+            <p>Zestawienie najciekawszych modeli dostępnych w polskiej dystrybucji.</p>
             
             <div class="ranking-list">
                 
@@ -103,14 +103,14 @@
                         <h4>Octagon SF8008 4K / Supreme</h4>
                         <div class="rank-stats">
                             <span>🚀 1Gbit LAN</span>
-                            <span>📡 WiFi wbudowane</span>
+                            <span>📡 WiFi</span>
                             <span>💰 ~480 zł</span>
                         </div>
                         <div class="rank-reason">
-                            <strong>Dlaczego #1?</strong> Absolutny król opłacalności. Posiada wszystko, czego potrzebuje 90% użytkowników: szybki procesor HiSilicon, gigabitową sieć, solidne WiFi i ogromne wsparcie społeczności. Wersja Supreme dodaje slot na dysk SSD M.2.
+                            <strong>Lider Rynku.</strong> Najlepszy balans ceny do możliwości. Posiada szybki procesor HiSilicon, gigabitową sieć (ważne przy NAS) i dobre wbudowane WiFi. Wersja Supreme dodaje slot na dysk M.2.
                         </div>
                     </div>
-                    <div class="rank-badge bestseller">Nr 1 w Polsce</div>
+                    <div class="rank-badge bestseller">Nr 1</div>
                 </div>
 
                 <div class="ranking-item">
@@ -118,15 +118,15 @@
                     <div class="rank-info">
                         <h4>Zgemma H9S / H11S</h4>
                         <div class="rank-stats">
-                            <span>💸 Budżetowy</span>
+                            <span>💸 Tani</span>
                             <span>📺 4K UHD</span>
                             <span>💰 ~260 zł</span>
                         </div>
                         <div class="rank-reason">
-                            <strong>Dlaczego #2?</strong> Najtańsza przepustka do świata 4K i Enigmy2. Idealny jako drugi tuner w sypialni lub na start. Ustępuje Octagonowi siecią (tylko 100Mb) i brakiem wbudowanego WiFi, ale nadrabia rewelacyjną ceną.
+                            <strong>Król Budżetu.</strong> Absolutnie najtańszy sposób na stabilne 4K z Enigmą2. Idealny na start lub jako drugi dekoder. Brak szybkiej sieci i slotu CI+ to kompromis za niską cenę.
                         </div>
                     </div>
-                    <div class="rank-badge value">Cena/Jakość</div>
+                    <div class="rank-badge value">Ekonomia</div>
                 </div>
 
                 <div class="ranking-item">
@@ -135,14 +135,14 @@
                         <h4>AB Pulse 4K Mini</h4>
                         <div class="rank-stats">
                             <span>🔒 Slot CI+</span>
-                            <span>💰 ~430 zł</span>
                             <span>🇪🇺 Europejski</span>
+                            <span>💰 ~430 zł</span>
                         </div>
                         <div class="rank-reason">
-                            <strong>Czarny koń.</strong> Najtańszy na rynku markowy tuner 4K, który posiada <strong>slot na moduł CI+</strong>. Kluczowe dla abonentów Polsatu czy Canal+ korzystających z własnych modułów, których Zgemma czy Octagon nie obsłużą.
+                            <strong>Najtańszy z CI+.</strong> Jeśli masz moduł Polsatu lub Canal+, to jest najtańszy tuner 4K, który go obsłuży. Zgemma i Octagon w tej cenie mają tylko czytnik kart.
                         </div>
                     </div>
-                    <div class="rank-badge value">Wybór Redakcji</div>
+                    <div class="rank-badge value">Unikat</div>
                 </div>
 
                 <div class="ranking-item">
@@ -155,7 +155,7 @@
                             <span>💰 ~440 zł</span>
                         </div>
                         <div class="rank-reason">
-                            <strong>Alternatywa.</strong> Bliźniak Octagona SF8008 produkowany w tej samej fabryce. Często tańszy, a oferuje identyczne parametry (1Gbit, WiFi). Posiada świetny dual-boot z oprogramowaniem Denys OS.
+                            <strong>Bliźniak Giganta.</strong> Technicznie to samo co Octagon SF8008, ale w innej obudowie i z dodatkowym systemem Denys OS. Często tańszy o kilkadziesiąt złotych.
                         </div>
                     </div>
                 </div>
@@ -163,14 +163,14 @@
                 <div class="ranking-item">
                     <div class="rank-number">5</div>
                     <div class="rank-info">
-                        <h4>VU+ Zero 4K</h4>
+                        <h4>VU+ Zero 4K (Rev. 2)</h4>
                         <div class="rank-stats">
                             <span>💎 Marka Premium</span>
-                            <span>🔒 Slot CI+</span>
+                            <span>🔒 CI+</span>
                             <span>💰 ~640 zł</span>
                         </div>
                         <div class="rank-reason">
-                            <strong>Klasyka gatunku.</strong> Dla fanów marki VU+. Solidne wykonanie, bardzo dobry pilot, obsługa CI+. Sprzęt na lata, choć w tej cenie konkurencja oferuje już często nieco więcej (np. 1Gbit LAN).
+                            <strong>Jakość Wykonania.</strong> Sprzęt dla fanów marki VU+. Bardzo szybki, stabilny, świetny pilot. Ma slot CI+, ale w tej cenie brakuje mu gigabitowego LANu.
                         </div>
                     </div>
                     <div class="rank-badge premium">Jakość</div>
@@ -181,12 +181,12 @@
                     <div class="rank-info">
                         <h4>GigaBlue Trio 4K Pro</h4>
                         <div class="rank-stats">
-                            <span>📡 Szybkie WiFi</span>
+                            <span>📡 Super WiFi</span>
                             <span>🚀 1Gbit LAN</span>
                             <span>💰 ~560 zł</span>
                         </div>
                         <div class="rank-reason">
-                            <strong>Nowoczesny wybór.</strong> Bardzo mocny konkurent w średniej półce. Oferuje świetne, szybkie wbudowane WiFi (1200Mbps), gigabitowy LAN i niemiecką jakość wykonania GigaBlue.
+                            <strong>Niemiecka Solidność.</strong> Bardzo mocny konkurent w średniej półce. Wyróżnia się szybkim WiFi (1200Mbps) i dobrym wsparciem software'owym (TeamBlue).
                         </div>
                     </div>
                 </div>
@@ -197,11 +197,11 @@
                         <h4>Dreambox Two Ultra HD</h4>
                         <div class="rank-stats">
                             <span>🏎️ 6-rdzeni CPU</span>
-                            <span>🖥️ Kolor LCD</span>
+                            <span>🖥️ LCD</span>
                             <span>💰 ~1450 zł</span>
                         </div>
                         <div class="rank-reason">
-                            <strong>Potwór wydajności.</strong> Najszybszy tuner na rynku. 6-rdzeniowy procesor Amlogic sprawia, że system DreamOS "pływa". Posiada kolorowy wyświetlacz i pilota Bluetooth. Sprzęt dla entuzjastów.
+                            <strong>Demon Prędkości.</strong> Najszybszy procesor na rynku (Amlogic). System działa błyskawicznie. Posiada kolorowy wyświetlacz i pilota Bluetooth.
                         </div>
                     </div>
                     <div class="rank-badge power">Moc</div>
@@ -210,36 +210,35 @@
                 <div class="ranking-item">
                     <div class="rank-number">8</div>
                     <div class="rank-info">
-                        <h4>VU+ Duo 4K SE</h4>
+                        <h4>Qviart Dual 4K</h4>
                         <div class="rank-stats">
-                            <span>📺 FBC Tuner</span>
-                            <span>💾 Dysk HDD</span>
-                            <span>💰 ~1650 zł</span>
+                            <span>🤖 Linux + Android</span>
+                            <span>💰 ~690 zł</span>
                         </div>
                         <div class="rank-reason">
-                            <strong>Centrum Multimedialne.</strong> Najlepszy wybór do salonu. Głowice FBC pozwalają nagrywać 8 kanałów jednocześnie. Miejsce na dysk twardy, duży wyświetlacz i topowa jakość obrazu.
+                            <strong>Hybryda.</strong> Unikalne połączenie Enigmy2 i pełnego Androida 9. Możesz używać Oscama i Netflixa na jednym urządzeniu.
                         </div>
                     </div>
-                    <div class="rank-badge premium">High-End</div>
+                    <div class="rank-badge hybrid">Hybryda</div>
                 </div>
 
             </div>
         </div>
         
         <div class="card full-width" data-aos="fade-up" data-aos-delay="200">
-            <h2>💡 Szybki przewodnik zakupowy</h2>
+            <h2>💡 Porady zakupowe</h2>
             
             <div class="accordion-item">
-                <button class="accordion-header">Kiedy warto dopłacić do slotu CI+?</button>
+                <button class="accordion-header">Moduł CI+ (Polsat/Canal+)</button>
                 <div class="accordion-content">
-                    <p>Jeśli posiadasz <strong>moduł CAM</strong> od operatora (np. Polsat Box, Canal+ 4K, tivusat). Tanie tunery (Zgemma, Octagon) mają tylko czytnik kart (uniwersalny), który nie obsłuży sparowanych kart włożonych w moduł. Do modułów potrzebujesz tunera ze slotem CI+ (np. AB Pulse, VU+, GigaBlue).</p>
+                    <p>Jeśli masz kartę wkładaną do modułu (CAM), musisz kupić tuner ze slotem <strong>CI+</strong>. Tanie Zgemmy i Octagony mają tylko czytnik kart (sam plastik), który modułu nie przyjmie. Szukaj: AB Pulse, VU+, GigaBlue.</p>
                 </div>
             </div>
             
             <div class="accordion-item">
-                <button class="accordion-header">Co daje 1Gbit LAN?</button>
+                <button class="accordion-header">Streaming w sieci (Multiroom)</button>
                 <div class="accordion-content">
-                    <p>Szybkie przesyłanie nagrań z tunera na komputer (ok. 80-100 MB/s zamiast 11 MB/s przy 100Mbit) oraz płynniejsze działanie przy oglądaniu telewizji przez sieć (streamowanie) na innych urządzeniach. Jeśli dużo nagrywasz na NAS, 1Gbit jest koniecznością.</p>
+                    <p>Jeśli chcesz oglądać TV na komputerze lub telefonie, wybierz tuner z portem <strong>Gigabit LAN (1000 Mbit)</strong>. Modele 100Mbit mogą przycinać przy kanałach 4K o wysokim bitrate.</p>
                 </div>
             </div>
         </div>
@@ -247,7 +246,7 @@
 
     <footer>
         <p>&copy; 2025 AIO-IPTV.pl</p>
-        <p>Dane specyfikacji są uśrednione i pochodzą z ogólnodostępnych ofert polskich dystrybutorów.</p>
+        <p>Baza danych na podstawie ofert największych polskich dystrybutorów (Stan na Grudzień 2025).</p>
     </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -255,7 +254,7 @@
     
     <script>
     // ==========================================
-    // LOGIKA PORÓWNYWARKI
+    // LOGIKA PORÓWNYWARKI (Zaktualizowana)
     // ==========================================
 
     let tunersList = [];
@@ -342,31 +341,26 @@
             const v2 = t2[f.k] || '-';
             let s1 = '', s2 = '';
 
-            // LAN
             if (f.k === 'lan') {
                 if (v1.includes('Gigabit') && !v2.includes('Gigabit')) s1 = 'color:#3fb950; font-weight:bold';
                 if (v2.includes('Gigabit') && !v1.includes('Gigabit')) s2 = 'color:#3fb950; font-weight:bold';
             }
-            // WiFi
             if (f.k === 'wifi') {
-                if (v1.includes('Wbudowane') && !v2.includes('Wbudowane')) s1 = 'color:#3fb950; font-weight:bold';
-                if (v2.includes('Wbudowane') && !v1.includes('Wbudowane')) s2 = 'color:#3fb950; font-weight:bold';
+                if (v1.includes('Tak') && !v2.includes('Tak')) s1 = 'color:#3fb950; font-weight:bold';
+                if (v2.includes('Tak') && !v1.includes('Tak')) s2 = 'color:#3fb950; font-weight:bold';
             }
-            // CI+
             if (f.k === 'slots') {
                 if (v1.includes('CI') && !v2.includes('CI')) s1 = 'color:#3fb950; font-weight:bold';
                 if (v2.includes('CI') && !v1.includes('CI')) s2 = 'color:#3fb950; font-weight:bold';
             }
-            // RAM/Flash/Cena
             if (['ram', 'flash', 'price'].includes(f.k)) {
                  const n1 = parseFloat(v1.replace(/ok\.|zł/g,''));
                  const n2 = parseFloat(v2.replace(/ok\.|zł/g,''));
-                 
                  if (!isNaN(n1) && !isNaN(n2)) {
-                     if (f.k === 'price') { // Cena: mniej = lepiej
+                     if (f.k === 'price') { 
                         if (n1 < n2) s1 = 'color:#3fb950; font-weight:bold';
                         if (n2 < n1) s2 = 'color:#3fb950; font-weight:bold';
-                     } else { // Reszta: więcej = lepiej
+                     } else { 
                         if (n1 > n2) s1 = 'color:#3fb950; font-weight:bold';
                         if (n2 > n1) s2 = 'color:#3fb950; font-weight:bold';
                      }
@@ -386,19 +380,17 @@
     function generateVerdict(t1, t2) {
         let text = "";
         
-        // Logika LAN/WiFi
         if ((t1.lan||'').includes('Gigabit') && !(t2.lan||'').includes('Gigabit')) 
             text += `👉 <strong>${t1.model}</strong> ma znacznie szybszą kartę sieciową (1Gbit), co ułatwia przesyłanie plików. `;
         else if ((t2.lan||'').includes('Gigabit') && !(t1.lan||'').includes('Gigabit')) 
             text += `👉 <strong>${t2.model}</strong> ma znacznie szybszą kartę sieciową (1Gbit). `;
 
-        // Logika CI+
         if ((t1.slots||'').includes('CI') && !(t2.slots||'').includes('CI'))
             text += `👉 <strong>${t1.model}</strong> posiada slot CI+, co pozwala na obsługę modułów (np. Polsat, Canal+). `;
         else if ((t2.slots||'').includes('CI') && !(t1.slots||'').includes('CI'))
             text += `👉 <strong>${t2.model}</strong> posiada slot CI+ (niezbędny dla modułów CAM). `;
 
-        if (text === "") text = "Oba tunery prezentują zbliżony poziom technologiczny. Kieruj się ceną i wyglądem.";
+        if (text === "") text = "Oba tunery prezentują zbliżony poziom technologiczny. Kieruj się ceną i dostępnością.";
         
         document.getElementById('verdict-text').innerHTML = text;
     }
