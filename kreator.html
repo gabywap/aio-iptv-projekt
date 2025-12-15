@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="style.css">
     
     <style>
-        /* Modern Wizard Styles - FIXED */
         :root {
             --primary: #58a6ff;
             --success: #238636;
@@ -38,7 +37,6 @@
             --text: #24292f;
         }
         
-        /* FIXED: Ograniczenie szerokości */
         body {
             background: var(--dark-bg);
             color: var(--text);
@@ -48,7 +46,6 @@
             min-height: 100vh;
         }
         
-        /* FIXED: Główny kontener z ograniczeniem szerokości */
         .main-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -72,7 +69,6 @@
             box-sizing: border-box;
         }
         
-        /* FIXED: Stepper na środku i odpowiednie rozmieszczenie */
         .wizard-stepper {
             display: flex;
             justify-content: center;
@@ -161,7 +157,6 @@
             color: var(--primary);
         }
         
-        /* FIXED: Wizard content z ustaloną szerokością */
         .wizard-content {
             background: var(--card-bg);
             border-radius: 16px;
@@ -213,7 +208,6 @@
             margin-bottom: 25px;
         }
         
-        /* FIXED: Card selector z ograniczoną ilością kolumn */
         .card-selector {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -293,7 +287,6 @@
             flex-grow: 1;
         }
         
-        /* FIXED: Form controls z odpowiednią szerokością */
         .form-group {
             margin-bottom: 20px;
             max-width: 100%;
@@ -332,7 +325,6 @@
             max-width: 100%;
         }
         
-        /* FIXED: Multi-select z wrapem */
         .multi-select {
             display: flex;
             flex-wrap: wrap;
@@ -365,7 +357,6 @@
             color: white;
         }
         
-        /* FIXED: Preview panel z przewijaniem */
         .preview-panel {
             background: var(--dark-bg);
             border-radius: 12px;
@@ -378,7 +369,6 @@
             box-sizing: border-box;
         }
         
-        /* FIXED: Download grid z ograniczoną ilością kolumn */
         .download-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -404,7 +394,6 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
         }
         
-        /* FIXED: Action buttons */
         .wizard-actions {
             display: flex;
             justify-content: space-between;
@@ -460,7 +449,6 @@
             font-size: 15px;
         }
         
-        /* FIXED: Header */
         header {
             display: flex;
             justify-content: space-between;
@@ -502,7 +490,6 @@
             gap: 10px;
         }
         
-        /* FIXED: Footer */
         footer {
             text-align: center;
             padding: 20px;
@@ -520,7 +507,6 @@
             margin: 0 auto;
         }
         
-        /* FIXED: Badges */
         .badge {
             display: inline-block;
             padding: 3px 8px;
@@ -545,7 +531,6 @@
             color: var(--warning);
         }
         
-        /* FIXED: Progress info */
         .progress-info {
             display: flex;
             align-items: center;
@@ -555,7 +540,6 @@
             opacity: 0.8;
         }
         
-        /* FIXED: Quick actions */
         .quick-actions {
             text-align: center;
             margin-top: 20px;
@@ -568,7 +552,6 @@
             flex-wrap: wrap;
         }
         
-        /* FIXED: Responsive design */
         @media (max-width: 1024px) {
             .wizard-stepper {
                 gap: 40px;
@@ -703,7 +686,6 @@
             }
         }
         
-        /* Custom Scrollbar */
         .preview-panel::-webkit-scrollbar {
             width: 6px;
         }
@@ -722,7 +704,6 @@
             background: var(--primary);
         }
         
-        /* Toggle Switch */
         .toggle-switch {
             display: flex;
             align-items: center;
@@ -780,7 +761,6 @@
             transform: translateX(24px);
         }
         
-        /* Toast notifications */
         .toast {
             position: fixed;
             bottom: 20px;
@@ -903,11 +883,11 @@
                             </div>
                             <div class="config-card-title">
                                 Zgemma H9S / H9.2S
-                                <span class="badge badge-popular">Popularny</span>
+                                <span class="badge badge-popular">Domyślny</span>
                             </div>
                             <div class="config-card-desc">
                                 Idealny dla początkujących, tani, dobry stosunek jakości do ceny. 
-                                Wsparcie dla 4K HDR.
+                                Wsparcie dla 4K HDR. Najpopularniejszy w Polsce.
                             </div>
                         </div>
                         
@@ -934,6 +914,33 @@
                             </div>
                             <div class="config-card-desc">
                                 Szybki, nowoczesny, z slotem M.2. Dobry wybór do multimediów.
+                                Dobry stosunek jakości do ceny.
+                            </div>
+                        </div>
+                        
+                        <div class="config-card" data-value="mutant">
+                            <div class="config-card-icon">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <div class="config-card-title">
+                                Mutant HD51 / HD60
+                            </div>
+                            <div class="config-card-desc">
+                                Stabilne działanie, dobre wsparcie społeczności.
+                                Dla wymagających użytkowników.
+                            </div>
+                        </div>
+                        
+                        <div class="config-card" data-value="dreambox">
+                            <div class="config-card-icon">
+                                <i class="fas fa-gem"></i>
+                            </div>
+                            <div class="config-card-title">
+                                Dreambox
+                            </div>
+                            <div class="config-card-desc">
+                                Oryginalne tunery Enigma, najlepsze wsparcie.
+                                Dla purystów i profesjonalistów.
                             </div>
                         </div>
                     </div>
@@ -956,7 +963,7 @@
                             </div>
                             <div class="config-card-title">
                                 OpenATV
-                                <span class="badge badge-popular">#1 w Polsce</span>
+                                <span class="badge badge-popular">Domyślny</span>
                             </div>
                             <div class="config-card-desc">
                                 Najpopularniejszy, częste aktualizacje, mnóstwo wtyczek.
@@ -974,6 +981,32 @@
                             <div class="config-card-desc">
                                 Stabilny, lekki, dla purystów. Mniej wtyczek,
                                 ale bardziej stabilny niż OpenATV.
+                            </div>
+                        </div>
+                        
+                        <div class="config-card" data-value="openvix">
+                            <div class="config-card-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="config-card-title">
+                                OpenViX
+                            </div>
+                            <div class="config-card-desc">
+                                Ładny interfejs, popularny w UK. Dobre wsparcie
+                                dla brytyjskich kanałów.
+                            </div>
+                        </div>
+                        
+                        <div class="config-card" data-value="egami">
+                            <div class="config-card-icon">
+                                <i class="fas fa-palette"></i>
+                            </div>
+                            <div class="config-card-title">
+                                Egami
+                            </div>
+                            <div class="config-card-desc">
+                                Unikalny wygląd, niszowy. Dla użytkowników,
+                                którzy szukają czegoś innego.
                             </div>
                         </div>
                     </div>
@@ -1020,6 +1053,18 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label class="form-label">
+                            <i class="fas fa-sync-alt"></i>
+                            Tryb aktualizacji wtyczek
+                        </label>
+                        <select class="form-control" id="updateMode">
+                            <option value="auto">Automatycznie (zalecane)</option>
+                            <option value="manual">Ręcznie</option>
+                            <option value="notify">Powiadomienia tylko</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- Step 4: Satellites -->
@@ -1034,13 +1079,48 @@
                     
                     <div class="multi-select">
                         <div class="tag-selector" data-sat="13e">
-                            <i class="fas fa-fire"></i> HotBird 13°E
+                            <i class="fas fa-fire"></i> HotBird 13°E <span class="badge badge-popular" style="margin-left: 5px;">Domyślny</span>
                         </div>
                         <div class="tag-selector" data-sat="19e">
                             Astra 19.2°E
                         </div>
                         <div class="tag-selector" data-sat="23e">
                             Astra 23.5°E
+                        </div>
+                        <div class="tag-selector" data-sat="28e">
+                            Astra 28.2°E
+                        </div>
+                        <div class="tag-selector" data-sat="0.8w">
+                            Thor/Intelsat 0.8°W
+                        </div>
+                        <div class="tag-selector" data-sat="4.8e">
+                            Astra 4.8°E
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h4 style="margin-bottom: 15px;">
+                            <i class="fas fa-sliders-h"></i>
+                            Zaawansowane opcje
+                        </h4>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Typ instalacji anteny</label>
+                                <select class="form-control" id="installType">
+                                    <option value="single">Pojedynczy LNB (domyślnie)</option>
+                                    <option value="diseqc">DiSEqC (przełącznik)</option>
+                                    <option value="motor">USALS (silnik obrotowy)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Format listy kanałów</label>
+                                <select class="form-control" id="channelFormat">
+                                    <option value="bouquet">Boukety (zalecane)</option>
+                                    <option value="single">Jedna lista</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1066,7 +1146,7 @@
                                 <i class="far fa-copy"></i> Kopiuj
                             </button>
                         </div>
-                        <pre class="code-block" id="configPreview" style="font-family: 'Courier New', monospace; font-size: 12px; margin: 0; white-space: pre-wrap; word-wrap: break-word;"># Podgląd konfiguracji pojawi się tutaj</pre>
+                        <pre class="code-block" id="configPreview" style="font-family: 'Courier New', monospace; font-size: 12px; margin: 0; white-space: pre-wrap; word-wrap: break-word;"># Konfiguracja zostanie wygenerowana po ukończeniu wszystkich kroków</pre>
                     </div>
                     
                     <!-- Download Options -->
@@ -1101,6 +1181,30 @@
                             </div>
                             <h3 style="margin: 10px 0 5px; font-size: 1.1rem;">Komplet</h3>
                             <p style="margin: 0; font-size: 0.9rem; opacity: 0.8;">ZIP z pełną konfiguracją</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Plugin Installation -->
+                    <div style="margin-top: 25px; padding: 20px; background: rgba(210, 153, 34, 0.05); border-radius: 12px; border: 1px solid var(--border);">
+                        <h4 style="margin-top: 0; font-size: 1.1rem;">
+                            <i class="fas fa-plug"></i>
+                            Instalacja wtyczek AIO-IPTV
+                        </h4>
+                        
+                        <div style="margin: 15px 0;">
+                            <p style="margin: 0 0 10px; font-size: 0.95rem;">Skopiuj poniższe komendy i wklej je w terminalu tunera:</p>
+                            
+                            <div style="background: rgba(0, 0, 0, 0.3); border-radius: 8px; padding: 15px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 12px;">
+                                <div style="color: var(--warning);"># AIO Panel (Panel zarządzania):</div>
+                                <div style="margin-left: 10px; color: var(--text);">wget -q "--no-check-certificate" https://raw.githubusercontent.com/OliOli2013/PanelAIO-Plugin/main/installer.sh -O - | /bin/sh</div>
+                                
+                                <div style="color: var(--warning); margin-top: 10px;"># IPTV Dream (Listy IPTV):</div>
+                                <div style="margin-left: 10px; color: var(--text);">wget -q "--no-check-certificate" https://raw.githubusercontent.com/OliOli2013/IPTV-Dream-Plugin/main/installer.sh -O - | /bin/sh</div>
+                            </div>
+                            
+                            <button class="btn btn-secondary" onclick="copyInstallCommands()" style="padding: 8px 16px; font-size: 13px; margin-top: 10px;">
+                                <i class="far fa-copy"></i> Kopiuj komendy instalacyjne
+                            </button>
                         </div>
                     </div>
                     
@@ -1190,18 +1294,29 @@
             offset: 100
         });
 
-        // Wizard State
+        // Wizard State z DEFAULTS
         const wizardState = {
             step: 1,
-            tuner: null,
-            image: null,
+            tuner: 'zgemma', // Domyślny tuner
+            image: 'openatv', // Domyślny image
             network: {
                 dhcp: true,
                 ip: '192.168.1.100',
                 gateway: '192.168.1.1',
-                dns1: '8.8.8.8'
+                dns1: '8.8.8.8',
+                updateMode: 'auto'
             },
-            satellites: []
+            satellites: ['13e'], // Domyślna satelita
+            advanced: {
+                installType: 'single',
+                channelFormat: 'bouquet'
+            }
+        };
+
+        // Instalacja commands
+        const installCommands = {
+            panelaio: 'wget -q "--no-check-certificate" https://raw.githubusercontent.com/OliOli2013/PanelAIO-Plugin/main/installer.sh -O - | /bin/sh',
+            iptvdream: 'wget -q "--no-check-certificate" https://raw.githubusercontent.com/OliOli2013/IPTV-Dream-Plugin/main/installer.sh -O - | /bin/sh'
         };
 
         // DOM Elements
@@ -1215,10 +1330,15 @@
         const configPreview = document.getElementById('configPreview');
         const networkAuto = document.getElementById('networkAuto');
         const manualConfig = document.getElementById('manualConfig');
+        const updateMode = document.getElementById('updateMode');
+        const installType = document.getElementById('installType');
+        const channelFormat = document.getElementById('channelFormat');
 
         // Initialize
         updateProgress();
         setupEventListeners();
+        setDefaultSelections(); // Ustaw domyślne wybory
+        updateView(); // Zaktualizuj widok z domyślnymi wartościami
 
         // Event Listeners
         function setupEventListeners() {
@@ -1266,6 +1386,19 @@
                 });
             });
 
+            // Advanced settings
+            updateMode.addEventListener('change', function() {
+                wizardState.network.updateMode = this.value;
+            });
+
+            installType.addEventListener('change', function() {
+                wizardState.advanced.installType = this.value;
+            });
+
+            channelFormat.addEventListener('change', function() {
+                wizardState.advanced.channelFormat = this.value;
+            });
+
             // Theme toggle
             document.getElementById('themeToggle').addEventListener('click', function() {
                 const theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
@@ -1279,6 +1412,24 @@
             document.body.dataset.theme = savedTheme;
             document.getElementById('themeToggle').innerHTML = savedTheme === 'dark' ? 
                 '<i class="fas fa-moon"></i> Motyw' : '<i class="fas fa-sun"></i> Motyw';
+        }
+
+        // Ustaw domyślne wybory
+        function setDefaultSelections() {
+            // Step 1: Domyślny tuner
+            document.querySelector(`.config-card[data-value="${wizardState.tuner}"]`)?.classList.add('selected');
+            
+            // Step 2: Domyślny image
+            document.querySelector(`.config-card[data-value="${wizardState.image}"]`)?.classList.add('selected');
+            
+            // Step 3: Network defaults już ustawione w wizardState
+            
+            // Step 4: Domyślne satelity
+            wizardState.satellites.forEach(sat => {
+                document.querySelector(`.tag-selector[data-sat="${sat}"]`)?.classList.add('selected');
+            });
+            
+            // Step 5: Zostanie wygenerowane przy przejściu
         }
 
         // Navigation
@@ -1365,18 +1516,25 @@
             const tunerNames = {
                 zgemma: 'Zgemma H9S/H9.2S',
                 vuplus: 'VU+ Duo 4K/Uno 4K',
-                octagon: 'Octagon SF8008'
+                octagon: 'Octagon SF8008',
+                mutant: 'Mutant HD51/HD60',
+                dreambox: 'Dreambox'
             };
             
             const imageNames = {
                 openatv: 'OpenATV 7.x',
-                openpli: 'OpenPLi 8.x'
+                openpli: 'OpenPLi 8.x',
+                openvix: 'OpenViX 6.x',
+                egami: 'Egami 10.x'
             };
             
             const satNames = {
                 '13e': 'HotBird 13°E',
                 '19e': 'Astra 19.2°E',
-                '23e': 'Astra 23.5°E'
+                '23e': 'Astra 23.5°E',
+                '28e': 'Astra 28.2°E',
+                '0.8w': 'Thor/Intelsat 0.8°W',
+                '4.8e': 'Astra 4.8°E'
             };
             
             let config = `# ========================================\n`;
@@ -1411,6 +1569,8 @@
                 config += `# ${satNames[sat] || sat}\n`;
             });
             
+            config += `# Typ instalacji: ${wizardState.advanced.installType}\n`;
+            config += `# Format list: ${wizardState.advanced.channelFormat}\n`;
             config += `\n`;
             
             // Installation Commands
@@ -1419,11 +1579,21 @@
             config += `# 3.1 Aktualizacja systemu\n`;
             config += `opkg update\n\n`;
             
-            config += `# 3.2 Instalacja podstawowych wtyczek\n`;
-            config += `opkg install enigma2-plugin-extensions-panelaio\n`;
-            config += `opkg install enigma2-plugin-extensions-iptvdream\n\n`;
+            config += `# 3.2 Instalacja wtyczek AIO-IPTV\n`;
+            config += `# AIO Panel:\n`;
+            config += `${installCommands.panelaio}\n\n`;
+            config += `# IPTV Dream:\n`;
+            config += `${installCommands.iptvdream}\n\n`;
+            
+            config += `# 3.3 Konfiguracja sieci\n`;
+            if (!wizardState.network.dhcp) {
+                config += `# Skopiuj plik interfaces do /etc/network/\n`;
+            }
+            config += `# Uruchom ponownie usługę sieciową\n`;
+            config += `/etc/init.d/networking restart\n\n`;
             
             config += `# 3.4 Import list kanałów\n`;
+            config += `# Skopiuj satellites.xml do /etc/tuxbox/\n`;
             config += `# Skopiuj bouquets do /etc/enigma2/\n`;
             config += `# Zrestartuj GUI Enigma2\n`;
             config += `init 4 && sleep 3 && init 3\n\n`;
@@ -1433,6 +1603,7 @@
             config += `# ========================================\n`;
             config += `# Autor: AIO-IPTV.pl Kreator Konfiguracji\n`;
             config += `# Data: ${new Date().toLocaleDateString('pl-PL')}\n`;
+            config += `# URL: https://aio-iptv.pl/kreator\n`;
             config += `# ========================================\n`;
             
             configPreview.textContent = config;
@@ -1441,7 +1612,7 @@
         // Download Functions
         function downloadFile(type) {
             const config = configPreview.textContent;
-            const filename = `enigma2-config-${wizardState.tuner}-${type}.txt`;
+            const filename = `enigma2-config-${wizardState.tuner}-${type}-${Date.now().toString().slice(-6)}.txt`;
             
             const blob = new Blob([config], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
@@ -1467,22 +1638,41 @@
                 .catch(() => showToast('Błąd kopiowania!', 'error'));
         }
 
+        function copyInstallCommands() {
+            const commands = `# AIO Panel (Panel zarządzania):\n${installCommands.panelaio}\n\n# IPTV Dream (Listy IPTV):\n${installCommands.iptvdream}`;
+            
+            navigator.clipboard.writeText(commands)
+                .then(() => showToast('Skopiowano komendy instalacyjne!', 'success'))
+                .catch(() => showToast('Błąd kopiowania!', 'error'));
+        }
+
         // Utility Functions
         function resetWizard() {
             if (confirm('Czy na pewno chcesz zacząć od nowa? Wszystkie ustawienia zostaną usunięte.')) {
                 wizardState.step = 1;
-                wizardState.tuner = null;
-                wizardState.image = null;
+                wizardState.tuner = 'zgemma';
+                wizardState.image = 'openatv';
                 wizardState.network.dhcp = true;
-                wizardState.satellites = [];
+                wizardState.satellites = ['13e'];
+                wizardState.advanced.installType = 'single';
+                wizardState.advanced.channelFormat = 'bouquet';
                 
+                // Zresetuj UI
                 document.querySelectorAll('.config-card').forEach(c => c.classList.remove('selected'));
                 document.querySelectorAll('.tag-selector').forEach(t => t.classList.remove('selected'));
+                
+                // Ustaw domyślne wybory
+                setDefaultSelections();
+                
+                // Zresetuj formularze
                 networkAuto.checked = true;
                 manualConfig.style.display = 'none';
+                updateMode.value = 'auto';
+                installType.value = 'single';
+                channelFormat.value = 'bouquet';
                 
                 updateView();
-                showToast('Kreator zresetowany!', 'info');
+                showToast('Kreator zresetowany do ustawień domyślnych!', 'info');
             }
         }
 
