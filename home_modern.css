@@ -534,7 +534,7 @@ body[data-page="home"] .footer-legal .sep { margin: 0 8px; opacity: .6; }
 
 
 /* --- Mobile: quick Support (Coffee) access --- */
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   /* Ensure support card is not accidentally hidden/collapsed */
   #wsparcie { display: block !important; }
 
@@ -648,27 +648,19 @@ body[data-page="home"] .footer-legal .sep { margin: 0 8px; opacity: .6; }
 
 html.no-scroll, body.no-scroll { overflow: hidden !important; }
 
-/* ===== POPRAWKA DLA MOBILNYCH (Start tutaj) ===== */
-@media (max-width: 700px) {
-  /* Zmiana siatki 3-kolumnowej na 1-kolumnową na telefonie */
-  body[data-page="home"] .quick-grid {
-    grid-template-columns: 1fr; 
-  }
 
-  /* Dostosowanie nagłówka sekcji Start */
-  body[data-page="home"] .intro-head {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  body[data-page="home"] .intro-actions {
-    width: 100%;
-    margin-top: 10px;
-    justify-content: flex-start;
-  }
-
-  /* Dostosowanie marginesów kafelków */
-  body[data-page="home"] .quick-card {
-    padding: 12px;
-  }
+/* --- FIX: Start tutaj (quick-grid) on phones --- */
+@media (max-width: 900px) {
+  body[data-page="home"] .quick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+@media (max-width: 620px) {
+  body[data-page="home"] .card-intro { padding: 18px 16px; }
+  body[data-page="home"] .intro-head { flex-direction: column; align-items: flex-start; gap: 12px; }
+  body[data-page="home"] .intro-actions { width: 100%; flex-wrap: wrap; }
+  body[data-page="home"] .pill-link { flex: 1 1 auto; justify-content: center; }
+  body[data-page="home"] .quick-grid { grid-template-columns: 1fr; }
+  body[data-page="home"] .quick-card { align-items: center; }
+  body[data-page="home"] .quick-ico { width: 52px; height: 52px; font-size: 1.35rem; }
+  body[data-page="home"] .quick-desc { font-size: 0.9rem; }
+}
+

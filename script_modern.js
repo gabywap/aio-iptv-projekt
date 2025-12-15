@@ -483,18 +483,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         wrapper.appendChild(btn);
     });
-    
-    // NAPRAWA PRZYCISKU WSPARCIE (Mobile FAB) - obsługa istniejącego przycisku
-    const mobileFab = document.getElementById('support-fab');
-    if (mobileFab) {
-        mobileFab.addEventListener('click', (e) => {
-            e.preventDefault();
-            const supportSection = document.getElementById('wsparcie');
-            if (supportSection) {
-                supportSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
-    }
 });
 
 // Quiz Enigma2
@@ -1019,7 +1007,49 @@ document.head.appendChild(style);
 // Mobile: szybki dostęp do "Wsparcie / kawa"
 // =========================
 function initMobileSupportFab() {
-  // Funkcja wyłączona - przycisk jest już w HTML, obsługa dodana w DOMContentLoaded
+  try {
+    if (!window.matchMedia || !window.matchMedia('(max-width: 700px)').matches) return;
+
+    const supportSection = document.getElementById('wsparcie');
+    if (!supportSection) return;
+
+    // Jeśli CSS ukrywa sekcję na mobile, wymuś widoczność (inline ma pierwszeństwo)
+    supportSection.style.display = 'block';
+
+    // Nie twórz duplikatu
+    if (document.getElementById('supportFab')) return;
+
+    const fab = document.createElement('button');
+    fab.id = 'supportFab';
+    fab.type = 'button';
+    fab.textContent = '☕ Wsparcie';
+    fab.setAttribute('aria-label', 'Przejdź do sekcji Wsparcie');
+    fab.style.cssText = [
+      'position:fixed',
+      'left:14px',
+      'bottom:14px',
+      'z-index:9999',
+      'padding:10px 14px',
+      'border-radius:999px',
+      'border:1px solid rgba(255,255,255,.18)',
+      'background:rgba(17,24,39,.72)',
+      'backdrop-filter:blur(10px)',
+      '-webkit-backdrop-filter:blur(10px)',
+      'color:#fff',
+      'font-weight:700',
+      'font-size:13px',
+      'box-shadow:0 10px 30px rgba(0,0,0,.35)',
+      'cursor:pointer'
+    ].join(';');
+
+    fab.addEventListener('click', () => {
+      supportSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    document.body.appendChild(fab);
+  } catch (e) {
+    console.warn('supportFab error', e);
+  }
 }
 
 // =========================
@@ -1383,3 +1413,91 @@ document.addEventListener('DOMContentLoaded', () => {
         sections.forEach(sec => obs.observe(sec));
     }
 });
+
+
+// =========================
+// PATCH v10: Support FAB & drawer (mobile) + robust wsparcie visibility
+// =========================
+(function () {
+  function forceVisible(el) {
+    if (!el) return;
+    try {
+      el.removeAttribute('hidden');
+      el.style.setProperty('display', 'block', 'important');
+      el.style.setProperty('visibility', 'visible', 'important');
+      el.style.setProperty('opacity', '1', 'important');
+      el.style.setProperty('max-height', 'none', 'important');
+      el.style.scrollMarginTop = '90px';
+    } catch (_) {}
+  }
+
+  function openSupportDrawer() {
+    const drawer = document.getElementById('supportDrawer');
+    if (!drawer) return false;
+
+    const content = document.getElementById('supportDrawerContent');
+    const supportSection = document.getElementById('wsparcie');
+
+    if (content && supportSection && !content.dataset.filled) {
+      // Skopiuj tylko wnętrze karty (bez duplikowania całej strony)
+      content.innerHTML = supportSection.innerHTML;
+      content.dataset.filled = '1';
+    } else if (content && !content.dataset.filled) {
+      content.innerHTML = '<p style="color:#8b949e;margin:0">Sekcja „Wsparcie” nie została znaleziona na stronie.</p>';
+      content.dataset.filled = '1';
+    }
+
+    drawer.classList.add('is-open');
+    drawer.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('no-scroll');
+
+    return true;
+  }
+
+  function closeSupportDrawer() {
+    const drawer = document.getElementById('supportDrawer');
+    if (!drawer) return;
+    drawer.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('no-scroll');
+  }
+
+  function init() {
+    const supportSection = document.getElementById('wsparcie');
+    forceVisible(supportSection);
+
+    const fab = document.getElementById('supportFab');
+    if (fab) {
+      fab.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Prefer drawer on mobile; fallback to scroll
+        if (window.matchMedia && window.matchMedia('(max-width: 700px)').matches) {
+          if (openSupportDrawer()) return;
+        }
+        const el = document.getElementById('wsparcie');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, { passive: false });
+    }
+
+    // Close handlers
+    document.querySelectorAll('[data-support-close]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeSupportDrawer();
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeSupportDrawer();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
