@@ -2,27 +2,27 @@ name: Update traffic JSON
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Uruchamia się codziennie o północy
-  workflow_dispatch:      # Pozwala na ręczne uruchomienie
+    - cron: '0 0 * * *' # Codziennie o północy
+  workflow_dispatch:      # Ręczne uruchamianie
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:          # Niezbędne uprawnienia do zapisu
+    permissions:          # Uprawnienia zapisu
       contents: write
       
     steps:
       - uses: actions/checkout@v3
       
+      # ZMIANA: Używamy wersji 'reweo', która jest aktualnym następcą
       - name: Traffic to JSON
-        # ZMIANA: Używamy stabilnej, oryginalnej wersji akcji
-        uses: yi-jiayu/github-traffic-action@v1
+        uses: reweo/github-traffic-action@v1
         with:
           my_token: ${{ secrets.TRAFFIC_TOKEN }}
-          static_list: "aio-iptv-projekt" # Dla pewności wskazujemy repo (opcjonalne, ale pomaga)
+          static_list: "aio-iptv-projekt"
           
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Update traffic data"
-          file_pattern: traffic/*
+          file_pattern: "traffic/**"
