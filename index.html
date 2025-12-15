@@ -337,6 +337,9 @@
         /* Comment list stays scrollable even with many entries */
         #comments .comment-list { max-height: 420px; overflow-y: auto; }
 
+        /* Lepsze przewijanie do sekcji przy sticky menu */
+        .card[id] { scroll-margin-top: 96px; }
+
 @media (max-width: 900px) {
             .hero-header { justify-content: center; text-align: center; flex-direction: column; }
             .header-stats-container { margin-top: 15px; width: 100%; justify-content: center; gap: 20px; }
@@ -353,6 +356,13 @@
         
         /* Optymalizacja dla małych ekranów (telefony) */
         @media (max-width: 600px) {
+            /* Kompaktowy nagłówek na telefonach */
+            .hero-header { padding: 14px 16px; }
+            .brand-logos span { display: none; }
+            .header-stats-container { display: none; }
+            .brand-text h1 { font-size: 1.4rem; }
+            .brand-text p { font-size: 0.85rem; }
+
             /* Modal komentarzy na telefon */
             .modal-content {
                 width: 95%;
@@ -558,7 +568,8 @@
             <a href="#generator" class="menu-btn">⚡ Generator</a>
             <a href="#pliki" class="menu-btn">📂 Pliki</a>
             <a href="#kontakt" class="menu-btn">📧 Kontakt</a>
-            <a href="#systemy" class="menu-btn">💿 Systemy</a>
+                        <a href="#wsparcie" class="menu-btn">☕ Wsparcie</a>
+<a href="#systemy" class="menu-btn">💿 Systemy</a>
             <a href="porownywarka.html" class="menu-btn">📊 Porównywarka</a>
             <a href="kreator.html" class="menu-btn">🔧 Kreator</a>
             <a href="#statystyki" class="menu-btn">📈 Statystyki</a>
@@ -1032,15 +1043,77 @@
 
             <div class="accordion-item">
                 <button class="accordion-header">[Porada] Jak uruchomić kanały IPTV</button>
-                <div class="accordion-content">
-                    <strong>KROK 1:</strong> Zaloguj się do terminala i wpisz:<br>
-                    <span class="code-snippet">opkg update</span>
-                    <span class="code-snippet">opkg install enigma2-plugin-systemplugins-serviceapp</span>
-                    <span class="code-snippet">opkg install exteplayer3</span>
-                    <span class="code-snippet">opkg install ffmpeg</span>
-                    <span class="code-snippet">opkg install streamlinksrv</span><br>
-                    <strong>KROK 2:</strong> Zmień w ServiceApp player na <strong>exteplayer3</strong> i zrestartuj GUI.
-                </div>
+                <div class="accordion-content"><p><strong>NIEZBĘDNIK IPTV z list kanałów &amp; KAMERY</strong></p>
+<p>Poniżej gotowa instrukcja instalacji pakietów przez Terminal (Telnet/SSH). Po tej konfiguracji powinny działać: kanały IPTV z list (M3U), linki YouTube oraz strumienie z kamer (HTTP/RTSP – zależnie od źródła).</p>
+
+<p><strong>📥 KROK 1: Instalacja pakietów</strong><br>
+Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Enterem).</p>
+
+<div class="cmd-title">1️⃣ Aktualizacja listy pakietów (BARDZO WAŻNE):</div>
+<div class="cmd-wrapper">
+  <div class="command-box" id="iptv-cmd-update">opkg update</div>
+  <button class="copy-btn" onclick="copyToClipboard('iptv-cmd-update')">📋 Kopiuj</button>
+</div>
+
+<div class="cmd-title">2️⃣ Instalacja ServiceApp oraz silnika odtwarzania (ExtEplayer3):</div>
+<div class="cmd-wrapper">
+  <div class="command-box" id="iptv-cmd-serviceapp">opkg install enigma2-plugin-systemplugins-serviceapp</div>
+  <button class="copy-btn" onclick="copyToClipboard('iptv-cmd-serviceapp')">📋 Kopiuj</button>
+</div>
+<div class="cmd-wrapper">
+  <div class="command-box" id="iptv-cmd-exte">opkg install exteplayer3</div>
+  <button class="copy-btn" onclick="copyToClipboard('iptv-cmd-exte')">📋 Kopiuj</button>
+</div>
+<div class="cmd-wrapper">
+  <div class="command-box" id="iptv-cmd-ffmpeg">opkg install ffmpeg</div>
+  <button class="copy-btn" onclick="copyToClipboard('iptv-cmd-ffmpeg')">📋 Kopiuj</button>
+</div>
+
+<div class="cmd-title">3️⃣ Instalacja obsługi linków (YouTube, Twitch itp.):</div>
+<div class="cmd-wrapper">
+  <div class="command-box" id="iptv-cmd-youtubedl">opkg install python3-youtube-dl</div>
+  <button class="copy-btn" onclick="copyToClipboard('iptv-cmd-youtubedl')">📋 Kopiuj</button>
+</div>
+<div class="cmd-wrapper">
+  <div class="command-box" id="iptv-cmd-ytdlp">opkg install python3-yt-dlp</div>
+  <button class="copy-btn" onclick="copyToClipboard('iptv-cmd-ytdlp')">📋 Kopiuj</button>
+</div>
+
+<div class="cmd-title">4️⃣ Instalacja wrapperów (łączników systemowych):</div>
+<div class="cmd-wrapper">
+  <div class="command-box" id="iptv-cmd-ytdlpwrapper">opkg install enigma2-plugin-extensions-ytdlpwrapper</div>
+  <button class="copy-btn" onclick="copyToClipboard('iptv-cmd-ytdlpwrapper')">📋 Kopiuj</button>
+</div>
+<div class="cmd-wrapper">
+  <div class="command-box" id="iptv-cmd-ytdlwrapper">opkg install enigma2-plugin-extensions-ytdlwrapper</div>
+  <button class="copy-btn" onclick="copyToClipboard('iptv-cmd-ytdlwrapper')">📋 Kopiuj</button>
+</div>
+<div class="cmd-wrapper">
+  <div class="command-box" id="iptv-cmd-streamlinkwrapper">opkg install enigma2-plugin-extensions-streamlinkwrapper</div>
+  <button class="copy-btn" onclick="copyToClipboard('iptv-cmd-streamlinkwrapper')">📋 Kopiuj</button>
+</div>
+
+<div class="cmd-title">5️⃣ Instalacja serwera Streamlink:</div>
+<div class="cmd-wrapper">
+  <div class="command-box" id="iptv-cmd-streamlinksrv">opkg install streamlinksrv</div>
+  <button class="copy-btn" onclick="copyToClipboard('iptv-cmd-streamlinksrv')">📋 Kopiuj</button>
+</div>
+
+<p><strong>⚙️ KROK 2: Konfiguracja</strong></p>
+<ul style="margin: 5px 0 0 20px; padding: 0;">
+  <li>Zrób pełny restart tunera: <strong>Menu → Czuwanie/Restart → Restart</strong>.</li>
+  <li>Wejdź w: <strong>Menu → Ustawienia → Obsługa i Interfejs → ServiceApp</strong>.</li>
+  <li>Ustaw:
+    <ul style="margin: 8px 0 0 18px;">
+      <li><strong>System odtwarzania Enigma2:</strong> serviceapp</li>
+      <li><strong>Player:</strong> exteplayer3</li>
+    </ul>
+  </li>
+  <li>Naciśnij <strong>Zielony (Zapisz)</strong>.</li>
+  <li>System poprosi o restart GUI – zatwierdź.</li>
+</ul>
+
+<p style="margin-top: 10px;"><strong>✅ Gotowe!</strong> Teraz odtwarzanie strumieni IPTV z list kanałów, linków YouTube oraz kamer powinno działać poprawnie.</p></div>
             </div>
 
             <div class="accordion-item">
@@ -1680,6 +1753,11 @@
                 <h3 style="font-size: 1rem; color: #58a6ff; margin-bottom: 15px;">📊 Popularność wtyczek</h3>
                 <div style="max-width: 300px; margin: 0 auto;">
                     <canvas id="popularity-chart" width="300" height="300"></canvas>
+                </div>
+            
+                <div id="popularity-list" class="popularity-list" style="margin-top: 14px;"></div>
+                <div class="muted" style="margin-top: 10px; font-size: 0.85rem; color:#8b949e;">
+                    Jeśli w repozytorium strony istnieją pliki <span class="code-snippet">traffic/*.json</span>, wykres użyje danych „Traffic” (Views/Clones – 14 dni). W przeciwnym razie wyświetli publiczne metryki GitHub (np. pobrania z Releases).
                 </div>
             </div>
 
