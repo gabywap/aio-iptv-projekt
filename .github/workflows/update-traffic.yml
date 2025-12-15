@@ -3,21 +3,23 @@ name: Update traffic JSON
 on:
   schedule:
     - cron: '0 0 * * *' # Uruchamia się codziennie o północy
-  workflow_dispatch:      # Pozwala na ręczne uruchomienie przyciskiem
+  workflow_dispatch:      # Pozwala na ręczne uruchomienie
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:          # WAŻNE: Nadaje uprawnienia do zapisu w repozytorium
+    permissions:          # Niezbędne uprawnienia do zapisu
       contents: write
       
     steps:
       - uses: actions/checkout@v3
       
       - name: Traffic to JSON
-        uses: sangonz193/github-traffic-action@v1.0.3
+        # ZMIANA: Używamy stabilnej, oryginalnej wersji akcji
+        uses: yi-jiayu/github-traffic-action@v1
         with:
           my_token: ${{ secrets.TRAFFIC_TOKEN }}
+          static_list: "aio-iptv-projekt" # Dla pewności wskazujemy repo (opcjonalne, ale pomaga)
           
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
