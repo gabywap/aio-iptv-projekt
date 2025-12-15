@@ -531,3 +531,73 @@ body[data-page="home"] .footer-legal .sep { margin: 0 8px; opacity: .6; }
     grid-template-columns: 1fr;
   }
 }
+
+
+/* ===== Extra mobile polish (to match kreator/porownywarka responsiveness) ===== */
+body[data-page="home"] .quick-meta { min-width: 0; }
+
+body[data-page="home"] .menu-btn.icon-btn {
+  padding: 8px 12px;
+  border-radius: 14px;
+}
+
+body[data-page="home"] .footer-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+body[data-page="home"] .footer-social-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  text-decoration: none;
+  color: var(--text);
+  background: rgba(30, 41, 59, 0.55);
+  transition: transform .2s ease, border-color .2s ease, background .2s ease;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+body[data-page="home"] .footer-social-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(99, 102, 241, 0.55);
+  background: rgba(99, 102, 241, 0.12);
+}
+
+body[data-page="home"] .footer-social-btn.messenger:hover {
+  border-color: rgba(0, 132, 255, 0.65);
+  background: rgba(0, 132, 255, 0.12);
+}
+
+/* Quick cards layout fixes */
+@media (max-width: 980px) {
+  body[data-page="home"] .quick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+  body[data-page="home"] .container { padding: 0 14px; margin-top: 18px; }
+  body[data-page="home"] .card { padding: 18px; border-radius: 16px; }
+  body[data-page="home"] .card-intro { padding: 18px; }
+
+  body[data-page="home"] .intro-head { gap: 12px; }
+  body[data-page="home"] .intro-actions { width: 100%; }
+  body[data-page="home"] .pill-link { flex: 1 1 calc(50% - 10px); justify-content: center; }
+
+  body[data-page="home"] .quick-grid { grid-template-columns: 1fr; }
+  body[data-page="home"] .quick-card { gap: 12px; padding: 14px; }
+  body[data-page="home"] .quick-ico { width: 42px; height: 42px; border-radius: 14px; }
+  body[data-page="home"] .quick-title { font-size: 0.98rem; }
+  body[data-page="home"] .quick-desc { font-size: 0.86rem; }
+
+  /* Header / nav spacing on small screens */
+  body[data-page="home"] .top-info-bar { padding: 10px 14px; }
+  body[data-page="home"] .hero-header { padding: 16px 14px; }
+  body[data-page="home"] .main-navigation-bar { padding: 10px 14px; }
+  body[data-page="home"] .news-banner { padding: 12px 14px; flex-wrap: wrap; gap: 10px; }
+  body[data-page="home"] .banner-actions { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+}
