@@ -489,6 +489,7 @@
         }
     </style>
     <link rel="stylesheet" href="home_modern.css">
+    <!-- Google Search Console: file verification is enabled via googlef4b9a82addbed417.html -->
 </head>
 <body data-page="home">
 
@@ -1993,5 +1994,24 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
     <script src="script_modern.js"></script>
     
     
-    </body>
+    <!-- Mobile quick access: Support / Coffee (non-intrusive) -->
+<button id="support-fab" class="support-fab" type="button" aria-label="Wsparcie (Postaw kawę)">
+    ☕ Wsparcie
+</button>
+
+<div id="support-drawer" class="support-drawer" aria-hidden="true" role="dialog" aria-label="Wsparcie">
+    <div class="support-drawer__sheet">
+        <div class="support-drawer__handle" aria-hidden="true"></div>
+        <div class="support-drawer__header">
+            <div class="support-drawer__title">Wsparcie</div>
+            <button id="support-drawer-close" class="support-drawer__close" type="button" aria-label="Zamknij">×</button>
+        </div>
+        <div id="support-drawer-content" class="support-drawer__content">
+            <!-- filled from #wsparcie automatically -->
+        </div>
+    </div>
+    <div id="support-drawer-backdrop" class="support-drawer__backdrop" aria-hidden="true"></div>
+</div>
+
+</body>
 </html>

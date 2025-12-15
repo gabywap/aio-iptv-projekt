@@ -409,8 +409,8 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem(storageKey, String(count));
 
     counterElements.forEach((el) => { el.textContent = count; });
+    try { initSupportDrawer(); } catch (e) {}
 });
-
 
 // Kalkulator wielkości EPG
 function calculateEpgSize() {
@@ -568,6 +568,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         wrapper.appendChild(btn);
     });
+
 });
 
 // Quiz Enigma2
@@ -715,7 +716,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initRatings();
     initParticles();
     initChart();
+
 });
+
 // Chart.js initialization
 // Chart.js initialization (real metrics)
 async function initChart() {
@@ -1459,9 +1462,8 @@ document.addEventListener('DOMContentLoaded', () => {
   try { initTopInfoBar(); } catch (e) { console.warn(e); }
   try { initSectionNav(); } catch (e) { console.warn(e); }
   try { initCommentsCollapsible(); } catch (e) { console.warn(e); }
+
 });
-
-
 
 // =========================
 // Modern navigation UX (mobile toggle + scrollspy)
@@ -1512,4 +1514,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
         sections.forEach(sec => obs.observe(sec));
     }
+
 });
+
+/* --- Mobile support drawer (Coffee) --- */
+function initSupportDrawer() {
+    const fab = document.getElementById('support-fab');
+    const drawer = document.getElementById('support-drawer');
+    const closeBtn = document.getElementById('support-drawer-close');
+    const backdrop = document.getElementById('support-drawer-backdrop');
+    const content = document.getElementById('support-drawer-content');
+    const supportCard = document.getElementById('wsparcie');
+
+    if (!fab || !drawer || !content || !supportCard) return;
+
+    // Fill drawer with existing content (without duplicating large layout styles)
+    try {
+        content.innerHTML = supportCard.innerHTML;
+    } catch (e) {
+        // ignore
+    }
+
+    const open = () => {
+        drawer.classList.add('open');
+        drawer.setAttribute('aria-hidden', 'false');
+        document.documentElement.classList.add('no-scroll');
+        document.body.classList.add('no-scroll');
+    };
+
+    const close = () => {
+        drawer.classList.remove('open');
+        drawer.setAttribute('aria-hidden', 'true');
+        document.documentElement.classList.remove('no-scroll');
+        document.body.classList.remove('no-scroll');
+    };
+
+    fab.addEventListener('click', open);
+    closeBtn && closeBtn.addEventListener('click', close);
+    backdrop && backdrop.addEventListener('click', close);
+
+    // ESC
+    document.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Escape' && drawer.classList.contains('open')) close();
+    });
+}
+
