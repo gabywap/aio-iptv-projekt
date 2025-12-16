@@ -2005,39 +2005,72 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
     <script src="script_modern.js"></script>
     
     
-    <!-- Mobile quick access: Support / Coffee (non-intrusive) -->
-<button id="support-fab" class="support-fab" type="button" aria-label="Wsparcie (Postaw kawę)">
-    ☕ Wsparcie
-</button>
+        <!-- Mobile quick access: Support / Coffee (non-intrusive) -->
+    <button id="support-fab" class="support-fab" type="button" aria-label="Wsparcie (Postaw kawę)">
+        ☕ Wsparcie
+    </button>
 
-<div id="support-drawer" class="support-drawer" aria-hidden="true" role="dialog" aria-label="Wsparcie">
-    <div class="support-drawer__sheet">
-        <div class="support-drawer__handle" aria-hidden="true"></div>
-        <div class="support-drawer__header">
-            <div class="support-drawer__title">Wsparcie</div>
-            <button id="support-drawer-close" class="support-drawer__close" type="button" aria-label="Zamknij">×</button>
+    <!-- Support drawer modal -->
+    <div id="support-drawer" class="support-drawer" aria-hidden="true" role="dialog" aria-label="Wsparcie">
+        <div class="support-drawer__sheet">
+            <div class="support-drawer__header">
+                <div class="support-drawer__title">Wsparcie</div>
+                <button id="support-drawer-close" class="support-drawer__close" type="button" aria-label="Zamknij">×</button>
+            </div>
+            <div class="support-drawer__content">
+                <h3>Wesprzyj moją pracę – Dziękuję za każdą kawę! ☕</h3>
+                <div style="margin-bottom: 15px; text-align: center;">
+                    <a href="https://buycoffee.to/pawelpawelek" target="_blank">
+                        <img src="https://buycoffee.to/static/img/share/share-button-dark.png"
+                             style="width: 322px; height: 84px; max-width: 100%;"
+                             alt="Postaw mi kawę na buycoffee.to">
+                    </a>
+                </div>
+                <img src="https://github.com/OliOli2013/aio-iptv-projekt/raw/main/pliki/QR_buycoffee.png"
+                     alt="Kod QR BuyCoffee"
+                     class="qr-code"
+                     style="display: block; margin: 20px auto; max-width: 200px;">
+
+                <p style="font-size: 0.9rem; color: #c9d1d9; line-height: 1.5;">
+                    <strong>Dziękuję za postawienie kawy ☕</strong><br><br>
+                    To dla mnie – jako twórcy oprogramowania i administratora tej strony – ogromne wsparcie i realna motywacja do dalszego rozwoju projektów oraz utrzymania serwisu na obecnym poziomie.<br>
+                    Dzięki Twojej pomocy mogę poświęcać więcej czasu na rozwijanie narzędzi, aktualizacje, dokumentację i wsparcie społeczności.<br>
+                    Jeśli chcesz docenić moją pracę i pomoc, możesz symbolicznie postawić mi kawę – to drobny gest, który naprawdę wiele znaczy.<br>
+                    <br>– Pawełek
+                </p>
+            </div>
         </div>
-        <div id="support-drawer-content" class="support-drawer__content">
-            <!-- filled from #wsparcie automatically -->
+        <div id="support-drawer-backdrop" class="support-drawer__backdrop"></div>
+    </div>
+
+    <!-- Mobile navigation drawer -->
+    <div id="mobile-nav-drawer" class="mobile-nav-drawer" aria-hidden="true">
+        <div class="mobile-nav-drawer__backdrop" data-nav-close></div>
+        <div class="mobile-nav-drawer__sheet" role="navigation" aria-label="Menu mobilne">
+            <div class="mobile-nav-drawer__header">
+                <div class="mobile-nav-drawer__title">Menu</div>
+                <button class="mobile-nav-drawer__close" type="button" data-nav-close aria-label="Zamknij">✕</button>
+            </div>
+            <div class="mobile-nav-drawer__content">
+                <a href="#wtyczki" class="mobile-nav-link" data-nav-close>🔌 Wtyczki</a>
+                <a href="#listy" class="mobile-nav-link" data-nav-close>📺 Listy</a>
+                <a href="#aktualnosci" class="mobile-nav-link" data-nav-close>📚 Porady</a>
+                <a href="#generator" class="mobile-nav-link" data-nav-close>⚡ Generator</a>
+                <a href="#pliki" class="mobile-nav-link" data-nav-close>📂 Pliki</a>
+                <a href="#kontakt" class="mobile-nav-link" data-nav-close>📧 Kontakt</a>
+                <a href="#wsparcie" class="mobile-nav-link" data-nav-close>☕ Wsparcie</a>
+                <a href="#systemy" class="mobile-nav-link" data-nav-close>💿 Systemy</a>
+                <a href="porownywarka.html" class="mobile-nav-link" data-nav-close>📊 Porównywarka</a>
+                <a href="kreator.html" class="mobile-nav-link" data-nav-close>🔧 Kreator</a>
+                <a href="#statystyki" class="mobile-nav-link" data-nav-close>📈 Statystyki</a>
+            </div>
         </div>
     </div>
-    <div id="support-drawer-backdrop" class="support-drawer__backdrop" aria-hidden="true"></div>
-</div>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-    <!-- Mobile support drawer (opens "Wsparcie / Postaw kawę") -->
-    <button id="supportFab" class="support-fab" type="button" aria-label="Wsparcie (Postaw kawę)">☕ Wsparcie</button>
-    <div id="supportDrawer" class="support-drawer" aria-hidden="true">
-      <div class="support-drawer__backdrop" data-support-close></div>
-      <div class="support-drawer__sheet" role="dialog" aria-modal="true" aria-label="Wsparcie">
-        <div class="support-drawer__header">
-          <div class="support-drawer__title">Wsparcie</div>
-          <button class="support-drawer__close" type="button" data-support-close aria-label="Zamknij">✕</button>
-        </div>
-        <div class="support-drawer__content" id="supportDrawerContent"></div>
-      </div>
-    </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script_modern.js"></script>
 
 </body>
 </html>
