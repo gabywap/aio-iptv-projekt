@@ -1,134 +1,56 @@
-📺 AIO-IPTV Project
+AIO-IPTV / Enigma2 Hub
 
-Autorskie narzędzia, wtyczki, poradniki i listy dla Enigma2
-Strona projektu: AIO-IPTV.pl (GitHub Pages) + repozytorium z plikami do pobrania i dokumentacją.
+Nowoczesne centrum dla użytkowników Enigma2: pliki do pobrania, poradniki, narzędzia oraz wygodny panel webowy działający na GitHub Pages. Projekt jest tworzony z myślą o image’ach OpenATV / OpenPLi / Egami oraz narzędziach typu OSCam.
 
+Co dostajesz
 
+Stronę w stylu nowoczesnego panelu (GitHub Pages, bez backendu)
 
+Wtyczki, listy kanałów i paczki – w jednym miejscu
 
+Centrum wiedzy Enigma2: wyszukiwarka + tagi + mini-tutoriale
 
+Narzędzia Enigma2: gotowe komendy i akcje (z przyciskiem „kopiuj”)
 
+AI-Chat Enigma2 (offline): szybkie podpowiedzi o piconach, listach, OSCam, logach, restartach GUI itd.
 
+Powiadomienia (dzwoneczek): changelog zmian na stronie + licznik nieprzeczytanych
 
-🚀 Oficjalna strona (pobieranie, poradniki, narzędzia)
+PWA / Offline: szybsze ładowanie i podstawowa praca bez internetu
 
-Na stronie znajdziesz:
+Oficjalna strona
 
-aktualne pliki do pobrania (wtyczki/listy/paczki),
+AIO-IPTV.pl – pobieranie, poradniki i narzędzia w jednym panelu.
 
-poradniki i mini-tutoriale,
+Jak to działa technicznie
 
-narzędzia i gotowe komendy dla Enigma2,
+Projekt jest w pełni statyczny:
 
-system powiadomień o zmianach,
+działa na GitHub Pages
 
-AI-Chat Enigma2 (tryb offline, GitHub Pages).
+bez kluczy API i bez serwera
 
-👉 Wejdź na stronę projektu:
-AIO-IPTV.pl
+dane (wiedza, narzędzia, zmiany) są w plikach data/*.json
 
-✅ Co jest w tym repozytorium?
+Najważniejsze pliki
 
-Repozytorium zawiera:
+index.html – strona
 
-Stronę statyczną (GitHub Pages) – nowoczesny panel z sekcjami:
+script_modern.js – logika (AI-Chat, powiadomienia, wyszukiwarka, kopiowanie)
 
-Wtyczki / Listy / Poradniki
-
-Centrum wiedzy Enigma2 (wyszukiwarka + tagi + „kopiuj komendę”)
-
-Narzędzia Enigma2 (szybkie moduły + komendy)
-
-Systemy (OpenATV / OpenPLi / Egami / OSCam – karty + checklisty)
-
-Powiadomienia (dzwoneczek – log zmian, pamięć nieprzeczytanych)
-
-AI-Chat Enigma2 (działa statycznie, offline)
-
-Pliki do pobrania (np. paczki/wtyczki/listy – w zależności od aktualnych wydań)
-
-Dokumentację i opisy funkcji dla użytkowników Enigma2
-
-🧠 AI-Chat (Enigma2) – jak działa?
-
-AI-Chat w tym projekcie działa w 100% statycznie (GitHub Pages), bez backendu i bez kluczy API:
-
-podpowiada na podstawie wbudowanej bazy wiedzy (offline),
-
-kieruje do poradników i narzędzi,
-
-nadaje się do szybkich odpowiedzi: picony, listy, OSCam, logi, restart GUI, satellites.xml itp.
-
-🔔 Powiadomienia (dzwoneczek)
-
-Panel powiadomień pokazuje wszystkie zmiany dodane do pliku:
-
-data/updates.json
-
-Dodatkowo:
-
-licznik nieprzeczytanych jest zapamiętywany w localStorage,
-
-możesz „oznaczyć wszystko jako przeczytane”.
-
-📦 PWA / Offline
-
-Strona wspiera tryb PWA:
-
-manifest.json
-
-service-worker.js
-
-offline.html
-
-Dzięki temu:
-
-część treści działa offline,
-
-zasoby są cache’owane (szybsze ładowanie).
-
-🧱 Struktura katalogów (skrót)
-
-Przykładowo:
-
-index.html – strona główna
-
-home_modern.css / style.css – styl i UI
-
-script_modern.js – logika UI (menu, chat, powiadomienia, wiedza, narzędzia)
+home_modern.css / style.css – UI
 
 data/knowledge.json – baza wiedzy Enigma2
 
 data/tools.json – narzędzia/komendy
 
-data/updates.json – changelog pod dzwoneczek
+data/updates.json – powiadomienia/changelog
 
-data/systems.json – karty systemów + checklisty
+manifest.json, service-worker.js, offline.html – PWA
 
-assets/ – grafiki/logotypy/ikony
-
-🛠️ Jak uruchomić lokalnie?
-
-Najprościej:
-
-Pobierz repozytorium
-
-Otwórz index.html w przeglądarce
-(dla PWA/SW zalecany lokalny serwer, np. VS Code Live Server)
-
-📌 Wymagania / zgodność
-
-Strona: dowolna nowoczesna przeglądarka
-
-Hosting: GitHub Pages (statycznie, bez backendu)
-
-Tematyka: Enigma2, OpenATV, OpenPLi, Egami, OSCam i narzędzia sat/iptv
-
-📜 Licencja
-
-Projekt udostępniony na licencji MIT (szczegóły w LICENSE).
-
-👤 Autor
+Autor
 
 Paweł Pawełek
 Kontakt: msisystem@t.pl
+
+Licencja: MIT
