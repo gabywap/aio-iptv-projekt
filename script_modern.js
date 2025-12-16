@@ -1,16 +1,16 @@
 // =========================
 // AIO-IPTV.pl configuration
-// Fill these to enable public comments (Supabase)
+// Fill these to enable public comments & AI Chat (Supabase)
 // =========================
 window.AIO_SITE = window.AIO_SITE || {};
 
 // Twój Project URL
 window.AIO_SITE.supabaseUrl = "https://pynjjeobqzxbrvmqofcw.supabase.co";
 
-// Twój Anon Public Key
+// Twój Anon Public Key (klucz bezpieczny, publiczny)
 window.AIO_SITE.supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5bmpqZW9icXp4YnJ2bXFvZmN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU3NDA5MDYsImV4cCI6MjA4MTMxNjkwNn0.XSBB0DJw27Wrn41nranqFyj8YI0-YjLzX52dkdrgkrg";
 
-/* script.js - Logika dla AIO-IPTV.pl - WERSJA COMPLETE AI */
+/* script.js - Logika dla AIO-IPTV.pl - WERSJA COMPLETE (REAL AI) */
 
 // Inicjalizacja animacji AOS
 if (typeof AOS !== 'undefined') {
@@ -505,8 +505,7 @@ async function initChart() {
     if (typeof Chart === 'undefined') return;
     const ctx = document.getElementById('popularity-chart');
     if (!ctx) return;
-    // (Skrócona logika wykresu dla czytelności - działa tak samo)
-    const data = [1200, 850, 430, 300]; // Przykładowe dane jeśli API zawiedzie
+    const data = [1200, 850, 430, 300]; 
     if(window.__aioPopularityChart) window.__aioPopularityChart.destroy();
     window.__aioPopularityChart = new Chart(ctx, {
         type: 'doughnut',
@@ -550,7 +549,7 @@ function highlightStars(stars, r) {
     });
 }
 
-// MOBILE SUPPORT FAB & HEADER
+// MOBILE SUPPORT FAB
 function initMobileSupportFab() {
     if(window.innerWidth > 700 || document.getElementById('supportFab')) return;
     const fab = document.createElement('button');
@@ -563,47 +562,100 @@ function initMobileSupportFab() {
     document.body.appendChild(fab);
 }
 
-// COMMENTS (SUPABASE)
+// COMMENTS (SUPABASE - PUBLIC)
 async function initPublicComments() {
     const root = document.getElementById('comments-public');
     if (!root) return;
-    // Logika Supabase (zachowana ze starego pliku)
-    // ... Wymaga poprawnej biblioteki supabase-js w HTML ...
+    
+    const sbUrl = window.AIO_SITE?.supabaseUrl;
+    const sbKey = window.AIO_SITE?.supabaseAnonKey;
+    
+    if (!window.supabase || !sbUrl || !sbKey) {
+        console.warn("Brak konfiguracji Supabase dla komentarzy");
+        return;
+    }
+
+    const client = window.supabase.createClient(sbUrl, sbKey);
+    const listEl = document.getElementById('commentsListPublic');
+    const btnSend = document.getElementById('commentSubmitBtn');
+    const btnRefresh = document.getElementById('commentRefreshBtn');
+    const page = location.pathname || '/';
+
+    const load = async () => {
+        const { data, error } = await client
+            .from('comments')
+            .select('*')
+            .eq('page', page)
+            .order('created_at', { ascending: false })
+            .limit(20);
+
+        if (error) { console.error(error); return; }
+        
+        if (listEl) {
+            listEl.innerHTML = (data || []).map(c => `
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <strong>${(c.name || 'Anonim').replace(/</g, "&lt;")}</strong>
+                        <span>${new Date(c.created_at).toLocaleDateString()}</span>
+                    </div>
+                    <div class="comment-text">${(c.message || '').replace(/</g, "&lt;")}</div>
+                </div>
+            `).join('');
+        }
+    };
+
+    const send = async () => {
+        const nameEl = document.getElementById('commentNamePublic');
+        const bodyEl = document.getElementById('commentBodyPublic');
+        if(!bodyEl || !bodyEl.value.trim()) return;
+
+        btnSend.disabled = true;
+        const { error } = await client.from('comments').insert({
+            page: page,
+            name: nameEl.value || 'Anonim',
+            message: bodyEl.value
+        });
+        
+        if(!error) {
+            bodyEl.value = '';
+            await load();
+        } else {
+            alert('Błąd wysyłania: ' + error.message);
+        }
+        btnSend.disabled = false;
+    };
+
+    if(btnSend) btnSend.addEventListener('click', send);
+    if(btnRefresh) btnRefresh.addEventListener('click', load);
+    await load();
 }
 
-// URUCHOMIENIE POZOSTAŁYCH FUNKCJI
+// URUCHOMIENIE FUNKCJI
 document.addEventListener('DOMContentLoaded', () => {
     try { initMobileSupportFab(); } catch(e){}
     try { initPublicComments(); } catch(e){}
     
-    // Nawigacja
     const navToggle = document.getElementById('navToggle');
     const navBar = document.querySelector('.main-navigation-bar');
     if(navToggle && navBar) {
         navToggle.addEventListener('click', () => navBar.classList.toggle('nav-open'));
     }
-});
-
-// PATCH v10 (Drawer fix)
-(function () {
-    function openSupportDrawer() {
-        const d = document.getElementById('supportDrawer');
-        if(!d) return false;
-        d.classList.add('is-open');
-        return true;
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-        const fab = document.getElementById('supportFab');
-        if(fab) fab.addEventListener('click', openSupportDrawer);
-        document.querySelectorAll('[data-support-close]').forEach(b => {
-            b.addEventListener('click', () => document.getElementById('supportDrawer')?.classList.remove('is-open'));
-        });
+    
+    // Patch dla Drawerów
+    const fab = document.getElementById('supportFab');
+    if(fab) fab.addEventListener('click', () => {
+         const d = document.getElementById('supportDrawer');
+         if(d) d.classList.add('is-open');
     });
-})();
+    document.querySelectorAll('[data-support-close]').forEach(b => {
+        b.addEventListener('click', () => document.getElementById('supportDrawer')?.classList.remove('is-open'));
+    });
+});
 
 
 // =======================================================
-//  MODUŁ AI CHAT (INTELLIGENCE) - DODANO NOWĄ FUNKCJĘ
+//  MODUŁ AI CHAT (INTELLIGENCE) - WERSJA SUPABASE EDGE
+//  Wymaga wdrożonej funkcji 'ai-chat' w Supabase
 // =======================================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -611,103 +663,109 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initAIChat() {
-    // 1. Baza Wiedzy Enigma2
-    const knowledgeBase = [
-        {
-            id: 'root_pass',
-            triggers: ['hasło', 'password', 'root', 'login', 'pass', 'ftp', 'logowanie'],
-            answer: '🔑 **Hasło root:**\nW OpenATV/OpenPLi domyślnie **nie ma hasła** (jest puste).\nAby ustawić: wpisz w terminalu `passwd`.\nLogin to zawsze: `root`.',
-            score: 0
-        },
-        {
-            id: 'softcam',
-            triggers: ['softcam', 'oscam', 'cccam', 'ncam', 'emulator', 'cam', 'nie świeci'],
-            answer: '📺 **Instalacja SoftCam (OpenATV):**\n1. Zainstaluj feed:\n`wget -O - -q http://updates.mynonpublic.com/oea/feed | bash`\n2. Menu > Wtyczki > Zielony > softcams > oscam-stable.\n3. Skonfiguruj pliki w `/etc/tuxbox/config/`.',
-            score: 0
-        },
-        {
-            id: 'restart',
-            triggers: ['restart', 'gui', 'zawiesił', 'reset', 'init', 'enigma'],
-            answer: '🔄 **Szybki Restart GUI:**\nKomenda:\n`init 4 && sleep 2 && init 3`\nPełny restart tunera: `reboot`.',
-            score: 0
-        },
-        {
-            id: 'picons',
-            triggers: ['picony', 'logo', 'ikony', 'kanałów', 'picon'],
-            answer: '🖼️ **Picony:**\nFolder domyślny: `/usr/share/enigma2/picon/`.\nWymiary zwykłe: 220x132, XPicons: 400x240.\nPamiętaj o restarcie GUI po wgraniu.',
-            score: 0
-        },
-        {
-            id: 'update',
-            triggers: ['aktualizacja', 'update', 'upgrade', 'opkg', 'nowa wersja'],
-            answer: '🚀 **Aktualizacja:**\n`opkg update && opkg upgrade`\nZalecany backup przed wykonaniem!',
-            score: 0
-        },
-        {
-            id: 'storage',
-            triggers: ['miejsce', 'dysk', 'df', 'pamięć', 'full'],
-            answer: '💾 **Sprawdź miejsce:**\n`df -h`\nSprawdź co zajmuje miejsce w bieżącym folderze: `du -sh *`',
-            score: 0
-        }
-    ];
+    // Konfiguracja dostępu (pobierana z góry pliku)
+    const sbUrl = window.AIO_SITE?.supabaseUrl;
+    const sbKey = window.AIO_SITE?.supabaseAnonKey;
 
-    // 2. Elementy DOM
+    // Elementy DOM
     const chatInput = document.getElementById('ai-chat-input');
     const chatOutput = document.getElementById('ai-chat-messages');
     const chatBtn = document.getElementById('ai-chat-send');
+    const chips = document.querySelectorAll('.chip'); // Przyciski z podpowiedziami
 
-    if (!chatInput || !chatOutput) return; // Jeśli brak HTML, nie rób nic
+    if (!chatInput || !chatOutput) return;
 
+    // Inicjalizacja klienta Supabase (jeśli jeszcze nie istnieje)
+    let supabaseClient = null;
+    if (window.supabase && sbUrl && sbKey) {
+        supabaseClient = window.supabase.createClient(sbUrl, sbKey);
+    }
+
+    // Funkcja dodająca wiadomość do okna
     function addMessage(text, sender) {
         const div = document.createElement('div');
         div.className = `chat-message ${sender}`;
-        // Prosty parser Markdown
-        div.innerHTML = text
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/`(.*?)`/g, '<code>$1</code>')
+        
+        // Formatowanie Markdown (pogrubienia i kod)
+        let formatted = text
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Pogrubienie
+            .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>') // Bloki kodu
+            .replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>') // Kod inline
             .replace(/\n/g, '<br>');
+
+        div.innerHTML = formatted;
         chatOutput.appendChild(div);
         chatOutput.scrollTop = chatOutput.scrollHeight;
     }
 
-    function getAnswer(query) {
-        const q = query.toLowerCase();
-        let best = null;
-        let max = 0;
+    // Funkcja komunikacji z Supabase Edge Function
+    async function askAI(query) {
+        if (!supabaseClient) {
+            return "❌ Błąd konfiguracji: Brak połączenia z Supabase. Sprawdź czy biblioteka supabase-js jest załadowana.";
+        }
 
-        knowledgeBase.forEach(topic => {
-            let score = 0;
-            topic.triggers.forEach(t => {
-                if (q.includes(t)) score += 10; // Dokładne
-                else if (q.length > 4 && t.includes(q)) score += 5; // Częściowe
+        try {
+            // Wywołanie funkcji 'ai-chat' w chmurze
+            const { data, error } = await supabaseClient.functions.invoke('ai-chat', {
+                body: { query: query }
             });
-            if (score > max) { max = score; best = topic; }
-        });
 
-        return (max >= 5) ? best.answer : '🤔 Nie jestem pewien. Zapytaj o: **hasło, softcam, restart, picony**.';
+            if (error) {
+                console.error("Supabase Function Error:", error);
+                return "⚠️ Wystąpił błąd połączenia z asystentem AI. Sprawdź logi w Supabase.";
+            }
+
+            return data.reply || "🤔 Otrzymałem pustą odpowiedź.";
+
+        } catch (e) {
+            console.error("Request Error:", e);
+            return "⚠️ Błąd krytyczny sieci.";
+        }
     }
 
-    function handleSend() {
-        const txt = chatInput.value.trim();
+    // Obsługa wysyłania
+    async function handleSend(textOverride = null) {
+        const txt = textOverride || chatInput.value.trim();
         if (!txt) return;
 
+        // 1. Pokaż pytanie użytkownika
+        if (!textOverride) chatInput.value = '';
         addMessage(txt, 'user');
-        chatInput.value = '';
         
-        // Symulacja myślenia
-        const typing = document.createElement('div');
-        typing.className = 'chat-message bot typing';
-        typing.textContent = '...';
-        chatOutput.appendChild(typing);
+        // 2. Wskaźnik "myślenia"
+        const typingId = 'typing-' + Date.now();
+        const typingDiv = document.createElement('div');
+        typingDiv.id = typingId;
+        typingDiv.className = 'chat-message bot typing';
+        typingDiv.textContent = 'AI analizuje pytanie...';
+        chatOutput.appendChild(typingDiv);
+        chatOutput.scrollTop = chatOutput.scrollHeight;
 
-        setTimeout(() => {
-            chatOutput.removeChild(typing);
-            addMessage(getAnswer(txt), 'bot');
-        }, 600);
+        // 3. Pobierz odpowiedź z chmury
+        const response = await askAI(txt);
+
+        // 4. Usuń wskaźnik i pokaż odpowiedź
+        const tDiv = document.getElementById(typingId);
+        if (tDiv) tDiv.remove();
+        
+        addMessage(response, 'bot');
     }
 
-    if (chatBtn) chatBtn.addEventListener('click', handleSend);
+    // Eventy (Kliknięcie, Enter, Chipsy)
+    if (chatBtn) chatBtn.addEventListener('click', () => handleSend());
+    
     chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleSend();
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Zapobiegaj przeładowaniu formularza
+            handleSend();
+        }
+    });
+
+    // Obsługa gotowych pytań (chipsów)
+    chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            const question = chip.getAttribute('data-chip') || chip.innerText;
+            handleSend(question);
+        });
     });
 }
