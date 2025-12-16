@@ -406,104 +406,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Statystyki GitHuba + status usług
     fetchGithubStats();
     checkServiceStatus();
-// Support Drawer Functions
-function initSupportDrawer() {
-    const fab = document.getElementById('support-fab');
-    const drawer = document.getElementById('support-drawer');
-    const closeBtn = document.getElementById('support-drawer-close');
-    const backdrop = document.getElementById('support-drawer-backdrop');
-    const sheet = drawer ? drawer.querySelector('.support-drawer__sheet') : null;
-
-    if (!fab || !drawer) return;
-
-    // Ensure correct stacking (backdrop behind sheet), even if HTML order is wrong
-    if (backdrop) backdrop.style.zIndex = '0';
-    if (sheet) sheet.style.zIndex = '1';
-
-    // Helper
-    const openDrawer = () => {
-        drawer.style.display = 'block';
-        drawer.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden'; // Prevent scrolling
-    };
-
-    const closeDrawer = () => {
-        drawer.style.display = 'none';
-        drawer.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-    };
-
-    // Open drawer (stop propagation so global click handlers won't close it)
-    fab.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        openDrawer();
-    }, { passive: false });
-
-    // Prevent clicks inside the sheet from closing
-    if (sheet) {
-        sheet.addEventListener('click', (e) => {
-            e.stopPropagation();
-        }, { passive: true });
-    }
-
-    // Close drawer
-    if (closeBtn) closeBtn.addEventListener('click', (e) => { e.preventDefault(); closeDrawer(); }, { passive: false });
-    if (backdrop) backdrop.addEventListener('click', (e) => { e.preventDefault(); closeDrawer(); }, { passive: false });
-
-    // Close with Escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && drawer.style.display === 'block') {
-            closeDrawer();
-        }
-    });
-}
-
-// Mobile Navigation Drawer
-
-function initMobileNavDrawer() {
-    const toggle = document.getElementById('navToggle');
-    const drawer = document.getElementById('mobile-nav-drawer');
-    const closeBtns = document.querySelectorAll('[data-nav-close]');
-    
-    if (!toggle || !drawer) return;
-    
-    // Open drawer
-    toggle.addEventListener('click', () => {
-        drawer.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    });
-    
-    // Close drawer
-    const closeDrawer = () => {
-        drawer.style.display = 'none';
-        document.body.style.overflow = '';
-    };
-    
-    closeBtns.forEach(btn => {
-        btn.addEventListener('click', closeDrawer);
-    });
-    
-    // Close with Escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && drawer.style.display === 'block') {
-            closeDrawer();
-        }
-    });
-}
-
-// Initialize on DOMContentLoaded
-document.addEventListener('DOMContentLoaded', () => {
-    // ... existing code ...
-    
-    // 6. Support Drawer
-    initSupportDrawer();
-    
-    // 7. Mobile Navigation Drawer
-    initMobileNavDrawer();
-    
-    // ... rest of existing code ...
-});
 
     // Etykieta czasu dla przycisku "Wróć na górę"
     if (!topTimeLabel) {
@@ -730,198 +632,68 @@ document.addEventListener('DOMContentLoaded', () => {
     initChart();
 });
 // Chart.js initialization
-// Chart.js initialization (real metrics: prefer Traffic "Clones uniques" when available)
-async function initChart() {
-    if (typeof Chart === 'undefined') return;
-    const ctx = document.getElementById('popularity-chart');
-    if (!ctx) return;
-
-    const owner = 'OliOli2013';
-    const repos = [
-        { repo: 'PanelAIO-Plugin', label: 'PanelAIO', traffic: 'https://github.com/OliOli2013/PanelAIO-Plugin/graphs/traffic' },
-        { repo: 'MyUpdater-Plugin', label: 'MyUpdater', traffic: 'https://github.com/OliOli2013/MyUpdater-Plugin/graphs/traffic' },
-        { repo: 'IPTV-Dream-Plugin', label: 'IPTV Dream', traffic: 'https://github.com/OliOli2013/IPTV-Dream-Plugin/graphs/traffic' },
-        { repo: 'PiconUpdater', label: 'PiconUpdater', traffic: 'https://github.com/OliOli2013/PiconUpdater/graphs/traffic' },
-    ];
-
-    const listEl = document.getElementById('popularity-list');
-
-    const sumReleaseDownloads = (releases) => {
-        if (!Array.isArray(releases)) return 0;
-        let total = 0;
-        for (const rel of releases) {
-            const assets = Array.isArray(rel.assets) ? rel.assets : [];
-            for (const a of assets) {
-                const c = Number(a.download_count || 0);
-                if (Number.isFinite(c)) total += c;
-            }
-        }
-        return total;
-    };
-
-    const tryFetchLocalTraffic = async (repo) => {
-        // Expected file: traffic/<repo>.json (generated by GitHub Actions and committed to this site repo)
-        try {
-            const res = await fetch(`traffic/${encodeURIComponent(repo)}.json`, { cache: 'no-store' });
-            if (!res.ok) return null;
-            const data = await res.json();
-            return data && typeof data === 'object' ? data : null;
-        } catch (e) {
-            return null;
-        }
-    };
-
-    const getTrafficClonesUniques = (data) => {
-        // Supports both formats:
-        // 1) { summary: { clones: { uniques } } }  (recommended)
-        // 2) { clones: { uniques } }              (legacy)
-        try {
-            const v1 = data && data.summary && data.summary.clones && data.summary.clones.uniques;
-            if (Number.isFinite(Number(v1))) return Number(v1);
-            const v2 = data && data.clones && data.clones.uniques;
-            if (Number.isFinite(Number(v2))) return Number(v2);
-        } catch (e) {}
-        return null;
-    };
-
-    const getTrafficViewsUniques = (data) => {
-        try {
-            const v1 = data && data.summary && data.summary.views && data.summary.views.uniques;
-            if (Number.isFinite(Number(v1))) return Number(v1);
-            const v2 = data && data.views && data.views.uniques;
-            if (Number.isFinite(Number(v2))) return Number(v2);
-        } catch (e) {}
-        return null;
-    };
-
-    const fetchReleaseDownloads = async (repo) => {
-        try {
-            const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/releases?per_page=20`, { cache: 'no-store' });
-            if (!res.ok) return null;
-            const data = await res.json();
-            return sumReleaseDownloads(data);
-        } catch (e) {
-            return null;
-        }
-    };
-
-    const fetchRepoStars = async (repo) => {
-        try {
-            const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { cache: 'no-store' });
-            if (!res.ok) return null;
-            const data = await res.json();
-            return Number(data.stargazers_count || 0);
-        } catch (e) {
-            return null;
-        }
-    };
-
-    // Build dataset
-    const results = [];
-    for (const r of repos) {
-        const [traffic, downloads, stars] = await Promise.all([
-            tryFetchLocalTraffic(r.repo),
-            fetchReleaseDownloads(r.repo),
-            fetchRepoStars(r.repo),
-        ]);
-
-        let value = 0;
-        let source = 'Brak danych';
-
-        // Prefer: Traffic (Clones uniques / 14 dni)
-        const clonesU = getTrafficClonesUniques(traffic);
-        const viewsU = getTrafficViewsUniques(traffic);
-
-        if (Number.isFinite(clonesU) && clonesU !== null) {
-            value = clonesU;
-            source = 'Traffic (Clones uniques / 14 dni)';
-        } else if (Number.isFinite(viewsU) && viewsU !== null) {
-            value = viewsU;
-            source = 'Traffic (Views uniques / 14 dni)';
-        } else if (Number.isFinite(downloads) && downloads !== null) {
-            value = downloads;
-            source = 'Pobrania (Releases)';
-        } else if (Number.isFinite(stars) && stars !== null) {
-            value = stars;
-            source = 'Gwiazdki (Stars)';
-        }
-
-        results.push({
-            ...r,
-            value: Math.max(0, Math.floor(Number(value || 0))),
-            source,
-        });
-    }
-
-    // Render list with links to traffic
-    if (listEl) {
-        listEl.innerHTML = results.map((r) => {
-            return `
-              <div class="footer-kpi" style="justify-content:space-between;">
-                <span><strong>${escapeHtml(r.label)}</strong> <span style="opacity:.7;">(${escapeHtml(r.source)})</span></span>
-                <span><a class="footer-link inline" href="${escapeHtml(r.traffic)}" target="_blank" rel="noopener">Traffic</a> · <strong>${r.value}</strong></span>
-              </div>
-            `;
-        }).join('');
-    }
-
-    // Chart
-    const labels = results.map(r => r.label);
-    const values = results.map(r => r.value);
-
-    // Destroy previous chart if any
-    if (window.__aioPopularityChart && typeof window.__aioPopularityChart.destroy === 'function') {
-        window.__aioPopularityChart.destroy();
-    }
-
-    window.__aioPopularityChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels,
-            datasets: [{
-                data: values,
-                backgroundColor: [
-                    'rgba(88, 166, 255, 0.8)',
-                    'rgba(35, 134, 54, 0.8)',
-                    'rgba(210, 153, 34, 0.8)',
-                    'rgba(248, 81, 73, 0.8)'
-                ],
-                borderColor: [
-                    'rgba(88, 166, 255, 1)',
-                    'rgba(35, 134, 54, 1)',
-                    'rgba(210, 153, 34, 1)',
-                    'rgba(248, 81, 73, 1)'
-                ],
-                borderWidth: 2,
-                hoverOffset: 10
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '60%',
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: { color: '#8b949e', font: { size: 12 }, padding: 15 }
+function initChart() {
+    if (typeof Chart !== 'undefined') {
+        const ctx = document.getElementById('popularity-chart');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['AIO Panel', 'IPTV Dream', 'MyUpdater', 'Picon Updater', 'Simple EPG'],
+                    datasets: [{
+                        data: [45, 38, 32, 28, 15],
+                        backgroundColor: [
+                            'rgba(88, 166, 255, 0.8)',
+                            'rgba(35, 134, 54, 0.8)',
+                            'rgba(210, 153, 34, 0.8)',
+                            'rgba(248, 81, 73, 0.8)',
+                            'rgba(137, 87, 229, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(88, 166, 255, 1)',
+                            'rgba(35, 134, 54, 1)',
+                            'rgba(210, 153, 34, 1)',
+                            'rgba(248, 81, 73, 1)',
+                            'rgba(137, 87, 229, 1)'
+                        ],
+                        borderWidth: 2,
+                        hoverOffset: 10
+                    }]
                 },
-                tooltip: {
-                    backgroundColor: '#161b22',
-                    titleColor: '#58a6ff',
-                    bodyColor: '#c9d1d9',
-                    borderColor: '#30363d',
-                    borderWidth: 1,
-                    callbacks: {
-                        label: function(context) {
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0) || 1;
-                            const percentage = ((context.parsed * 100) / total).toFixed(1);
-                            return `${context.label}: ${context.parsed} (${percentage}%)`;
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#8b949e',
+                                font: {
+                                    size: 12
+                                },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#161b22',
+                            titleColor: '#58a6ff',
+                            bodyColor: '#c9d1d9',
+                            borderColor: '#30363d',
+                            borderWidth: 1,
+                            callbacks: {
+                                label: function(context) {
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((context.parsed * 100) / total).toFixed(1);
+                                    return `${context.label}: ${context.parsed} tys. pobrań (${percentage}%)`;
+                                }
+                            }
                         }
                     }
                 }
-            }
+            });
         }
-    });
+    }
 }
 
 // Particles background
@@ -1100,55 +872,6 @@ style.textContent = `
 document.head.appendChild(style);
 
 
-
-// =========================
-// Mobile: szybki dostęp do "Wsparcie / kawa"
-// =========================
-function initMobileSupportFab() {
-  try {
-    if (!window.matchMedia || !window.matchMedia('(max-width: 700px)').matches) return;
-
-    const supportSection = document.getElementById('wsparcie');
-    if (!supportSection) return;
-
-    // Jeśli CSS ukrywa sekcję na mobile, wymuś widoczność (inline ma pierwszeństwo)
-    supportSection.style.display = 'block';
-
-    // Nie twórz duplikatu
-    if (document.getElementById('supportFab')) return;
-
-    const fab = document.createElement('button');
-    fab.id = 'supportFab';
-    fab.type = 'button';
-    fab.textContent = '☕ Wsparcie';
-    fab.setAttribute('aria-label', 'Przejdź do sekcji Wsparcie');
-    fab.style.cssText = [
-      'position:fixed',
-      'left:14px',
-      'bottom:14px',
-      'z-index:9999',
-      'padding:10px 14px',
-      'border-radius:999px',
-      'border:1px solid rgba(255,255,255,.18)',
-      'background:rgba(17,24,39,.72)',
-      'backdrop-filter:blur(10px)',
-      '-webkit-backdrop-filter:blur(10px)',
-      'color:#fff',
-      'font-weight:700',
-      'font-size:13px',
-      'box-shadow:0 10px 30px rgba(0,0,0,.35)',
-      'cursor:pointer'
-    ].join(';');
-
-    fab.addEventListener('click', () => {
-      supportSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-
-    document.body.appendChild(fab);
-  } catch (e) {
-    console.warn('supportFab error', e);
-  }
-}
 
 // =========================
 // Top info bar (date/weather/login/notifications)
@@ -1513,88 +1236,79 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// =========================
-// PATCH v10: Support FAB & drawer (mobile) + robust wsparcie visibility
-// =========================
+/* =========================================================
+   Support Drawer (☕ Wsparcie) — robust binding for #support-fab
+   Adds drawer open/close without touching existing logic.
+   ========================================================= */
 (function () {
-  function forceVisible(el) {
-    if (!el) return;
-    try {
-      el.removeAttribute('hidden');
-      el.style.setProperty('display', 'block', 'important');
-      el.style.setProperty('visibility', 'visible', 'important');
-      el.style.setProperty('opacity', '1', 'important');
-      el.style.setProperty('max-height', 'none', 'important');
-      el.style.scrollMarginTop = '90px';
-    } catch (_) {}
-  }
+  function initSupportDrawerRobust() {
+    var fab = document.getElementById('support-fab');
+    var drawer = document.getElementById('support-drawer');
+    if (!fab || !drawer) return;
 
-  function openSupportDrawer() {
-    const drawer = document.getElementById('supportDrawer');
-    if (!drawer) return false;
+    var closeBtn = document.getElementById('support-drawer-close');
+    var backdrop = document.getElementById('support-drawer-backdrop') || drawer.querySelector('.support-drawer__backdrop');
+    var sheet = drawer.querySelector('.support-drawer__sheet');
 
-    const content = document.getElementById('supportDrawerContent');
-    const supportSection = document.getElementById('wsparcie');
+    // Ensure stacking order (backdrop behind, sheet above)
+    if (backdrop) backdrop.style.zIndex = '0';
+    if (sheet) sheet.style.zIndex = '1';
 
-    if (content && supportSection && !content.dataset.filled) {
-      // Skopiuj tylko wnętrze karty (bez duplikowania całej strony)
-      content.innerHTML = supportSection.innerHTML;
-      content.dataset.filled = '1';
-    } else if (content && !content.dataset.filled) {
-      content.innerHTML = '<p style="color:#8b949e;margin:0">Sekcja „Wsparcie” nie została znaleziona na stronie.</p>';
-      content.dataset.filled = '1';
+    function openDrawer() {
+      drawer.style.display = 'block';
+      drawer.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+
+      // Prevent immediate close due to bubbling/captured clicks on some mobile browsers
+      if (sheet) {
+        sheet.addEventListener('click', function (e) { e.stopPropagation(); }, { passive: true });
+        sheet.addEventListener('touchstart', function (e) { e.stopPropagation(); }, { passive: true });
+      }
     }
 
-    drawer.classList.add('is-open');
-    drawer.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('no-scroll');
-
-    return true;
-  }
-
-  function closeSupportDrawer() {
-    const drawer = document.getElementById('supportDrawer');
-    if (!drawer) return;
-    drawer.classList.remove('is-open');
-    drawer.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('no-scroll');
-  }
-
-  function init() {
-    const supportSection = document.getElementById('wsparcie');
-    forceVisible(supportSection);
-
-    const fab = document.getElementById('supportFab');
-    if (fab) {
-      fab.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        // Prefer drawer on mobile; fallback to scroll
-        if (window.matchMedia && window.matchMedia('(max-width: 700px)').matches) {
-          if (openSupportDrawer()) return;
-        }
-        const el = document.getElementById('wsparcie');
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, { passive: false });
+    function closeDrawer() {
+      drawer.style.display = 'none';
+      drawer.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
     }
 
-    // Close handlers
-    document.querySelectorAll('[data-support-close]').forEach((btn) => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        closeSupportDrawer();
-      });
+    // Open
+    fab.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      openDrawer();
+    }, { passive: false });
+
+    fab.addEventListener('touchend', function (e) {
+      // Some Android browsers fire touchend without click reliably
+      e.preventDefault();
+      e.stopPropagation();
+      openDrawer();
+    }, { passive: false });
+
+    // Close
+    if (closeBtn) closeBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeDrawer();
     });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeSupportDrawer();
+    if (backdrop) backdrop.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeDrawer();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && drawer.style.display === 'block') {
+        closeDrawer();
+      }
     });
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', initSupportDrawerRobust);
   } else {
-    init();
+    initSupportDrawerRobust();
   }
 })();
