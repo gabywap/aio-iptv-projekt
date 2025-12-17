@@ -311,23 +311,101 @@ async function checkServiceStatus() {
     }
 }
 
-// Obsługa Pogody (OpenMeteo)
-function weatherEmojiFromCode(code) {
-  if (code === 0) return '☀️';
-  if ([1,2,3].includes(code)) return '⛅';
-  if ([45,48].includes(code)) return '🌫️';
-  if ([51,53,55,56,57].includes(code)) return '🌦️';
-  if ([61,63,65,66,67].includes(code)) return '🌧️';
-  if ([71,73,75,77].includes(code)) return '🌨️';
-  if ([80,81,82].includes(code)) return '🌧️';
-  if ([95,96,99].includes(code)) return '⛈️';
-  return '☁️';
+// Obsługa Pogody (OpenMeteo) + lokalizacja użytkownika (fallback: Warszawa)
+function weatherCategoryFromCode(code) {
+  if (code === 0) return 'clear';
+  if ([1, 2].includes(code)) return 'partly';
+  if ([3].includes(code)) return 'cloudy';
+  if ([45, 48].includes(code)) return 'fog';
+  if ([51, 53, 55, 56, 57].includes(code)) return 'drizzle';
+  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return 'rain';
+  if ([71, 73, 75, 77].includes(code)) return 'snow';
+  if ([95, 96, 99].includes(code)) return 'storm';
+  return 'cloudy';
+}
+
+function weatherSvgFromCategory(cat) {
+  // 24x24 viewBox, animated classes styled in home_modern.css
+  if (cat === 'clear') {
+    return `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g class="wx-sun-rays">
+          <path d="M12 1.6v2.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M12 20v2.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M1.6 12h2.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M20 12h2.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M4.2 4.2l1.7 1.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M18.1 18.1l1.7 1.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M18.1 5.9l1.7-1.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M4.2 19.8l1.7-1.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </g>
+        <circle cx="12" cy="12" r="4.3" fill="currentColor" opacity="0.95"/>
+      </svg>`;
+  }
+  if (cat === 'partly') {
+    return `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g class="wx-sun-rays" opacity="0.85">
+          <circle cx="9" cy="9" r="3.3" fill="currentColor"/>
+        </g>
+        <g class="wx-cloud">
+          <path d="M16.6 17.3H7.7c-2 0-3.7-1.6-3.7-3.6 0-1.8 1.2-3.2 2.9-3.6.5-2 2.3-3.5 4.5-3.5 2.3 0 4.1 1.4 4.6 3.5 2 0.2 3.6 1.8 3.6 3.9 0 1.8-1.5 3.3-3.3 3.3Z" fill="currentColor" opacity="0.65"/>
+        </g>
+      </svg>`;
+  }
+  if (cat === 'rain' || cat === 'drizzle') {
+    return `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g class="wx-cloud">
+          <path d="M17 15.2H7.6c-2.1 0-3.8-1.7-3.8-3.8 0-1.9 1.3-3.4 3.1-3.7.6-2.1 2.5-3.7 4.8-3.7 2.5 0 4.5 1.6 5 3.9 2 .2 3.6 1.9 3.6 4 0 1.9-1.5 3.3-3.3 3.3Z" fill="currentColor" opacity="0.7"/>
+        </g>
+        <g opacity="0.95">
+          <path class="wx-rain" d="M9 16.2l-1 2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path class="wx-rain" d="M13 16.2l-1 2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path class="wx-rain" d="M17 16.2l-1 2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </g>
+      </svg>`;
+  }
+  if (cat === 'snow') {
+    return `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g class="wx-cloud">
+          <path d="M17 14.9H7.6c-2.1 0-3.8-1.7-3.8-3.8 0-1.9 1.3-3.4 3.1-3.7.6-2.1 2.5-3.7 4.8-3.7 2.5 0 4.5 1.6 5 3.9 2 .2 3.6 1.9 3.6 4 0 1.8-1.5 3.3-3.3 3.3Z" fill="currentColor" opacity="0.7"/>
+        </g>
+        <g opacity="0.95">
+          <path class="wx-rain" d="M9.5 16.7v2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path class="wx-rain" d="M14.5 16.7v2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </g>
+      </svg>`;
+  }
+  if (cat === 'storm') {
+    return `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g class="wx-cloud">
+          <path d="M17 15.2H7.6c-2.1 0-3.8-1.7-3.8-3.8 0-1.9 1.3-3.4 3.1-3.7.6-2.1 2.5-3.7 4.8-3.7 2.5 0 4.5 1.6 5 3.9 2 .2 3.6 1.9 3.6 4 0 1.9-1.5 3.3-3.3 3.3Z" fill="currentColor" opacity="0.7"/>
+        </g>
+        <path d="M12.8 16l-2.2 3.7h2.2l-1.2 3.1 3.8-5h-2.3l1.2-1.8Z" fill="currentColor" opacity="0.95"/>
+      </svg>`;
+  }
+  // cloudy / fog default
+  return `
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g class="wx-cloud">
+        <path d="M17.1 16.2H7.7c-2.2 0-4-1.8-4-4 0-2 1.4-3.6 3.3-3.9.6-2.3 2.7-4 5.2-4 2.6 0 4.8 1.7 5.4 4.2 2.2.2 3.9 2 3.9 4.2 0 1.9-1.6 3.5-3.4 3.5Z" fill="currentColor" opacity="0.7"/>
+      </g>
+    </svg>`;
 }
 
 async function fetchWeather() {
   const iconEl = document.getElementById('weather-icon');
   const tempEl = document.getElementById('weather-temp');
+  const locEl = document.getElementById('weather-location');
+  const widget = document.getElementById('weatherWidget');
   if (!tempEl || !iconEl) return;
+
+  const DEFAULT = { lat: 52.2297, lon: 21.0122, name: 'Warszawa' };
+  const STORAGE_COORDS = 'aio_geo_coords_v1';
+  const STORAGE_DENIED = 'aio_geo_denied_v1';
 
   const fetchByCoords = async (lat, lon) => {
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&current_weather=true&timezone=auto`;
@@ -336,18 +414,80 @@ async function fetchWeather() {
     return res.json();
   };
 
+  const reverseGeocode = async (lat, lon) => {
+    try {
+      const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&accept-language=pl`;
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) return '';
+      const j = await res.json();
+      const a = (j && j.address) || {};
+      return a.city || a.town || a.village || a.hamlet || a.county || a.state || '';
+    } catch (e) {
+      return '';
+    }
+  };
+
+  const setUI = (t, code, name) => {
+    const cat = weatherCategoryFromCode(Number(code));
+    iconEl.innerHTML = weatherSvgFromCategory(cat);
+    tempEl.textContent = Number.isFinite(t) ? `${Math.round(t)}°C` : '--°C';
+    if (locEl) locEl.textContent = (name || DEFAULT.name);
+  };
+
+  const updateWeather = async (lat, lon, name) => {
+    const d = await fetchByCoords(lat, lon);
+    const cw = d && d.current_weather;
+    if (!cw) throw new Error('No current_weather');
+    const resolvedName = name || (await reverseGeocode(lat, lon)) || DEFAULT.name;
+    setUI(cw.temperature, cw.weathercode, resolvedName);
+    return resolvedName;
+  };
+
+  // Initial quick paint (Warszawa), then try saved coords
+  setUI(NaN, 3, DEFAULT.name);
+
   try {
-     // Domyślnie Warszawa jeśli brak geolokalizacji
-     const d = await fetchByCoords(52.2297, 21.0122);
-     const cw = d && d.current_weather;
-     if (cw) {
-        const t = Math.round(cw.temperature);
-        iconEl.textContent = weatherEmojiFromCode(cw.weathercode);
-        tempEl.textContent = `${t}°C`;
-     }
+    const saved = JSON.parse(localStorage.getItem(STORAGE_COORDS) || 'null');
+    if (saved && Number.isFinite(saved.lat) && Number.isFinite(saved.lon)) {
+      await updateWeather(saved.lat, saved.lon, saved.name);
+    } else {
+      await updateWeather(DEFAULT.lat, DEFAULT.lon, DEFAULT.name);
+    }
   } catch (e) {
-    iconEl.textContent = '☁️';
-    tempEl.textContent = '--°C';
+    // ignore
+  }
+
+  const requestGeo = () => {
+    if (!('geolocation' in navigator)) return;
+    if (localStorage.getItem(STORAGE_DENIED) === '1') return;
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          const name = await updateWeather(lat, lon);
+          localStorage.setItem(STORAGE_COORDS, JSON.stringify({ lat, lon, name }));
+          localStorage.removeItem(STORAGE_DENIED);
+        } catch (e) {
+          // keep default
+        }
+      },
+      (err) => {
+        if (err && err.code === 1) localStorage.setItem(STORAGE_DENIED, '1');
+      },
+      { enableHighAccuracy: false, timeout: 6500, maximumAge: 60 * 60 * 1000 }
+    );
+  };
+
+  // Try to obtain user location once (browser prompt). If denied -> fallback Warszawa.
+  requestGeo();
+
+  // Allow retry (user gesture) + refresh
+  if (widget && widget.dataset.wxBound !== '1') {
+    widget.dataset.wxBound = '1';
+    widget.addEventListener('click', (e) => { e.preventDefault(); localStorage.removeItem(STORAGE_DENIED); requestGeo(); }, { passive: false });
+    widget.addEventListener('touchstart', (e) => { e.preventDefault(); localStorage.removeItem(STORAGE_DENIED); requestGeo(); }, { passive: false });
   }
 }
 
@@ -377,6 +517,16 @@ document.addEventListener('DOMContentLoaded', () => {
     initSupportDrawer();
     initMobileNavDrawer();
     fetchWeather(); // Pogoda
+
+    // Dzwonek "Aktualizacje" — pewna obsługa na urządzeniach dotykowych
+    const bellBtn = document.getElementById('newsBellBtn');
+    if (bellBtn && bellBtn.dataset.touchBound !== '1') {
+        bellBtn.dataset.touchBound = '1';
+        bellBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (typeof window.toggleNotifications === 'function') window.toggleNotifications(true);
+        }, { passive: false });
+    }
 
     // Etykieta przycisku top
     if (!topTimeLabel) {
@@ -572,10 +722,10 @@ function initParticles() {
             number: { value: 26, density: { enable: true, value_area: 900 } },
             shape: {
                 type: 'image',
-                image: { src: 'assets/particles/satellite.svg', width: 32, height: 32 }
+                image: { src: 'assets/particles/satellite.png', width: 32, height: 32 }
             },
-            opacity: { value: 0.35, random: true },
-            size: { value: 18, random: true },
+            opacity: { value: 0.45, random: true },
+            size: { value: 20, random: true },
             move: { enable: true, speed: 1.2, direction: 'none', out_mode: 'out' },
             line_linked: { enable: false }
         },

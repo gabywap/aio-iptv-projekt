@@ -230,6 +230,14 @@
       (section || panel)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
+    // Also wire the promo banner button for mobile browsers (avoid relying on inline onclick only)
+    const bannerBtn = document.querySelector('#newsBanner button[onclick*="openComments"]');
+    if (bannerBtn) {
+      bannerBtn.addEventListener('click', (e) => { e.preventDefault(); window.openComments(); });
+      bannerBtn.addEventListener('touchstart', (e) => { e.preventDefault(); window.openComments(); }, { passive: false });
+    }
+
+
     if (!toggle || !panel) return;
 
     // Wire the built-in toggle button (uses [hidden] in CSS)

@@ -16,7 +16,6 @@
 
     <meta name="theme-color" content="#0d1117">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
@@ -31,8 +30,6 @@
     <meta property="og:description" content="Pobierz AIO Panel, IPTV Dream, listy kanałów i picony. Kompletny zestaw narzędzi dla Twojego dekodera.">
     <meta property="og:image" content="https://olioli2013.github.io/aio-iptv-projekt/pliki/logo.png">
 
-    <link rel="icon" type="image/png" href="assets/icons/icon-192.png">
-    
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css"> 
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -517,79 +514,71 @@
         }
     </style>
     <link rel="stylesheet" href="home_modern.css">
-    <!-- Google Search Console: file verification is enabled via googlef4b9a82addbed417.html -->
+    <!-- Google Search Console: file verification is enabled via googlef4b9a82addbed417.html -->    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+
 </head>
 <body data-page="home">
 
     <button onclick="topFunction()" id="topBtn" title="Wróć na górę">⬆️</button>
     <div id="particles-js"></div>
 
-    <div class="top-info-bar">
-        <div class="status-left">
-            <span class="dot-online"></span>
-            <span id="current-date-display">...</span>
-        </div>
-        <div class="status-right">
-            <div class="top-btn-small" title="Kliknij aby odświeżyć" onclick="fetchWeather()">
-                <span id="weather-icon">☁️</span> <span id="weather-temp">--°C</span>
-            </div>
-            
-            <div class="top-btn-small" title="Powiadomienia" onclick="toggleNotifications()">
-                🔔 <span class="badge-red" id="notif-badge">0</span>
-            </div>
-            
-            <div class="notifications-dropdown" id="notificationsDropdown" aria-hidden="true">
-                <div class="notif-header">
-                    <div class="notif-title">Aktualizacje</div>
-                    <button type="button" class="notif-close" id="notifCloseBtn" aria-label="Zamknij">✕</button>
+    <!-- Top utility bar: support + weather + notifications (mobile-friendly) -->
+    <div class="top-support-bar" role="region" aria-label="Wsparcie i pogoda">
+        <div class="top-support-inner">
+            <div class="support-message">
+                <div class="support-copy">
+                    <span class="support-ico" aria-hidden="true">☕</span>
+                    <span class="support-text">
+                        <strong>Wesprzyj AIO-IPTV</strong> — kawa pomaga rozwijać stronę i autorskie wtyczki:
+                        <strong>AIO Panel</strong>, <strong>IPTV Dream</strong> i inne.
+                    </span>
                 </div>
-                <div class="notif-list" id="notifList"></div>
-                <div class="notif-footer">
-                    <button type="button" class="notif-markall" id="notifMarkAll">Oznacz wszystko jako przeczytane</button>
-                </div>
+                <a class="support-btn" href="#wsparcie">Postaw kawę</a>
             </div>
-            <div class="notifications-backdrop" id="notifBackdrop" aria-hidden="true"></div>
 
-            <div class="top-btn-small" id="login-btn" onclick="toggleLogin()">
-                👤 <span id="user-status">Gość</span>
+            <div class="top-widgets">
+                <button class="top-pill-btn" id="newsBellBtn" type="button" onclick="toggleNotifications()" aria-label="Nowości i aktualizacje">
+                    <span class="bell">🔔</span>
+                    <span class="badge-red" id="notif-badge">0</span>
+                </button>
+
+                <button class="top-pill-btn weather-pill" id="weatherWidget" type="button" title="Pogoda – kliknij aby ustawić lokalizację" aria-label="Pogoda">
+                    <span class="weather-stack">
+                        <span class="weather-icon" id="weather-icon" aria-hidden="true"></span>
+                        <span class="weather-loc" id="weather-location">Warszawa</span>
+                    </span>
+                    <span class="weather-temp" id="weather-temp">--°C</span>
+                </button>
             </div>
         </div>
     </div>
 
-    <header class="hero-header">
-        <div class="brand-area">
-            <div class="brand-logos">
-                <img src="assets/logo-modern.svg" alt="AIO-IPTV • Enigma2" class="brand-logo-img">
-                <div class="brand-badges" aria-label="Obsługiwane systemy">
-                    <img src="assets/brands/enigma2.svg" alt="Enigma2" class="brand-badge">
-                    <img src="assets/brands/openatv.svg" alt="OpenATV" class="brand-badge">
-                    <img src="assets/brands/openpli.svg" alt="OpenPLi" class="brand-badge">
-                    <img src="assets/brands/egami.svg" alt="Egami" class="brand-badge">
-                    <img src="assets/brands/oscam.svg" alt="OSCam" class="brand-badge">
-                </div>
-            </div>
-            <div class="brand-text">
-                <h1>AIO-IPTV.pl</h1>
-                <p>Niezbędnik Enigma2</p>
-                <p style="font-size: 0.75rem; opacity: 0.7; margin-top: 4px;">Autorskie Wtyczki • Listy Kanałów • Porady • Wsparcie</p>
-            </div>
+    <!-- Notifications (bell) dropdown markup (filled via app_final.js / data/updates.json) -->
+    <div class="notifications-dropdown" id="notificationsDropdown" aria-hidden="true">
+        <div class="notif-header">
+            <div class="notif-title">Aktualizacje</div>
+            <button type="button" class="notif-close" id="notifCloseBtn" aria-label="Zamknij">✕</button>
         </div>
-        
-        <div class="header-stats-container">
-            <div>
-                <span class="h-stat-val" id="real-downloads">...</span>
-                <span class="h-stat-label">POBRANIA</span>
-            </div>
-            <div>
-                <span class="h-stat-val" id="real-users">...</span>
-                <span class="h-stat-label">SPOŁECZNOŚĆ</span>
-            </div>
-            <div>
-                <span class="h-stat-val" id="real-support">...</span>
-                <span class="h-stat-label">WSPARCIE</span>
+        <div class="notif-list" id="notifList"></div>
+        <div class="notif-footer">
+            <button type="button" class="notif-markall" id="notifMarkAll">Oznacz wszystko jako przeczytane</button>
+        </div>
+    </div>
+    <div class="notifications-backdrop" id="notifBackdrop" aria-hidden="true"></div>
+
+        <header class="site-header-simple" role="banner">
+        <div class="site-header-inner">
+            <img src="logo.png" alt="AIO-IPTV" class="site-logo">
+            <div class="site-title-block">
+                <h1>AIO-IPTV.pl</h1>
+                <p class="site-subtitle">Niezbędnik Enigma2</p>
+                <p class="site-tagline">Autorskie Wtyczki • Listy Kanałów • Porady • Twórcy - Paweł Pawełek</p>
             </div>
         </div>
     </header>
+
+
 
     <nav class="main-navigation-bar">
         <div class="nav-left-group">
