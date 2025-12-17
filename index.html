@@ -51,6 +51,8 @@
             align-items: center;
             font-size: 0.85rem;
             color: #8b949e;
+            position: relative;
+            z-index: 3000;
         }
         .status-left { display: flex; align-items: center; gap: 10px; }
         .dot-online { width: 10px; height: 10px; background-color: #3fb950; border-radius: 50%; display: inline-block; box-shadow: 0 0 5px #3fb950; }
@@ -63,25 +65,36 @@
         }
         .top-btn-small:hover { border-color: #58a6ff; color: white; background: #30363d; }
         .badge-red { background: #f85149; color: white; font-size: 0.7em; padding: 1px 6px; border-radius: 10px; font-weight: bold; }
+        /* Powiadomienia (dzwonek) – overlay nad treścią */
+        .notifications-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.55);
+            z-index: 99990;
+        }
+        .notifications-backdrop.show { display: block; }
 
-        /* Dropdown powiadomień */
         .notifications-dropdown {
             display: none;
-            position: absolute;
-            top: 35px;
-            right: 0;
-            width: 300px;
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            z-index: 2000;
+            position: fixed;
+            top: 54px;
+            right: 12px;
+            width: min(360px, calc(100vw - 24px));
+            background: rgba(17, 24, 39, 0.92);
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            border-radius: 14px;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.65);
+            z-index: 99999;
             overflow: hidden;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
         }
-        .notif-item { padding: 10px 15px; border-bottom: 1px solid #30363d; font-size: 0.8rem; color: #c9d1d9; cursor: pointer; display: flex; align-items: start; gap: 10px; }
-        .notif-item:hover { background: #21262d; }
+        .notifications-dropdown.show { display: block; }
+        .notif-item { padding: 10px 12px; border-bottom: 1px solid rgba(148,163,184,0.10); font-size: 0.85rem; color: #e6edf3; cursor: pointer; display: flex; gap: 10px; }
+        .notif-item:hover { background: rgba(2,6,23,0.25); }
         .notif-item:last-child { border-bottom: none; }
-        .notif-icon { font-size: 1.2em; }
+        .notif-icon { width: 22px; text-align: center; }
 
         /* 2. Główny nagłówek (Hero) */
         .hero-header {
@@ -536,16 +549,6 @@
                 </div>
             </div>
             <div class="notifications-backdrop" id="notifBackdrop" aria-hidden="true"></div>
-                </div>
-                <div class="notif-item">
-                    <span class="notif-icon">📺</span>
-                    <div><strong>Listy kanałów</strong><br>Nowe listy Bzyk83 (Grudzień)</div>
-                </div>
-                <div class="notif-item">
-                    <span class="notif-icon">🔧</span>
-                    <div><strong>Poradnik</strong><br>Nowy skrypt Zgemma H9S</div>
-                </div>
-            </div>
 
             <div class="top-btn-small" id="login-btn" onclick="toggleLogin()">
                 👤 <span id="user-status">Gość</span>
@@ -2005,7 +2008,7 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
                     <a class="footer-link" href="#generator">Generator One‑Liner</a>
                     <a class="footer-link" href="kreator.html">Kreator konfiguracji</a>
                     <a class="footer-link" href="porownywarka.html">Porównywarka tunerów</a>
-                    <a class="footer-link" href="#komentarze">Komentarze</a>
+                    <a class="footer-link" href="#comments">Komentarze</a>
                 </div>
 
                 <div class="footer-col">

@@ -563,11 +563,27 @@ async function initChart() {
 
 // PARTICLES
 function initParticles() {
-    if (typeof particlesJS !== 'undefined') {
-        particlesJS('particles-js', {
-            particles: { number: { value: 30 }, color: { value: '#58a6ff' }, line_linked: { color: '#58a6ff' } }
-        });
-    }
+    if (typeof particlesJS === 'undefined') return;
+    if (!document.getElementById('particles-js')) return;
+
+    // Tematyczne cząsteczki w tle (Enigma2/IPTV) – pod całą zawartością strony
+    particlesJS('particles-js', {
+        particles: {
+            number: { value: 26, density: { enable: true, value_area: 900 } },
+            shape: {
+                type: 'image',
+                image: { src: 'assets/particles/satellite.svg', width: 32, height: 32 }
+            },
+            opacity: { value: 0.35, random: true },
+            size: { value: 18, random: true },
+            move: { enable: true, speed: 1.2, direction: 'none', out_mode: 'out' },
+            line_linked: { enable: false }
+        },
+        interactivity: {
+            events: { onhover: { enable: false }, onclick: { enable: false }, resize: true }
+        },
+        retina_detect: true
+    });
 }
 
 // RATINGS

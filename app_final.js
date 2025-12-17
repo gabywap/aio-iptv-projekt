@@ -208,6 +208,44 @@
 
     if (markAll) markAll.addEventListener('click', () => { markAllRead(); close(); });
   }
+
+  // -----------------------------
+  // Comments: scroll helper + collapse toggle
+  // -----------------------------
+  function initCommentsFinal() {
+    const section = qs('#comments');
+    const panel = qs('#commentsPanel');
+    const toggle = qs('#commentsToggle');
+
+    // Global helper for inline onclick="openComments()"
+    window.openComments = function openComments() {
+      // Ensure panel is visible
+      if (panel && panel.hasAttribute('hidden')) {
+        panel.removeAttribute('hidden');
+        if (toggle) {
+          toggle.textContent = 'Ukryj';
+          toggle.setAttribute('aria-expanded', 'true');
+        }
+      }
+      (section || panel)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    if (!toggle || !panel) return;
+
+    // Wire the built-in toggle button (uses [hidden] in CSS)
+    toggle.addEventListener('click', () => {
+      const willShow = panel.hasAttribute('hidden');
+      if (willShow) {
+        panel.removeAttribute('hidden');
+        toggle.textContent = 'Ukryj';
+        toggle.setAttribute('aria-expanded', 'true');
+      } else {
+        panel.setAttribute('hidden', '');
+        toggle.textContent = 'Pokaż';
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
 // -----------------------------
   // Knowledge Base (knowledge.json)
   // -----------------------------
@@ -618,6 +656,7 @@
     initSupportDrawerFinal();
     initMobileNavFinal();
     initNotificationsFinal();
+    initCommentsFinal();
     initKnowledgeBaseFinal();
     initToolsFinal();
     initSystemsFinal();
