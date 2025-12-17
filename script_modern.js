@@ -675,6 +675,12 @@ async function initPublicComments() {
 document.addEventListener('DOMContentLoaded', () => {
     try { initMobileSupportFab(); } catch(e){}
     try { initPublicComments(); } catch(e){}
+    
+    const navToggle = document.getElementById('navToggle');
+    const navBar = document.querySelector('.main-navigation-bar');
+    if(navToggle && navBar) {
+        navToggle.addEventListener('click', () => navBar.classList.toggle('nav-open'));
+    }
 });
 
 
@@ -682,7 +688,9 @@ document.addEventListener('DOMContentLoaded', () => {
 //  MODUŁ AI CHAT (INTELLIGENCE) - WERSJA SUPABASE EDGE
 // =======================================================
 
-// initAIChat() is handled by app_final.js
+document.addEventListener('DOMContentLoaded', () => {
+    initAIChat();
+});
 
 function initAIChat() {
     // 1. Konfiguracja i pobranie kluczy
