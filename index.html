@@ -599,6 +599,14 @@
         <div class="nav-right-group">
             
             <button id="navToggle" class="menu-btn nav-toggle" type="button" aria-label="Menu">☰</button>
+
+            <button class="menu-btn weather-mini" id="weatherWidgetMobile" type="button" title="Pogoda – kliknij aby ustawić lokalizację" aria-label="Pogoda">
+                <span class="weather-stack">
+                    <span class="weather-icon" id="weather-icon-m" aria-hidden="true"></span>
+                    <span class="weather-loc" id="weather-location-m">Warszawa</span>
+                </span>
+                <span class="weather-temp" id="weather-temp-m">--°C</span>
+            </button>
 <input type="text" id="searchBoxHeader" class="search-input-header" placeholder="Szukaj..." onkeyup="filterListGeneric(this.value)">
             <button id="themeToggle" class="menu-btn" type="button" style="padding: 8px 12px;">🌞</button>
             <button class="menu-btn" onclick="sharePage()" style="padding: 8px 12px;">📤</button>

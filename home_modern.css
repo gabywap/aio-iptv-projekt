@@ -21,7 +21,11 @@ body[data-page="home"] {
 }
 
 body[data-page="home"] #particles-js {
-  opacity: 0.55;
+  opacity: 0.18;
+}
+
+@media (max-width: 900px){
+  body[data-page="home"] #particles-js{ opacity: 0.12; }
 }
 
 /* Top support + weather bar (replaces the old decorative top bar) */
@@ -1175,37 +1179,66 @@ html.no-scroll, body.no-scroll { overflow: hidden !important; }
 .no-scroll{ overflow: hidden !important; }
 
 /* ======================================================
-   FIX MOBILE: Naprawa paska i ukrycie menu
+   MOBILE: cienki pasek (pogoda + udostępnij + menu) + bez dużego nagłówka
    ====================================================== */
 @media (max-width: 900px) {
-    /* 1. Odczepiamy górne paski (wyjeżdżają przy scrollowaniu) */
-    body[data-page="home"] .top-info-bar,
-    body[data-page="home"] .hero-header {
-        position: relative !important;
-        top: auto !important;
-        z-index: 10;
-    }
+  /* Ukryj duży nagłówek (zasłania ekran na telefonach) */
+  body[data-page="home"] .site-header-simple{ display: none !important; }
 
-    /* 2. Przyklejamy pasek nawigacji */
-    body[data-page="home"] .main-navigation-bar {
-        position: sticky !important;
-        top: 0 !important;
-        z-index: 9999;
-        margin: 0;
-        /* Układ */
-        justify-content: flex-end; /* Ikony do prawej */
-    }
+  /* Ukryj szeroki pasek wsparcia na mobile */
+  body[data-page="home"] .top-support-bar{ display: none !important; }
 
-    /* 3. Ukrywamy Hamburgera (Menu się nie rozwija) */
-    body[data-page="home"] .nav-toggle {
-        display: none !important;
-    }
+  /* Cienki, stały pasek: wykorzystujemy main-navigation-bar */
+  body[data-page="home"] .main-navigation-bar{
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9999;
+    margin: 0;
+    padding: 6px 10px;
+    min-height: 50px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
 
-    /* 4. Ukrywamy linki tekstowe (dla pewności) */
-    body[data-page="home"] .nav-left-group {
-        display: none !important;
-    }
+  /* Ukryj „zakładki” w poziomie – zostają w menu rozwijanym */
+  body[data-page="home"] .nav-left-group{ display: none !important; }
+
+  /* W barze zostaw: hamburger + pogoda + udostępnij */
+  body[data-page="home"] .search-input-header{ display: none !important; }
+  body[data-page="home"] #themeToggle{ display: none !important; }
+
+  body[data-page="home"] .nav-right-group{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  body[data-page="home"] .nav-toggle{
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+  }
+
+  body[data-page="home"] .weather-mini{ display: inline-flex !important; }
 }
+
+/* Mini pogoda w pasku nawigacji (mobile) */
+body[data-page="home"] .weather-mini{
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.18);
+  background: rgba(2,6,23,0.20);
+  color: #e6edf3;
+}
+body[data-page="home"] .weather-mini .weather-stack{ display:flex; flex-direction:column; align-items:flex-start; line-height:1.05; }
+body[data-page="home"] .weather-mini .weather-loc{ font-size: 0.72rem; opacity: 0.78; max-width: 140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+body[data-page="home"] .weather-mini .weather-temp{ font-weight: 900; font-size: 0.95rem; }
 
 
 /* Simple header (mobile-friendly replacement for top-info-bar) */
@@ -1276,4 +1309,13 @@ body[data-page="home"] .news-banner {
 body[data-page="home"] .news-banner,
 body[data-page="home"] .news-banner * {
   pointer-events: auto;
+}
+
+
+/* Mobile: przenieś Wsparcie i AI Chat na lewą stronę (nie zasłaniają przycisku 'do góry') */
+@media (max-width: 700px){
+  .support-fab, .ai-chat-fab{
+    left: 14px !important;
+    right: auto !important;
+  }
 }

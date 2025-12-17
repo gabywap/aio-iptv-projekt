@@ -397,11 +397,23 @@ function weatherSvgFromCategory(cat) {
 }
 
 async function fetchWeather() {
-  const iconEl = document.getElementById('weather-icon');
-  const tempEl = document.getElementById('weather-temp');
-  const locEl = document.getElementById('weather-location');
-  const widget = document.getElementById('weatherWidget');
-  if (!tempEl || !iconEl) return;
+  // Desktop + mobile widgets (if present)
+  const widgets = [
+    {
+      widget: document.getElementById('weatherWidget'),
+      icon: document.getElementById('weather-icon'),
+      temp: document.getElementById('weather-temp'),
+      loc: document.getElementById('weather-location')
+    },
+    {
+      widget: document.getElementById('weatherWidgetMobile'),
+      icon: document.getElementById('weather-icon-m'),
+      temp: document.getElementById('weather-temp-m'),
+      loc: document.getElementById('weather-location-m')
+    }
+  ].filter(w => w && w.icon && w.temp);
+
+  if (!widgets.length) return;
 
   const DEFAULT = { lat: 52.2297, lon: 21.0122, name: 'Warszawa' };
   const STORAGE_COORDS = 'aio_geo_coords_v1';
@@ -415,6 +427,18 @@ async function fetchWeather() {
   };
 
   const reverseGeocode = async (lat, lon) => {
+    // Prefer Open-Meteo reverse geocoding (CORS-friendly), fallback to Nominatim.
+    try {
+      const url = `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&language=pl&count=1`;
+      const res = await fetch(url, { cache: 'no-store' });
+      if (res.ok) {
+        const j = await res.json();
+        const r = (j && j.results && j.results[0]) || null;
+        const name = r ? (r.name || r.admin1 || r.admin2 || r.country || '') : '';
+        if (name) return name;
+      }
+    } catch (e) { /* ignore */ }
+
     try {
       const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&accept-language=pl`;
       const res = await fetch(url, { cache: 'no-store' });
@@ -429,9 +453,11 @@ async function fetchWeather() {
 
   const setUI = (t, code, name) => {
     const cat = weatherCategoryFromCode(Number(code));
-    iconEl.innerHTML = weatherSvgFromCategory(cat);
-    tempEl.textContent = Number.isFinite(t) ? `${Math.round(t)}°C` : '--°C';
-    if (locEl) locEl.textContent = (name || DEFAULT.name);
+    widgets.forEach(w => {
+      w.icon.innerHTML = weatherSvgFromCategory(cat);
+      w.temp.textContent = Number.isFinite(t) ? `${Math.round(t)}°C` : '--°C';
+      if (w.loc) w.loc.textContent = (name || DEFAULT.name);
+    });
   };
 
   const updateWeather = async (lat, lon, name) => {
@@ -483,12 +509,15 @@ async function fetchWeather() {
   // Try to obtain user location once (browser prompt). If denied -> fallback Warszawa.
   requestGeo();
 
-  // Allow retry (user gesture) + refresh
-  if (widget && widget.dataset.wxBound !== '1') {
-    widget.dataset.wxBound = '1';
-    widget.addEventListener('click', (e) => { e.preventDefault(); localStorage.removeItem(STORAGE_DENIED); requestGeo(); }, { passive: false });
-    widget.addEventListener('touchstart', (e) => { e.preventDefault(); localStorage.removeItem(STORAGE_DENIED); requestGeo(); }, { passive: false });
-  }
+  // Allow retry (user gesture) + refresh on every widget
+  widgets.forEach(w => {
+    if (!w.widget) return;
+    if (w.widget.dataset.wxBound === '1') return;
+    w.widget.dataset.wxBound = '1';
+    const handler = (e) => { e.preventDefault(); localStorage.removeItem(STORAGE_DENIED); requestGeo(); };
+    w.widget.addEventListener('click', handler, { passive: false });
+    w.widget.addEventListener('touchstart', handler, { passive: false });
+  });
 }
 
 // Inicjalizacje główne DOM
@@ -719,14 +748,12 @@ function initParticles() {
     // Tematyczne cząsteczki w tle (Enigma2/IPTV) – pod całą zawartością strony
     particlesJS('particles-js', {
         particles: {
-            number: { value: 26, density: { enable: true, value_area: 900 } },
-            shape: {
-                type: 'image',
-                image: { src: 'assets/particles/satellite.png', width: 32, height: 32 }
-            },
-            opacity: { value: 0.45, random: true },
-            size: { value: 20, random: true },
-            move: { enable: true, speed: 1.2, direction: 'none', out_mode: 'out' },
+            // Subtelne, mało rozpraszające „pyłki” (zamiast obrazków / „rączek”)
+            number: { value: 18, density: { enable: true, value_area: 1200 } },
+            shape: { type: 'circle' },
+            opacity: { value: 0.14, random: true },
+            size: { value: 2.2, random: true },
+            move: { enable: true, speed: 0.25, direction: 'none', out_mode: 'out' },
             line_linked: { enable: false }
         },
         interactivity: {

@@ -227,7 +227,14 @@
           toggle.setAttribute('aria-expanded', 'true');
         }
       }
-      (section || panel)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      try { window.location.hash = '#comments'; } catch(e) {}
+      const target = (section || panel);
+      if (target && target.scrollIntoView) {
+        // Double RAF improves reliability on some mobile browsers
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }));
+      }
     };
 
     // Also wire the promo banner button for mobile browsers (avoid relying on inline onclick only)
