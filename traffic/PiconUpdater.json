@@ -1,30 +1,25 @@
 {
   "owner": "OliOli2013",
   "repo": "PiconUpdater",
-  "updatedAt": "2025-12-17T03:55:09Z",
+  "updatedAt": "2025-12-18T03:56:14Z",
   "summary": {
     "views": {
-      "count": 74,
+      "count": 13,
       "uniques": 2
     },
     "clones": {
-      "count": 83,
-      "uniques": 62
+      "count": 16,
+      "uniques": 15
     }
   },
   "raw": {
     "views": {
-      "count": 74,
+      "count": 13,
       "uniques": 2,
       "views": [
         {
-          "timestamp": "2025-12-03T00:00:00Z",
-          "count": 59,
-          "uniques": 1
-        },
-        {
           "timestamp": "2025-12-04T00:00:00Z",
-          "count": 3,
+          "count": 1,
           "uniques": 1
         },
         {
@@ -45,18 +40,13 @@
       ]
     },
     "clones": {
-      "count": 83,
-      "uniques": 62,
+      "count": 16,
+      "uniques": 15,
       "clones": [
         {
-          "timestamp": "2025-12-03T00:00:00Z",
-          "count": 56,
-          "uniques": 37
-        },
-        {
           "timestamp": "2025-12-04T00:00:00Z",
-          "count": 18,
-          "uniques": 17
+          "count": 7,
+          "uniques": 7
         },
         {
           "timestamp": "2025-12-05T00:00:00Z",
