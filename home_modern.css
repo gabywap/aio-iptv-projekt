@@ -583,13 +583,12 @@ body[data-page="home"] .nav-toggle { display: none; }
 
 /* ===== Footer (modern) ===== */
 body[data-page="home"] .site-footer {
-  background: rgba(15, 23, 42, 0.82);
-  border-top: 1px solid rgba(148, 163, 184, 0.14);
-  padding: 34px 0;
+  text-align: left !important;
+  padding: 34px 0 !important;
+  background: rgba(15, 23, 42, 0.82) !important;
+  border-top: 1px solid rgba(148, 163, 184, 0.14) !important;
   /* Override legacy global footer rule (style.css) that centers everything */
-  text-align: left;
-  margin-top: 0;
-}
+  margin-top: 0;}
 
 body[data-page="home"] .footer-inner {
   /* Slightly narrower footer on desktop to avoid excessive whitespace */
@@ -605,6 +604,7 @@ body[data-page="home"] .footer-grid {
   align-items: start;
   padding-bottom: 22px;
   border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  justify-items: start;
 }
 
 body[data-page="home"] .footer-title {
@@ -1638,4 +1638,13 @@ body[data-page="home"] .holiday-wish{
   body[data-page="home"] .holiday-wish{
     max-width: 100%;
   }
+}
+
+
+/* Desktop safety override: neutralize legacy footer centering */
+footer.site-footer {
+  text-align: left !important;
+}
+footer.site-footer .footer-grid {
+  justify-items: start;
 }
