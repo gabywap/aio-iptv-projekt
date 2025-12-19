@@ -3,6 +3,11 @@
 */
 
 body[data-page="home"] {
+  /* Desktop sizing: keep the whole layout comfortable at 100% zoom on common laptop widths.
+     We still allow a wider layout on very large displays via the media query below. */
+  --page-max: 1280px;
+  --page-pad: 18px;
+
   --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   --secondary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
 
@@ -18,6 +23,14 @@ body[data-page="home"] {
               radial-gradient(circle at 50% 120%, rgba(59, 130, 246, 0.14), transparent 50%),
               var(--bg);
   color: var(--text);
+
+  /* Safety: prevent horizontal scroll caused by long labels on narrower desktops */
+  overflow-x: hidden;
+}
+
+/* Allow a wider layout only on very large displays */
+@media (min-width: 1600px){
+  body[data-page="home"]{ --page-max: 1400px; }
 }
 
 body[data-page="home"] #particles-js {
@@ -36,9 +49,9 @@ body[data-page="home"] .top-support-bar{
 }
 
 body[data-page="home"] .top-support-inner{
-  max-width: 1400px;
+  max-width: var(--page-max);
   margin: 0 auto;
-  padding: 10px 18px;
+  padding: 10px var(--page-pad);
   display:flex;
   align-items:center;
   justify-content: space-between;
@@ -175,9 +188,21 @@ body[data-page="home"] .wx-rain{ animation: aioDrop 1.1s linear infinite; }
 
 /* Make the global container feel like a modern dashboard */
 body[data-page="home"] .container {
-  max-width: 1400px;
-  padding: 0 22px;
+  max-width: var(--page-max);
+  padding: 0 var(--page-pad);
   margin-top: 28px;
+}
+
+/* Desktop grid: keep cards readable without forcing browser zoom-out */
+@media (min-width: 1100px) and (max-width: 1499px){
+  body[data-page="home"] .container{
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+@media (min-width: 1500px){
+  body[data-page="home"] .container{
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
 }
 
 /* Top bar */
@@ -230,6 +255,27 @@ body[data-page="home"] .main-navigation-bar {
   background: rgba(15, 23, 42, 0.85);
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(10px);
+
+  /* Keep the navigation usable at 100% zoom on typical desktop widths */
+  padding-left: var(--page-pad) !important;
+  padding-right: var(--page-pad) !important;
+}
+
+/* Desktop nav: allow right group to wrap if labels become long */
+body[data-page="home"] .nav-right-group{ flex-wrap: wrap; }
+body[data-page="home"] .search-input-header{
+  width: 180px;
+  max-width: 220px;
+  min-width: 140px;
+}
+body[data-page="home"] .search-input-header:focus{
+  width: 200px;
+}
+
+@media (max-width: 1400px){
+  body[data-page="home"] .menu-btn{ padding: 8px 12px; font-size: 0.84rem; }
+  body[data-page="home"] .nav-left-group{ gap: 10px; }
+  body[data-page="home"] .nav-right-group{ gap: 10px; }
 }
 
 /* Mobile-only CTA (update download) – hidden on desktop by default */
@@ -592,9 +638,9 @@ body[data-page="home"] .site-footer {
 }
 
 body[data-page="home"] .footer-inner {
-  max-width: 1400px;
+  max-width: var(--page-max);
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 var(--page-pad);
 }
 
 /* 1. Lepszy podział kolumn: Szeroka marka | Wąskie linki | Wąskie linki | Szeroki kontakt */
@@ -1370,9 +1416,9 @@ body[data-page="home"] .site-header-simple {
 }
 
 body[data-page="home"] .site-header-inner {
-  max-width: 1400px;
+  max-width: var(--page-max);
   margin: 0 auto;
-  padding: 18px 18px;
+  padding: 18px var(--page-pad);
   display: flex;
   align-items: center;
   justify-content: center;
