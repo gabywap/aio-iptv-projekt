@@ -327,11 +327,11 @@ header {
 }
 #topBtn:hover { background-color: #2563eb; transform: scale(1.1); }
 
-footer {
+footer:not(.site-footer) {
     text-align: center; padding: 40px 0; font-size: 0.9rem; color: #8b949e;
     border-top: 1px solid #30363d; margin-top: 40px; background-color: #0d1117;
 }
-footer a { color: #58a6ff; text-decoration: none; }
+footer:not(.site-footer) a { color: #58a6ff; text-decoration: none; }
 
 .full-width { grid-column: 1 / -1; }
 

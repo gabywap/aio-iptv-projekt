@@ -583,28 +583,29 @@ body[data-page="home"] .nav-toggle { display: none; }
 
 /* ===== Footer (modern) ===== */
 body[data-page="home"] .site-footer {
-  text-align: left !important;
-  padding: 34px 0 !important;
-  background: rgba(15, 23, 42, 0.82) !important;
-  border-top: 1px solid rgba(148, 163, 184, 0.14) !important;
-  /* Override legacy global footer rule (style.css) that centers everything */
-  margin-top: 0;}
+  /* Override legacy global footer styling from style.css */
+  text-align: left;
+  margin-top: 0;
+  background: rgba(15, 23, 42, 0.82);
+  border-top: 1px solid rgba(148, 163, 184, 0.14);
+  padding: 34px 0;
+}
 
 body[data-page="home"] .footer-inner {
-  /* Slightly narrower footer on desktop to avoid excessive whitespace */
-  max-width: 1280px;
+  /* Keep desktop tidy (less empty space on wide screens) */
+  max-width: 1180px;
   margin: 0 auto;
   padding: 0 22px;
 }
 
 body[data-page="home"] .footer-grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
-  gap: 22px;
+  grid-template-columns: 1.25fr 0.9fr 0.9fr 1.15fr;
+  gap: 18px;
   align-items: start;
+  justify-items: start;
   padding-bottom: 22px;
   border-bottom: 1px solid rgba(148, 163, 184, 0.12);
-  justify-items: start;
 }
 
 body[data-page="home"] .footer-title {
@@ -1638,13 +1639,4 @@ body[data-page="home"] .holiday-wish{
   body[data-page="home"] .holiday-wish{
     max-width: 100%;
   }
-}
-
-
-/* Desktop safety override: neutralize legacy footer centering */
-footer.site-footer {
-  text-align: left !important;
-}
-footer.site-footer .footer-grid {
-  justify-items: start;
 }
