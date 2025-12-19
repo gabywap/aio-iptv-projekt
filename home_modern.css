@@ -1443,3 +1443,59 @@ body[data-page="home"] .holiday-wish::after{
   margin-left: 8px;
   opacity: .9;
 }
+
+
+/* === Adjustments: restore top bar, move holiday wish under update badge, strengthen coffee marquee === */
+body[data-page="home"] .header-badges{
+  display:flex;
+  flex-direction: column;
+  align-items:flex-start;
+  justify-content:center;
+  gap: 6px;
+}
+
+body[data-page="home"] .update-link{
+  text-decoration: none;
+  cursor: pointer;
+}
+body[data-page="home"] .update-link:hover{
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+body[data-page="home"] .update-link:focus{
+  outline: 2px solid rgba(63, 185, 80, 0.55);
+  outline-offset: 2px;
+}
+
+/* Make the coffee (support) marquee more prominent */
+body[data-page="home"] .support-copy{
+  opacity: 1;
+}
+body[data-page="home"] .support-text{
+  font-size: 0.95rem;
+}
+body[data-page="home"] .support-marquee{
+  border-radius: 12px;
+}
+body[data-page="home"] .support-marquee .support-text{
+  font-weight: 800;
+  text-shadow: 0 0 14px rgba(56, 189, 248, 0.22);
+}
+@media (prefers-reduced-motion: no-preference){
+  body[data-page="home"] .support-marquee .support-text{
+    animation-duration: 14s;
+  }
+}
+
+/* Ensure holiday wish sits nicely under the update badge */
+body[data-page="home"] .holiday-wish{
+  max-width: 360px;
+}
+@media (max-width: 900px){
+  body[data-page="home"] .header-badges{
+    align-items:center;
+  }
+  body[data-page="home"] .holiday-wish{
+    max-width: 100%;
+  }
+}

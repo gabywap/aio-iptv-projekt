@@ -1,7 +1,12 @@
 [
   {
+    "date": "2025-12-19",
+    "title": "AIO Panel v5.0 — aktualizacja wtyczki",
+    "details": "Dodano nową paczkę do pobrania: enigma2-plugin-extensions-panelaio_5.0_all.ipk (repozytorium strony)."
+  },
+  {
     "date": "2025-12-16",
-    "title": "AI Chat (Enigma2) + Centrum wiedzy",
+    "title": "AI Chat Enigma2 + Centrum wiedzy",
     "details": "Dodano czat offline, wyszukiwarkę tematów, tagi i kopiowanie komend."
   },
   {
