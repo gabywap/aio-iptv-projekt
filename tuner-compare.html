@@ -66,41 +66,96 @@
 <a href="stats.html">Statystyki</a><a href="support.html">☕ <span data-i18n="nav_support">Wsparcie</span></a>
 </aside>
 <main class="container">
-<section class="section">
-<div class="section-head">
-<div>
-<h2 class="section-title">Porównywarka tunerów</h2>
-<p class="section-sub">Filtruj po marce, tagach i wyszukuj po specyfikacji.</p>
-</div>
-</div>
-<div class="card">
-<div style="display:grid; gap:10px; grid-template-columns: 1fr 1fr 2fr">
-<div>
-<div style="color:var(--muted); font-weight:800; margin-bottom:6px">Marka</div>
-<select id="brandFilter" style="width:100%; padding:12px; border-radius:14px; border:1px solid rgba(148,163,184,.18); background:rgba(0,0,0,.18); color:var(--text)">
-<option value="">Wszystkie</option>
-</select>
-</div>
-<div>
-<div style="color:var(--muted); font-weight:800; margin-bottom:6px">Tag</div>
-<select id="tagFilter" style="width:100%; padding:12px; border-radius:14px; border:1px solid rgba(148,163,184,.18); background:rgba(0,0,0,.18); color:var(--text)">
-<option value="">Wszystkie</option>
-</select>
-</div>
-<div>
-<div style="color:var(--muted); font-weight:800; margin-bottom:6px">Szukaj</div>
-<input id="tunerQuery" placeholder="Np. 4K, VU+, gigabit, DVB-S2X" style="width:100%; padding:12px; border-radius:14px; border:1px solid rgba(148,163,184,.18); background:rgba(0,0,0,.18); color:var(--text)" type="text"/>
-</div>
-</div>
-</div>
-<div class="card" style="margin-top:12px; display:flex; align-items:center; justify-content:space-between; gap:12px">
-  <div style="color:var(--muted)">Wyniki: <strong id="tunersCount">0 / 0</strong></div>
-  <button class="btn" id="tunersMore" type="button" style="display:none">Pokaż więcej</button>
-</div>
-<div id="tunersHost"></div>
-</section>
-</main>
-<footer class="site-footer">
+  <section class="page-head">
+    <h1>Porównywarka tunerów</h1>
+    <p class="muted">Wybierz dwa modele, aby zobaczyć różnice oraz rekomendację najlepszego wyboru.</p>
+  </section>
+
+  <section class="card">
+    <h2>Wybór modeli</h2>
+    <p class="muted">Wpisz frazę, aby zawęzić listę (marka / model / CPU / RAM / 4K / DVB‑S2X itd.).</p>
+
+    <div class="field-row" style="margin-top:12px">
+      <label class="field" style="flex:1">
+        <span>Szukaj</span>
+        <input id="tunerSearch" type="text" placeholder="Np. VU+, 4K, gigabit, DVB-S2X, BCM..." />
+      </label>
+      <div class="note" id="tunersLoaded" style="min-width:220px; align-self:end; margin:0">—</div>
+    </div>
+
+    <div class="compare-grid" style="margin-top:14px">
+      <div class="compare-card">
+        <div class="compare-card-head">
+          <div class="compare-badge badge-a">TUNER A</div>
+          <div>
+            <div class="compare-title">Model A</div>
+            <div class="muted">Pierwszy tuner do porównania</div>
+          </div>
+        </div>
+        <select id="tuner1-select" class="select">
+          <option value="">— Wybierz model —</option>
+        </select>
+        <div class="tag-row" id="tagsA"></div>
+      </div>
+
+      <div class="compare-card">
+        <div class="compare-card-head">
+          <div class="compare-badge badge-b">TUNER B</div>
+          <div>
+            <div class="compare-title">Model B</div>
+            <div class="muted">Drugi tuner do porównania</div>
+          </div>
+        </div>
+        <select id="tuner2-select" class="select">
+          <option value="">— Wybierz model —</option>
+        </select>
+        <div class="tag-row" id="tagsB"></div>
+      </div>
+    </div>
+
+    <div class="link-row" style="margin-top:14px">
+      <button class="btn primary" id="compareBtn" type="button" disabled>
+        Porównaj
+      </button>
+      <div class="note" id="compareHint" style="margin:0">Wybierz dwa różne modele.</div>
+    </div>
+  </section>
+
+  <section class="card" id="comparison-result" style="display:none">
+    <div class="results-head">
+      <h2 style="margin:0">Wynik porównania</h2>
+      <div class="results-badges">
+        <span class="compare-badge badge-a" id="badgeA">TUNER A</span>
+        <span class="compare-badge badge-b" id="badgeB">TUNER B</span>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-top:12px">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:220px">Parametr</th>
+            <th id="tuner1-name">Tuner A</th>
+            <th id="tuner2-name">Tuner B</th>
+          </tr>
+        </thead>
+        <tbody id="comparison-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="ai-analysis" style="margin-top:14px">
+      <div class="ai-head">
+        <div class="ai-icon">🤖</div>
+        <div>
+          <div class="ai-title">Rekomendacja</div>
+          <div class="muted">Automatyczna ocena na podstawie specyfikacji oraz ceny.</div>
+        </div>
+      </div>
+      <div class="ai-text" id="aiText"></div>
+      <div class="ai-tag" id="recommendationTag"></div>
+    </div>
+  </section>
+</main><footer class="site-footer">
 <div class="footer-inner">
 <div class="footer-grid">
 <div>
@@ -166,7 +221,5 @@
 <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
 <script src="assets/js/site.js?v=next1"></script>
 <script src="assets/js/tuners.js?v=next1"></script>
-
-<script src="assets/js/stats-nav.js" defer></script>
 </body>
 </html>
