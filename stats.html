@@ -65,39 +65,39 @@
 <a href="contact.html">✉️ <span data-i18n="nav_contact">Kontakt</span></a>
 <a href="stats.html">Statystyki</a><a href="support.html">☕ <span data-i18n="nav_support">Wsparcie</span></a>
 </aside>
+
 <main class="container">
-<section class="page-head">
-<h1>Statystyki projektu</h1>
-<p class="muted">Podgląd danych projektu oraz licznik odwiedzin strony. Dane repo pobierane są z GitHub API.</p>
-</section>
-<section class="grid-2">
-<div class="card">
-<h2>GitHub: repozytorium strony</h2>
-<div class="kpi-grid">
-<div class="kpi"><div class="kpi-label">Gwiazdki</div><div class="kpi-value" id="repoStars">—</div></div>
-<div class="kpi"><div class="kpi-label">Obserwujący</div><div class="kpi-value" id="repoWatchers">—</div></div>
-<div class="kpi"><div class="kpi-label">Forki</div><div class="kpi-value" id="repoForks">—</div></div>
-<div class="kpi"><div class="kpi-label">Ostatnia aktualizacja</div><div class="kpi-value" id="repoUpdated">—</div></div>
-</div>
-<p class="muted" style="margin-top:10px;">
-      Repo: <a href="https://github.com/OliOli2013/aio-iptv-projekt" rel="noopener" target="_blank">OliOli2013/aio-iptv-projekt</a>
-</p>
-</div>
-<div class="card">
-<h2>Licznik odwiedzin</h2>
-<p class="muted">Wstawiony kod z counterliczniki.com (działa online). Licznik widoczny jest także w stopce.</p>
-<div class="note">
-      Jeśli licznik nie pojawia się od razu, odśwież stronę (czasem skrypt ładuje się po chwili).
+  <section class="section">
+    <div class="section-head">
+      <h1 style="margin:0 0 6px" data-i18n="stats_title">Statystyki odwiedzin</h1>
+      <p class="muted" style="margin:0" data-i18n="stats_subtitle">Dane z Google Analytics (GA4).</p>
     </div>
-</div>
-</section>
-<div class="ad-banner-section">
-<a href="https://multi-click.pl/" rel="nofollow noopener" target="_blank">
-<img alt="Multi-Click Sklep" class="ad-banner-img banner-desktop" src="multi-click_banner_970x250.webp"/>
-<img alt="Multi-Click Sklep" class="ad-banner-img banner-mobile" src="multi-click_banner_320x100.webp"/>
-</a>
-</div>
+
+    <div class="card" style="padding:14px; margin-top:14px">
+      <div id="statsStatus" class="muted" data-i18n="stats_note">
+        Aby wyświetlić dane, ustaw statsEndpoint (API) lub looker_embed_url w data/analytics_config.json.
+      </div>
+    </div>
+
+    <div style="margin-top:14px">
+      <h2 style="margin:0 0 10px; font-size:1.1rem" data-i18n="stats_cards_title">Podsumowanie</h2>
+      <div id="statsCards" class="grid" style="grid-template-columns:repeat(4, minmax(0, 1fr)); gap:14px"></div>
+    </div>
+
+    <div style="margin-top:14px">
+      <h2 style="margin:0 0 10px; font-size:1.1rem" data-i18n="stats_table_title">Top strony</h2>
+      <div id="statsTable"></div>
+    </div>
+
+    <div id="statsEmbedWrap" style="display:none; margin-top:16px">
+      <h2 style="margin:0 0 10px; font-size:1.1rem" data-i18n="stats_embed_title">Raport (Looker Studio)</h2>
+      <div class="card" style="padding:0; overflow:hidden">
+        <iframe id="statsEmbed" title="Analytics report" style="border:0; width:100%; height:70vh"></iframe>
+      </div>
+    </div>
+  </section>
 </main>
+
 <footer class="site-footer">
 <div class="footer-inner">
 <div class="footer-grid">
@@ -177,5 +177,6 @@
     // ignore
   }
 })();</script><script src="assets/js/site.js?v=next1"></script>
+<script src="assets/js/stats.js?v=next1"></script>
 </body>
 </html>

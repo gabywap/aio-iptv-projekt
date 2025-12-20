@@ -65,41 +65,40 @@
 <a href="contact.html">✉️ <span data-i18n="nav_contact">Kontakt</span></a>
 <a href="stats.html">Statystyki</a><a href="support.html">☕ <span data-i18n="nav_support">Wsparcie</span></a>
 </aside>
+
 <main class="container">
-<section class="section">
-<div class="section-head">
-<div>
-<h2 class="section-title" data-i18n="tuner_compare_title">Porównywarka tunerów</h2>
-<p class="section-sub" data-i18n="tuner_compare_sub">Filtruj po marce, tagach i wyszukuj po specyfikacji.</p>
-</div>
-</div>
-<div class="card">
-<div style="display:grid; gap:10px; grid-template-columns: 1fr 1fr 2fr">
-<div>
-<div style="color:var(--muted); font-weight:800; margin-bottom:6px" data-i18n="label_brand">Marka</div>
-<select id="brandFilter" style="width:100%; padding:12px; border-radius:14px; border:1px solid rgba(148,163,184,.18); background:rgba(0,0,0,.18); color:var(--text)">
-<option data-i18n="all" value="">Wszystkie</option>
-</select>
-</div>
-<div>
-<div style="color:var(--muted); font-weight:800; margin-bottom:6px" data-i18n="label_tag">Tag</div>
-<select id="tagFilter" style="width:100%; padding:12px; border-radius:14px; border:1px solid rgba(148,163,184,.18); background:rgba(0,0,0,.18); color:var(--text)">
-<option data-i18n="all" value="">Wszystkie</option>
-</select>
-</div>
-<div>
-<div style="color:var(--muted); font-weight:800; margin-bottom:6px" data-i18n="label_search">Szukaj</div>
-<input data-i18n-placeholder="tuner_search_ph" id="tunerQuery" placeholder="Np. 4K, VU+, gigabit, DVB-S2X" style="width:100%; padding:12px; border-radius:14px; border:1px solid rgba(148,163,184,.18); background:rgba(0,0,0,.18); color:var(--text)" type="text"/>
-</div>
-</div>
-</div>
-<div class="card" style="margin-top:12px; display:flex; align-items:center; justify-content:space-between; gap:12px">
-  <div style="color:var(--muted)"><span data-i18n="results">Wyniki</span>: <strong id="tunersCount">0 / 0</strong></div>
-  <button class="btn" data-i18n="show_more" id="tunersMore" type="button" style="display:none">Pokaż więcej</button>
-</div>
-<div id="tunersHost"></div>
-</section>
+  <section class="section">
+    <div class="section-head">
+      <h1 style="margin:0 0 6px" data-i18n="tuners_title">Porównywarka tunerów</h1>
+      <p class="muted" style="margin:0" data-i18n="tuners_subtitle">Wybierz dwa modele i porównaj specyfikację.</p>
+    </div>
+
+    <div class="card" style="padding:16px; margin-top:14px">
+      <div class="compare-filters">
+        <div>
+          <label class="muted" style="display:block; margin-bottom:6px" data-i18n="tuner1_label">Tuner 1</label>
+          <select id="tuner1-select" style="width:100%; padding:12px; border-radius:14px; border:1px solid rgba(148,163,184,.18); background:rgba(0,0,0,.18); color:var(--text)"></select>
+        </div>
+        <div>
+          <label class="muted" style="display:block; margin-bottom:6px" data-i18n="tuner2_label">Tuner 2</label>
+          <select id="tuner2-select" style="width:100%; padding:12px; border-radius:14px; border:1px solid rgba(148,163,184,.18); background:rgba(0,0,0,.18); color:var(--text)"></select>
+        </div>
+        <div>
+          <label class="muted" style="display:block; margin-bottom:6px" data-i18n="tuners_search_label">Szukaj</label>
+          <input id="tunerSearch" type="text" data-i18n-placeholder="tuners_search_ph" placeholder="Np. 4K, VU+, gigabit, DVB-S2X" style="width:100%; padding:12px; border-radius:14px; border:1px solid rgba(148,163,184,.18); background:rgba(0,0,0,.18); color:var(--text)"/>
+        </div>
+      </div>
+
+      <div id="compareStatus" class="muted" style="margin-top:10px"></div>
+    </div>
+
+    <div class="compare-grid">
+      <div class="card" id="compareLeft" style="padding:16px"></div>
+      <div class="card" id="compareRight" style="padding:16px"></div>
+    </div>
+  </section>
 </main>
+
 <footer class="site-footer">
 <div class="footer-inner">
 <div class="footer-grid">

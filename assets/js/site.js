@@ -316,60 +316,11 @@
   }
 
   // -------------------------
-  // External visit counter (counterliczniki.com)
-  // -------------------------
-  function initExternalCounter() {
-    if (window.__counterlicznikiLoaded) return;
-    const footer = document.querySelector('footer.site-footer .footer-bottom');
-    if (!footer) return;
-
-    const wrap = document.createElement('div');
-    wrap.className = 'counterliczniki';
-    wrap.id = 'counterliczniki-root';
-    wrap.innerHTML = "<a href='http://www.counterliczniki.com' rel='nofollow' target='_blank'>licznik odwiedzin tumblr</a>";
-    footer.appendChild(wrap);
-
-    const s1 = document.createElement('script');
-    s1.type = 'text/javascript';
-    s1.src = 'https://www.counterliczniki.com/auth.php?id=1a977b2874c28eff7105e5f733e082df3e79428e';
-    const s2 = document.createElement('script');
-    s2.type = 'text/javascript';
-    s2.src = 'https://www.counterliczniki.com/pl/home/counter/1464496/t/0';
-
-    document.body.appendChild(s1);
-    document.body.appendChild(s2);
-    window.__counterlicznikiLoaded = true;
-  }
-
-  // -------------------------
-  // Generator One-Liner
-  // -------------------------
-  function initOneLinerGenerator() {
-    const output = qs('#generator-output');
-    if (!output) return;
-
-    const checks = qsa('input[type="checkbox"][data-target]');
-    if (!checks.length) return;
-
-    const update = () => {
-      const parts = [];
-      for (const cb of checks) {
-        if (!cb.checked) continue;
-        const tid = cb.getAttribute('data-target');
-        const src = tid ? document.getElementById(tid) : null;
-        const txt = src ? String(src.innerText || src.textContent || '').trim() : '';
-        if (txt) parts.push(txt);
-      }
-      output.textContent = parts.length ? parts.join(' && ') : t('generator_hint');
-    };
-
-    checks.forEach((cb) => cb.addEventListener('change', update));
-    update();
-  }
-
   
-  // -----------------------------
-  // AI-Chat Enigma2 (drawer, offline KB + optional online endpoint)
+
+  // (external visit counter removed)
+
+// AI-Chat Enigma2 (drawer, offline KB + optional online endpoint)
   // -----------------------------
   function injectAIChatMarkup() {
     if (document.getElementById('ai-chat-fab')) return;
@@ -485,44 +436,41 @@
   }
 
   async function safeFetchJSON(url) {
-    const res = await fetch(url, { cache: 'no-store' });
+    const u = new URL(url, document.baseURI).toString();
+    const res = await fetch(u, { cache: 'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     return await res.json();
   }
-  // --- Analytics (GA4) ---
+
+  // -----------------------------
+  // Google Analytics 4 (GA4)
+  // -----------------------------
   async function initAnalytics() {
     try {
-      // Respect browser DNT preference (optional)
-      if (navigator.doNotTrack === '1' || window.doNotTrack === '1' || navigator.msDoNotTrack === '1') {
-        // If you prefer to ignore DNT, set respect_do_not_track=false in data/analytics_config.json
-      }
-      const cfgUrl = new URL('data/analytics_config.json', document.baseURI).toString();
-      const cfg = await safeFetchJSON(cfgUrl);
-      if (!cfg || cfg.enabled !== true) return;
+      const cfg = await safeFetchJSON('./data/analytics_config.json');
+      window.__AIO_ANALYTICS_CONFIG = cfg || {};
+      const mid = String((cfg && (cfg.measurement_id || cfg.measurementId)) || '').trim();
+      if (!mid) return;
 
-      if (cfg.respect_do_not_track !== false) {
-        const dnt = (navigator.doNotTrack === '1' || window.doNotTrack === '1' || navigator.msDoNotTrack === '1');
-        if (dnt) return;
-      }
-
-      const mid = String(cfg.ga4_measurement_id || '').trim();
-      if (!/^G-[A-Z0-9]+$/i.test(mid)) return;
-
-      // Avoid double-injection
       if (document.querySelector('script[data-ga4="gtag"]')) return;
 
-      const s = document.createElement('script');
-      s.async = true;
-      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(mid);
-      s.setAttribute('data-ga4', 'gtag');
-      document.head.appendChild(s);
+      const s1 = document.createElement('script');
+      s1.async = true;
+      s1.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(mid);
+      s1.setAttribute('data-ga4', 'gtag');
+      document.head.appendChild(s1);
 
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
-      window.gtag('js', new Date());
-      window.gtag('config', mid);
+      const s2 = document.createElement('script');
+      s2.setAttribute('data-ga4', 'gtag');
+      s2.text = [
+        'window.dataLayer = window.dataLayer || [];',
+        'function gtag(){dataLayer.push(arguments);}',
+        "gtag('js', new Date());",
+        "gtag('config', '" + mid.replace(/'/g, "\\'") + "', { anonymize_ip: true });"
+      ].join('\n');
+      document.head.appendChild(s2);
     } catch (e) {
-      // Silent fail by design (analytics should never break the site)
+      // ignore
     }
   }
 
@@ -542,10 +490,19 @@
     const input = document.getElementById('aiChatInput');
     const meta = document.getElementById('ai-chat-meta');
 
-    let cfg = { mode: 'offline', endpoint: '' };
-    try { cfg = await safeFetchJSON('./data/aichat_config.json'); } catch (e) {}
+    let cfg = { mode: 'offline', endpoint: '', apikey: '', supabase_url: '', supabase_anon_key: '', function: 'ai-chat' };
+    try { cfg = await safeFetchJSON('./data/aichat_config.json'); } catch (e) { cfg = cfg || {}; }
 
-    meta.textContent = (cfg.mode === 'online' && cfg.endpoint) ? 'Tryb: ONLINE' : 'Tryb: OFFLINE (baza wiedzy)';
+    const endpoint = String(
+      (cfg && cfg.endpoint) ||
+      ((cfg && cfg.supabase_url) ? (String(cfg.supabase_url).replace(/\/$/, '') + '/functions/v1/' + (cfg.function || 'ai-chat')) : '') ||
+      ''
+    ).trim();
+
+    const apikey = String((cfg && (cfg.apikey || cfg.supabase_anon_key)) || '').trim();
+    const onlineEnabled = (String(cfg && cfg.mode || '').toLowerCase() === 'online') && !!endpoint;
+
+    meta.textContent = onlineEnabled ? 'Tryb: ONLINE' : 'Tryb: OFFLINE (baza wiedzy)';
 
     let kb = [];
     try { kb = await safeFetchJSON('./data/knowledge.json'); } catch (e) { kb = []; }
@@ -557,11 +514,11 @@
       if (input) input.value = '';
       renderChatMessage('user', q);
 
-      if (cfg.mode === 'online' && cfg.endpoint) {
+      if (onlineEnabled) {
         try {
-          const res = await fetch(cfg.endpoint, {
+          const res = await fetch(endpoint, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: Object.assign({ 'Content-Type': 'application/json' }, apikey ? { apikey: apikey, Authorization: 'Bearer ' + apikey } : {}),
             body: JSON.stringify({ message: q, source: 'aio-iptv', locale: getLang() })
           });
           if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -583,15 +540,13 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     applyI18n();
+    initAnalytics();
     initDrawer();
     setActiveNav();
     initUpdates();
     initPayPal();
     initMarquee();
     initAIChatDrawer();
-    initExternalCounter();
     initOneLinerGenerator();
   });
-
-  initAnalytics();
 })();
