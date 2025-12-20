@@ -62,17 +62,7 @@
       srv_load_sample: 'Wczytaj próbkę',
       srv_upload: 'Wczytaj plik lamedb',
       srv_export: 'Eksport CSV',
-      srv_search: 'Szukaj kanału / ServiceRef…',
-
-      // Tuner comparison (list view)
-      tuner_compare_title: 'Porównywarka tunerów',
-      tuner_compare_sub: 'Filtruj po marce, tagach i wyszukuj po specyfikacji.',
-      label_brand: 'Marka',
-      label_tag: 'Tag',
-      label_search: 'Szukaj',
-      all: 'Wszystkie',
-      results: 'Wyniki',
-      tuner_search_ph: 'Np. 4K, VU+, gigabit, DVB-S2X'
+      srv_search: 'Szukaj kanału / ServiceRef…'
     },
     en: {
       nav_home: 'Home',
@@ -116,17 +106,7 @@
       srv_load_sample: 'Load sample',
       srv_upload: 'Load lamedb file',
       srv_export: 'Export CSV',
-      srv_search: 'Search channel / ServiceRef…',
-
-      // Tuner comparison (list view)
-      tuner_compare_title: 'Receiver comparison',
-      tuner_compare_sub: 'Filter by brand, tags and search by specifications.',
-      label_brand: 'Brand',
-      label_tag: 'Tag',
-      label_search: 'Search',
-      all: 'All',
-      results: 'Results',
-      tuner_search_ph: 'e.g. 4K, VU+, gigabit, DVB-S2X'
+      srv_search: 'Search channel / ServiceRef…'
     }
   };
 
@@ -510,7 +490,7 @@
     return await res.json();
   }
 
-  async function initAIChatDrawer() {
+  async async function initAIChatDrawer() {
     injectAIChatMarkup();
 
     const fab = document.getElementById('ai-chat-fab');
@@ -526,57 +506,96 @@
     const meta = document.getElementById('ai-chat-meta');
 
     let cfg = { mode: 'offline', endpoint: '' };
-    try { cfg = await safeFetchJSON('./data/aichat_config.json'); } catch (e) {}
+    try {
+      // Use document.baseURI so it works on GitHub Pages subpaths
+      const cfgUrl = new URL('data/aichat_config.json', document.baseURI).toString();
+      cfg = await safeFetchJSON(cfgUrl);
+    } catch (e) {
+      // keep offline defaults
+    }
 
-    meta.textContent = (cfg.mode === 'online' && (cfg.endpoint || (cfg.supabaseUrl && cfg.functionName))) ? 'Tryb: ONLINE' : 'Tryb: OFFLINE (baza wiedzy)';
+    const mode = String(cfg.mode || 'offline').toLowerCase();
+    const provider = String(cfg.provider || '').toLowerCase();
+
+    // Resolve endpoint + auth for typical Supabase Edge Function deployment
+    let endpoint = String(cfg.endpoint || '').trim();
+    const supabaseUrl =
+      String(cfg.supabaseUrl || (window.AIO_SITE && window.AIO_SITE.supabaseUrl) || '').trim();
+    const supabaseAnonKey =
+      String(cfg.supabaseAnonKey || cfg.apikey || (window.AIO_SITE && window.AIO_SITE.supabaseAnonKey) || '').trim();
+    const functionName = String(cfg.functionName || 'ai-chat').trim();
+
+    if (!endpoint && (provider === 'supabase' || (supabaseUrl && functionName))) {
+      if (supabaseUrl) {
+        endpoint = supabaseUrl.replace(/\/$/, '') + '/functions/v1/' + functionName;
+      }
+    }
+
+    const isOnline = (mode === 'online' && !!endpoint);
+    if (meta) {
+      meta.textContent = isOnline ? 'Tryb: ONLINE' : 'Tryb: OFFLINE (baza wiedzy)';
+    }
 
     let kb = [];
-    try { kb = await safeFetchJSON('./data/knowledge.json'); } catch (e) { kb = []; }
+    try {
+      const kbUrl = new URL('data/enigma2_kb.json', document.baseURI).toString();
+      kb = await safeFetchJSON(kbUrl);
+    } catch (e) {
+      kb = [];
+    }
+
+    const sendBtn = document.getElementById('aiChatSend');
+    sendBtn && (sendBtn.disabled = false);
 
     form && form.addEventListener('submit', async (ev) => {
       ev.preventDefault();
       const q = (input && input.value || '').trim();
       if (!q) return;
-      if (input) input.value = '';
+
       renderChatMessage('user', q);
+      if (input) input.value = '';
 
-            if (cfg.mode === 'online' && (cfg.endpoint || (cfg.supabaseUrl && cfg.functionName))) {
+      // ONLINE (Supabase or generic endpoint)
+      if (isOnline) {
         try {
-          // If config provides Supabase parameters, build the Edge Function URL automatically.
-          const endpoint = cfg.endpoint || (cfg.supabaseUrl.replace(/\/$/, '') + '/functions/v1/' + cfg.functionName);
-
-          // Supabase Edge Functions require apikey + Authorization (Bearer <anonKey>).
-          // This mirrors the behaviour of supabaseClient.functions.invoke(...) used in the legacy (working) build.
-          const anonKey = cfg.supabaseAnonKey || cfg.anonKey || cfg.apikey || '';
-
           const headers = { 'Content-Type': 'application/json' };
-          if (anonKey) {
-            headers['apikey'] = anonKey;
-            headers['Authorization'] = 'Bearer ' + anonKey;
+
+          // If configured for Supabase, include required auth headers (triggers CORS preflight)
+          const addAuth =
+            (provider === 'supabase') ||
+            (cfg.addAuthHeaders === true) ||
+            (!provider && !!supabaseUrl && !!supabaseAnonKey);
+
+          if (addAuth && supabaseAnonKey) {
+            headers['apikey'] = supabaseAnonKey;
+            headers['Authorization'] = 'Bearer ' + supabaseAnonKey;
           }
 
-          // Legacy function expects { query }, while generic endpoints may accept { message }.
-          // We send both for maximum compatibility.
-          const payload = { query: q, message: q, source: 'aio-iptv', locale: getLang() };
+          const body =
+            (provider === 'supabase' || addAuth)
+              ? { query: q, locale: getLang(), source: 'aio-iptv' }
+              : { message: q, locale: getLang(), source: 'aio-iptv' };
 
           const res = await fetch(endpoint, {
             method: 'POST',
             headers,
-            body: JSON.stringify(payload)
+            body: JSON.stringify(body)
           });
 
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-          const data = await res.json();
+          if (!res.ok) {
+            throw new Error('HTTP ' + res.status);
+          }
 
-          const reply = (data.reply || data.text || data.answer || '').toString().trim();
+          const data = await res.json();
+          const reply = (data && (data.reply || data.text || data.message) || '').toString().trim();
           renderChatMessage('bot', reply || 'Brak odpowiedzi z endpointu.');
           return;
         } catch (e) {
-          renderChatMessage('bot', 'Nie udało się połączyć z trybem ONLINE. Odpowiadam z bazy offline.');
+          renderChatMessage('bot', 'Nie udało się dołączyć z trybem ONLINE. Odpowiadam z bazy offline.');
         }
       }
 
-      // offline fallback
+      // OFFLINE fallback
       const lines = buildOfflineReply(q, kb);
       lines.forEach(l => renderChatMessage('bot', l));
     });
