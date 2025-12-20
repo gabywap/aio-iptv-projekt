@@ -43,6 +43,7 @@
 <a data-i18n="nav_downloads" href="downloads.html">Pobieranie</a>
 <a data-i18n="nav_systems" href="systems.html">Systemy</a>
 <a data-i18n="nav_contact" href="contact.html">Kontakt</a>
+<a data-i18n="nav_stats" href="stats.html">Statystyki</a>
 <a data-i18n="nav_support" href="support.html">Wsparcie</a>
 </div>
 </div>
@@ -63,41 +64,93 @@
 <a href="downloads.html">⬇️ <span data-i18n="nav_downloads">Pobieranie</span></a>
 <a href="systems.html">💿 <span data-i18n="nav_systems">Systemy</span></a>
 <a href="contact.html">✉️ <span data-i18n="nav_contact">Kontakt</span></a>
-<a href="stats.html">Statystyki</a><a href="support.html">☕ <span data-i18n="nav_support">Wsparcie</span></a>
+<a href="stats.html">📊 <span data-i18n="nav_stats">Statystyki</span></a>
+<a href="support.html">☕ <span data-i18n="nav_support">Wsparcie</span></a>
 </aside>
-
 <main class="container">
+  <section class="page-head">
+    <h1 data-i18n="nav_stats">Statystyki</h1>
+    <p class="muted">Panel statystyk oparty o GA4 Data API (przez prywatny endpoint) + dane repozytorium z GitHub API.</p>
+  </section>
+
   <section class="section">
-    <div class="section-head">
-      <h1 style="margin:0 0 6px" data-i18n="stats_title">Statystyki odwiedzin</h1>
-      <p class="muted" style="margin:0" data-i18n="stats_subtitle">Dane z Google Analytics (GA4).</p>
-    </div>
-
-    <div class="card" style="padding:14px; margin-top:14px">
-      <div id="statsStatus" class="muted" data-i18n="stats_note">
-        Aby wyświetlić dane, ustaw statsEndpoint (API) lub looker_embed_url w data/analytics_config.json.
+    <div class="card">
+      <div class="stats-head">
+        <div>
+          <h2 style="margin:0 0 6px 0">Ruch na stronie (GA4)</h2>
+          <div class="muted">Zakres: <strong id="kpiRange">—</strong> • Status: <span id="gaStatus">—</span></div>
+        </div>
+        <div class="stats-range">
+          <button class="btn" type="button" data-range="today">Dzisiaj</button>
+          <button class="btn" type="button" data-range="7d">7 dni</button>
+          <button class="btn" type="button" data-range="30d">30 dni</button>
+        </div>
       </div>
-    </div>
 
-    <div style="margin-top:14px">
-      <h2 style="margin:0 0 10px; font-size:1.1rem" data-i18n="stats_cards_title">Podsumowanie</h2>
-      <div id="statsCards" class="grid" style="grid-template-columns:repeat(4, minmax(0, 1fr)); gap:14px"></div>
-    </div>
+      <div class="kpi-grid" style="margin-top:14px">
+        <div class="kpi">
+          <div class="kpi-label">Aktywni użytkownicy</div>
+          <div class="kpi-value" id="kpiUsers">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Sesje</div>
+          <div class="kpi-value" id="kpiSessions">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Wyświetlenia stron</div>
+          <div class="kpi-value" id="kpiViews">—</div>
+        </div>
+      </div>
 
-    <div style="margin-top:14px">
-      <h2 style="margin:0 0 10px; font-size:1.1rem" data-i18n="stats_table_title">Top strony</h2>
-      <div id="statsTable"></div>
-    </div>
+      <h3 style="margin-top:18px">Top strony</h3>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr><th>#</th><th>Ścieżka</th><th style="text-align:right">Wyświetlenia</th></tr>
+          </thead>
+          <tbody id="topPagesBody"></tbody>
+        </table>
+      </div>
 
-    <div id="statsEmbedWrap" style="display:none; margin-top:16px">
-      <h2 style="margin:0 0 10px; font-size:1.1rem" data-i18n="stats_embed_title">Raport (Looker Studio)</h2>
-      <div class="card" style="padding:0; overflow:hidden">
-        <iframe id="statsEmbed" title="Analytics report" style="border:0; width:100%; height:70vh"></iframe>
+      <div class="note" style="margin-top:12px">
+        Aby panel pokazywał realne dane, ustaw <code>statsEndpoint</code> w <code>data/analytics_config.json</code> na adres Twojego endpointu (np. Cloudflare Worker / Vercel).
       </div>
     </div>
   </section>
-</main>
 
+  <section class="grid-2">
+    <div class="card">
+      <h2>GitHub: repozytorium strony</h2>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-label">Gwiazdki</div><div class="kpi-value" id="repoStars">—</div></div>
+        <div class="kpi"><div class="kpi-label">Obserwujący</div><div class="kpi-value" id="repoWatchers">—</div></div>
+        <div class="kpi"><div class="kpi-label">Forki</div><div class="kpi-value" id="repoForks">—</div></div>
+        <div class="kpi"><div class="kpi-label">Ostatnia aktualizacja</div><div class="kpi-value" id="repoUpdated">—</div></div>
+      </div>
+      <p class="muted" style="margin-top:10px;">
+        Repo: <a id="repoLink" href="https://github.com/OliOli2013/aio-iptv-projekt" rel="noopener" target="_blank"><span id="repoName">OliOli2013/aio-iptv-projekt</span></a>
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Informacja</h2>
+      <p class="muted">
+        Kluczy/poświadczeń GA4 nie wolno trzymać w repozytorium GitHub Pages. Dlatego statystyki są pobierane z prywatnego endpointu,
+        który uwierzytelnia się do Google i zwraca gotowy JSON.
+      </p>
+      <div class="note">
+        Jeśli chcesz, mogę dostosować odpowiedź endpointu do dokładnego formatu, jakiego używasz teraz w swoim API.
+      </div>
+    </div>
+  </section>
+
+  <div class="ad-banner-section">
+    <a href="https://multi-click.pl/" rel="nofollow noopener" target="_blank">
+      <img alt="Multi-Click Sklep" class="ad-banner-img banner-desktop" src="multi-click_banner_970x250.webp"/>
+      <img alt="Multi-Click Sklep" class="ad-banner-img banner-mobile" src="multi-click_banner_320x100.webp"/>
+    </a>
+  </div>
+</main>
 <footer class="site-footer">
 <div class="footer-inner">
 <div class="footer-grid">
@@ -176,7 +229,7 @@
   }catch(e){
     // ignore
   }
-})();</script><script src="assets/js/site.js?v=next1"></script>
-<script src="assets/js/stats.js?v=next1"></script>
+})();</script><script src="assets/js/stats.js?v=next1"></script>
+<script src="assets/js/site.js?v=next1"></script>
 </body>
 </html>

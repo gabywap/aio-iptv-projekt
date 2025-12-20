@@ -1,27 +1,44 @@
 [
   {
+    "date": "2025-12-20",
+    "ts": 1766188800000,
+    "type": "change",
+    "title": "Statystyki + dzwonek (changelog) + AI‑Chat ONLINE",
+    "details": "Dodano zakładkę „Statystyki” i panel GA4 (przez endpoint), poprawiono dzwoneczek (licznik nieprzeczytanych) i ustabilizowano tryb ONLINE w AI‑Chat (Supabase). Usunięto licznik zewnętrzny w stopce."
+  },
+  {
     "date": "2025-12-19",
     "title": "AIO Panel v5.0 — aktualizacja wtyczki",
-    "details": "Dodano nową paczkę do pobrania: enigma2-plugin-extensions-panelaio_5.0_all.ipk (repozytorium strony)."
+    "details": "Dodano nową paczkę do pobrania: enigma2-plugin-extensions-panelaio_5.0_all.ipk (repozytorium strony).",
+    "ts": 1766102400000,
+    "type": "feature"
   },
   {
     "date": "2025-12-16",
     "title": "AI Chat Enigma2 + Centrum wiedzy",
-    "details": "Dodano czat offline, wyszukiwarkę tematów, tagi i kopiowanie komend."
+    "details": "Dodano czat offline, wyszukiwarkę tematów, tagi i kopiowanie komend.",
+    "ts": 1765843200000,
+    "type": "feature"
   },
   {
     "date": "2025-12-16",
     "title": "Naprawa: przycisk ☕ Wsparcie na mobile",
-    "details": "Poprawione warstwy (z-index) i obsługa dotyku."
+    "details": "Poprawione warstwy (z-index) i obsługa dotyku.",
+    "ts": 1765843200000,
+    "type": "fix"
   },
   {
     "date": "2025-12-16",
     "title": "Powiadomienia (dzwonek) — changelog",
-    "details": "Dzwonek pokazuje wszystkie zmiany z data/updates.json, licznik nieprzeczytanych i zapis w localStorage."
+    "details": "Dzwonek pokazuje wszystkie zmiany z data/updates.json, licznik nieprzeczytanych i zapis w localStorage.",
+    "ts": 1765843200000,
+    "type": "feature"
   },
   {
     "date": "2025-12-16",
     "title": "PWA / offline",
-    "details": "Dodano manifest, ikony, service worker i stronę offline."
+    "details": "Dodano manifest, ikony, service worker i stronę offline.",
+    "ts": 1765843200000,
+    "type": "feature"
   }
 ]
