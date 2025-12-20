@@ -1,0 +1,6 @@
+{
+  "enabled": true,
+  "provider": "ga4",
+  "ga4_measurement_id": "G-H1D8KEP1W4",
+  "respect_do_not_track": true
+}

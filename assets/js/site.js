@@ -489,6 +489,42 @@
     if (!res.ok) throw new Error('HTTP ' + res.status);
     return await res.json();
   }
+  // --- Analytics (GA4) ---
+  async function initAnalytics() {
+    try {
+      // Respect browser DNT preference (optional)
+      if (navigator.doNotTrack === '1' || window.doNotTrack === '1' || navigator.msDoNotTrack === '1') {
+        // If you prefer to ignore DNT, set respect_do_not_track=false in data/analytics_config.json
+      }
+      const cfgUrl = new URL('data/analytics_config.json', document.baseURI).toString();
+      const cfg = await safeFetchJSON(cfgUrl);
+      if (!cfg || cfg.enabled !== true) return;
+
+      if (cfg.respect_do_not_track !== false) {
+        const dnt = (navigator.doNotTrack === '1' || window.doNotTrack === '1' || navigator.msDoNotTrack === '1');
+        if (dnt) return;
+      }
+
+      const mid = String(cfg.ga4_measurement_id || '').trim();
+      if (!/^G-[A-Z0-9]+$/i.test(mid)) return;
+
+      // Avoid double-injection
+      if (document.querySelector('script[data-ga4="gtag"]')) return;
+
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(mid);
+      s.setAttribute('data-ga4', 'gtag');
+      document.head.appendChild(s);
+
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', mid);
+    } catch (e) {
+      // Silent fail by design (analytics should never break the site)
+    }
+  }
 
 
   async function initAIChatDrawer() {
@@ -506,87 +542,13 @@
     const input = document.getElementById('aiChatInput');
     const meta = document.getElementById('ai-chat-meta');
 
-    const defaults = {
-      mode: 'offline',
-      provider: 'supabase',
-      endpoint: '',
-      supabaseUrl: '',
-      supabaseAnonKey: '',
-      functionName: 'ai-chat'
-    };
+    let cfg = { mode: 'offline', endpoint: '' };
+    try { cfg = await safeFetchJSON('./data/aichat_config.json'); } catch (e) {}
 
-    let cfg = { ...defaults };
-    try {
-      const fromFile = await safeFetchJSON('./data/aichat_config.json');
-      if (fromFile && typeof fromFile === 'object') cfg = { ...cfg, ...fromFile };
-    } catch (e) {
-      // ignore
-    }
-
-    // Allow legacy globals (from base build) if present
-    if (!cfg.supabaseUrl && window.AIO_SITE && window.AIO_SITE.supabaseUrl) {
-      cfg.supabaseUrl = window.AIO_SITE.supabaseUrl;
-    }
-    if (!cfg.supabaseAnonKey && window.AIO_SITE && window.AIO_SITE.supabaseAnonKey) {
-      cfg.supabaseAnonKey = window.AIO_SITE.supabaseAnonKey;
-    }
-
-    const onlineSupabase =
-      cfg.mode === 'online' &&
-      String(cfg.provider || 'supabase').toLowerCase() === 'supabase' &&
-      !!cfg.supabaseUrl &&
-      !!cfg.supabaseAnonKey;
-
-    const onlineEndpoint = cfg.mode === 'online' && !!cfg.endpoint;
-
-    if (meta) {
-      if (onlineSupabase) meta.textContent = 'Tryb: ONLINE';
-      else if (onlineEndpoint) meta.textContent = 'Tryb: ONLINE';
-      else meta.textContent = 'Tryb: OFFLINE (baza wiedzy)';
-    }
+    meta.textContent = (cfg.mode === 'online' && cfg.endpoint) ? 'Tryb: ONLINE' : 'Tryb: OFFLINE (baza wiedzy)';
 
     let kb = [];
-    try {
-      kb = await safeFetchJSON('./data/knowledge.json');
-    } catch (e) {
-      kb = [];
-    }
-
-    async function callSupabaseFunction(query) {
-      const base = String(cfg.supabaseUrl).replace(/\/+$/, '');
-      const fn = String(cfg.functionName || 'ai-chat').trim() || 'ai-chat';
-      const url = `${base}/functions/v1/${encodeURIComponent(fn)}`;
-
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': cfg.supabaseAnonKey,
-          'Authorization': `Bearer ${cfg.supabaseAnonKey}`
-        },
-        body: JSON.stringify({ query })
-      });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      const reply = (data && (data.reply || data.text || data.message)) ? String(data.reply || data.text || data.message) : '';
-      return reply.trim();
-    }
-
-    async function callGenericEndpoint(message) {
-      const res = await fetch(cfg.endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, source: 'aio-iptv', locale: lang })
-      });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      const reply = (data && (data.reply || data.text || data.message)) ? String(data.reply || data.text || data.message) : '';
-      return reply.trim();
-    }
-
-    function botLines(lines) {
-      (lines || []).forEach((l) => renderChatMessage('bot', l));
-    }
+    try { kb = await safeFetchJSON('./data/knowledge.json'); } catch (e) { kb = []; }
 
     form && form.addEventListener('submit', async (ev) => {
       ev.preventDefault();
@@ -595,30 +557,27 @@
       if (input) input.value = '';
       renderChatMessage('user', q);
 
-      // ONLINE
-      if (onlineSupabase || onlineEndpoint) {
+      if (cfg.mode === 'online' && cfg.endpoint) {
         try {
-          const reply = onlineSupabase ? await callSupabaseFunction(q) : await callGenericEndpoint(q);
-          renderChatMessage('bot', reply || (lang === 'pl' ? 'Brak odpowiedzi z trybu ONLINE.' : 'No reply from ONLINE mode.'));
+          const res = await fetch(cfg.endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: q, source: 'aio-iptv', locale: getLang() })
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const data = await res.json();
+          const reply = (data.reply || data.text || '').toString().trim();
+          renderChatMessage('bot', reply || 'Brak odpowiedzi z endpointu.');
           return;
         } catch (e) {
-          renderChatMessage('bot', lang === 'pl'
-            ? 'Nie udało się połączyć z trybem ONLINE. Odpowiadam z bazy offline.'
-            : 'Unable to reach ONLINE mode. Falling back to offline knowledge base.'
-          );
+          renderChatMessage('bot', 'Nie udało się połączyć z trybem ONLINE. Odpowiadam z bazy offline.');
         }
       }
 
-      // OFFLINE fallback
-      botLines(buildOfflineReply(q, kb));
+      // offline fallback
+      const lines = buildOfflineReply(q, kb);
+      lines.forEach(l => renderChatMessage('bot', l));
     });
-
-    // Auto-open on the dedicated AI-Chat tab
-    const isAIChatPage = (location.pathname.split('/').pop() || '').toLowerCase() === 'ai-chat.html';
-    if (isAIChatPage || window.__aio_ai_chat_autopen) {
-      // Wait a tick so CSS/layout is ready
-      setTimeout(() => setAIChatOpen(true), 80);
-    }
   }
 
 
@@ -633,4 +592,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initExternalCounter();
     initOneLinerGenerator();
   });
+
+  initAnalytics();
 })();
