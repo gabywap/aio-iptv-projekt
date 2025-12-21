@@ -1,80 +1,60 @@
-(function () {
-  'use strict';
+/* Future Lab — AIO-IPTV.pl
+   Fix pack: align JS bindings with current HTML IDs (cfgDiff*, check*, sr*)
+   and keep backward compatibility with older IDs.
+*/
+(() => {
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+  const first = (...sels) => {
+    for (const s of sels) { const el = $(s); if (el) return el; }
+    return null;
+  };
 
-  const qs = (s, r = document) => r.querySelector(s);
-  const qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const i18n = {
+    pl: {
+      needFiles: 'Wybierz oba pliki: „przed” i „po”.',
+      cfgHeader: (a,r,c,s)=>`Znaleziono: +${a} / -${r} / Δ${c} / =${s}`,
+      checklistRunning: 'Uruchamiam testy…',
+      checklistDone: (ok,total)=>`Wynik: ${ok}/${total} testów OK.`,
+      sampleLoading: 'Wczytuję próbkę lamedb…',
+      sampleLoaded: (n)=>`Wczytano usług: ${n}.`,
+      sampleFail: 'Nie udało się wczytać próbki lamedb z repo.',
+      noServices: 'Brak wyników.',
+      exportEmpty: 'Brak danych do eksportu.',
+    },
+    en: {
+      needFiles: 'Select both files: “before” and “after”.',
+      cfgHeader: (a,r,c,s)=>`Found: +${a} / -${r} / Δ${c} / =${s}`,
+      checklistRunning: 'Running tests…',
+      checklistDone: (ok,total)=>`Result: ${ok}/${total} tests OK.`,
+      sampleLoading: 'Loading lamedb sample…',
+      sampleLoaded: (n)=>`Loaded services: ${n}.`,
+      sampleFail: 'Unable to load lamedb sample from repo.',
+      noServices: 'No results.',
+      exportEmpty: 'No data to export.',
+    }
+  };
+  const lang = (navigator.language || 'pl').toLowerCase().startsWith('pl') ? 'pl' : 'en';
+  const T = i18n[lang];
 
-  // -------------------------
-  // Small logger (adds a panel at bottom)
-  // -------------------------
-  function ensureLogPanel() {
-    let wrap = qs('#flLog');
-    if (wrap) return wrap;
+  // ---------- helpers ----------
+  const escapeHtml = (s) =>
+    String(s ?? '').replace(/[&<>"']/g, (m) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[m]));
 
-    const main = qs('main.container') || document.body;
-    wrap = document.createElement('section');
-    wrap.className = 'fl-log';
-    wrap.id = 'flLog';
-    wrap.innerHTML = `
-      <div class="fl-log__head">
-        <div class="fl-log__title">Future Lab — log</div>
-        <div style="display:flex; gap:8px">
-          <button type="button" class="btn" id="flLogCopy">Kopiuj</button>
-          <button type="button" class="btn" id="flLogClear">Wyczyść</button>
-        </div>
-      </div>
-      <div class="fl-log__body" id="flLogBody"></div>
-    `;
-    main.appendChild(wrap);
-
-    const body = qs('#flLogBody');
-    const copyBtn = qs('#flLogCopy');
-    const clrBtn = qs('#flLogClear');
-
-    copyBtn && copyBtn.addEventListener('click', async () => {
-      const text = (body?.innerText || '').trim();
-      if (!text) return;
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch (_) {}
-    });
-
-    clrBtn && clrBtn.addEventListener('click', () => {
-      if (body) body.innerHTML = '';
-    });
-
-    return wrap;
+  async function readFileInput(inputEl){
+    if(!inputEl) return '';
+    if(inputEl.type === 'file'){
+      const f = inputEl.files && inputEl.files[0];
+      if(!f) return '';
+      return await f.text();
+    }
+    return String(inputEl.value || '');
   }
 
-  function logLine(message, level = 'info') {
-    ensureLogPanel();
-    const body = qs('#flLogBody');
-    if (!body) return;
-    const ts = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    const div = document.createElement('div');
-    div.className = 'fl-log__line' + (level === 'warn' ? ' fl-log__line--warn' : level === 'err' ? ' fl-log__line--err' : '');
-    div.textContent = `[${ts}] ${message}`;
-    body.appendChild(div);
-    body.scrollTop = body.scrollHeight;
-  }
-
-  // -------------------------
-  // Helpers
-  // -------------------------
-  function escapeHtml(s) {
-    return String(s ?? '').replace(/[&<>"]|'/g, (m) =>
-      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]
-    );
-  }
-
-  async function readFile(input) {
-    const f = input?.files?.[0];
-    if (!f) return '';
-    return await f.text();
-  }
-
-  function downloadText(filename, text) {
-    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  function downloadText(filename, text){
+    const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -85,504 +65,336 @@
     URL.revokeObjectURL(url);
   }
 
-  function toBaseUrl(path) {
-    return new URL(path, document.baseURI).toString();
-  }
-
-  // -------------------------
-  // Config Diff
-  // Supports Enigma2 settings and simple key=value / key: value configs.
-  // -------------------------
-  function parseKeyValue(text) {
+  // ---------- Config Diff ----------
+  function parseSettings(text){
+    const lines = String(text).split(/\r?\n/);
     const map = new Map();
-    const lines = String(text || '').split(/\r?\n/);
-
-    for (const raw of lines) {
+    for(const raw of lines){
       const line = raw.trim();
-      if (!line || line.startsWith('#') || line.startsWith(';')) continue;
-
-      let idx = line.indexOf('=');
-      if (idx < 1) idx = line.indexOf(':');
-      if (idx < 1) continue;
-
+      if(!line || line.startsWith('#')) continue;
+      const idx = line.indexOf('=');
+      if(idx === -1) continue;
       const key = line.slice(0, idx).trim();
-      const val = line.slice(idx + 1).trim();
-      if (!key) continue;
-      map.set(key, val);
+      const val = line.slice(idx+1).trim();
+      if(key) map.set(key, val);
     }
-
     return map;
   }
 
-  function renderDiff(beforeMap, afterMap) {
-    const table = qs('#cfgDiffTable');
-    const tbody = table ? qs('tbody', table) : null;
-    const summary = qs('#cfgDiffSummary');
+  function renderDiff(beforeMap, afterMap){
+    const summaryEl = first('#cfgDiffSummary', '#diffOutput');
+    const tableEl = first('#cfgDiffTable', '#diffTable');
+    const tbody = tableEl ? tableEl.querySelector('tbody') : null;
+    if(tbody) tbody.innerHTML = '';
 
     const keys = new Set([...beforeMap.keys(), ...afterMap.keys()]);
     const rows = [];
-    let added = 0,
-      removed = 0,
-      changed = 0,
-      same = 0;
+    let added=0, removed=0, changed=0, same=0;
 
-    for (const k of Array.from(keys).sort((a, b) => a.localeCompare(b))) {
+    for(const k of Array.from(keys).sort((a,b)=>a.localeCompare(b))){
       const b = beforeMap.get(k);
       const a = afterMap.get(k);
-      if (b === undefined && a !== undefined) {
-        added++;
-        rows.push({ type: 'ADDED', key: k, before: '', after: a });
-      } else if (b !== undefined && a === undefined) {
-        removed++;
-        rows.push({ type: 'REMOVED', key: k, before: b, after: '' });
-      } else if (b !== a) {
-        changed++;
-        rows.push({ type: 'CHANGED', key: k, before: b, after: a });
+      if(b === undefined && a !== undefined){
+        added++; rows.push({k, status:'ADDED', b:'', a});
+      } else if(b !== undefined && a === undefined){
+        removed++; rows.push({k, status:'REMOVED', b, a:''});
+      } else if(b !== a){
+        changed++; rows.push({k, status:'CHANGED', b, a});
       } else {
         same++;
       }
     }
 
-    const headline = `Zmiany: +${added} / -${removed} / Δ${changed} / =${same}`;
-    if (summary) summary.textContent = headline;
+    const header = T.cfgHeader(added, removed, changed, same);
+    if(summaryEl) summaryEl.textContent = header;
 
-    if (tbody) {
-      tbody.innerHTML = rows
-        .map((r) => {
-          const cls = r.type.toLowerCase();
-          return `
-            <tr class="${cls}">
-              <td>${escapeHtml(r.type)}</td>
-              <td>${escapeHtml(r.key)}</td>
-              <td class="mono">${escapeHtml(r.before)}</td>
-              <td class="mono">${escapeHtml(r.after)}</td>
-            </tr>
-          `;
-        })
-        .join('');
+    const reportLines = [];
+    reportLines.push('Config Diff — /etc/enigma2/settings');
+    reportLines.push(header);
+    reportLines.push('');
+    for(const r of rows){
+      reportLines.push(`[${r.status}] ${r.k}`);
+      if(r.b !== '') reportLines.push(`  before: ${r.b}`);
+      if(r.a !== '') reportLines.push(`  after : ${r.a}`);
+      reportLines.push('');
+    }
+    const report = reportLines.join('\n');
 
-      if (!rows.length) {
-        tbody.innerHTML = `<tr><td colspan="4" class="muted">Brak zmian do pokazania.</td></tr>`;
+    // Render table
+    if(tbody){
+      for(const r of rows){
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="badge ${r.status.toLowerCase()}">${escapeHtml(r.status)}</span></td>
+          <td class="mono">${escapeHtml(r.k)}</td>
+          <td class="mono">${escapeHtml(r.b)}</td>
+          <td class="mono">${escapeHtml(r.a)}</td>
+        `;
+        tbody.appendChild(tr);
       }
     }
 
-    const report = [];
-    report.push('AIO‑IPTV — Future Lab / Config Diff');
-    report.push(headline);
-    report.push('');
-    for (const r of rows) {
-      report.push(`[${r.type}] ${r.key}`);
-      if (r.type !== 'ADDED') report.push(`  BEFORE: ${r.before}`);
-      if (r.type !== 'REMOVED') report.push(`  AFTER : ${r.after}`);
-      report.push('');
+    // attach report to download button
+    const dlBtn = first('#cfgDiffDownload', '#downloadDiffBtn');
+    if(dlBtn){
+      dlBtn.disabled = false;
+      dlBtn.dataset.report = report;
     }
-
-    const dl = qs('#cfgDiffDownload');
-    if (dl) {
-      dl.disabled = false;
-      dl.dataset.report = report.join('\n');
-    }
-
-    logLine(`Config Diff: ${headline}`);
   }
 
-  function bindConfigDiff() {
-    const runBtn = qs('#cfgDiffBtn');
-    const dlBtn = qs('#cfgDiffDownload');
-    const beforeInput = qs('#cfgBefore');
-    const afterInput = qs('#cfgAfter');
+  function bindConfigDiff(){
+    const runBtn = first('#cfgDiffBtn', '#runDiffBtn');
+    const dlBtn  = first('#cfgDiffDownload', '#downloadDiffBtn');
+    if(!runBtn) return;
 
-    if (!runBtn || !beforeInput || !afterInput) return;
-
-    runBtn.addEventListener('click', async () => {
-      try {
-        const beforeTxt = await readFile(beforeInput);
-        const afterTxt = await readFile(afterInput);
-
-        if (!beforeTxt || !afterTxt) {
-          alert('Wybierz oba pliki: „przed” i „po”.');
-          return;
-        }
-
-        const beforeMap = parseKeyValue(beforeTxt);
-        const afterMap = parseKeyValue(afterTxt);
-
-        renderDiff(beforeMap, afterMap);
-      } catch (e) {
-        logLine(`Config Diff: błąd — ${String(e)}`, 'err');
+    runBtn.addEventListener('click', async ()=>{
+      const beforeTxt = await readFileInput(first('#cfgBefore'));
+      const afterTxt  = await readFileInput(first('#cfgAfter'));
+      if(!beforeTxt || !afterTxt){
+        alert(T.needFiles);
+        return;
       }
+      renderDiff(parseSettings(beforeTxt), parseSettings(afterTxt));
     });
 
-    dlBtn &&
-      dlBtn.addEventListener('click', () => {
+    if(dlBtn){
+      dlBtn.addEventListener('click', ()=>{
         const report = dlBtn.dataset.report || '';
-        if (!report) return;
+        if(!report) return;
         downloadText('config-diff-report.txt', report);
-        logLine('Config Diff: pobrano raport');
       });
+    }
   }
 
-  // -------------------------
-  // Auto‑Checklist
-  // -------------------------
-  async function tryFetch(url, ms = 6000) {
+  // ---------- Auto-Checklist (browser + tuner commands) ----------
+  async function tryFetch(url, ms=7000){
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), ms);
-    try {
-      const res = await fetch(url, { signal: ctrl.signal, cache: 'no-store' });
-      const txt = await res.text().catch(() => '');
-      clearTimeout(timer);
-      return { ok: res.ok, status: res.status, text: txt };
-    } catch (e) {
-      clearTimeout(timer);
-      return { ok: false, error: String(e) };
+    const t = setTimeout(()=>ctrl.abort(), ms);
+    try{
+      const res = await fetch(url, {signal: ctrl.signal, cache:'no-store', mode:'cors'});
+      clearTimeout(t);
+      return res.ok;
+    } catch(e){
+      clearTimeout(t);
+      return false;
     }
   }
 
-  function badge(ok) {
-    return ok
-      ? '<span class="pill" style="background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.28)">OK</span>'
-      : '<span class="pill" style="background:rgba(239,68,68,.14);border-color:rgba(239,68,68,.28)">BŁĄD</span>';
+  async function tryJson(url, ms=7000){
+    const ctrl = new AbortController();
+    const t = setTimeout(()=>ctrl.abort(), ms);
+    try{
+      const res = await fetch(url, {signal: ctrl.signal, cache:'no-store', mode:'cors'});
+      clearTimeout(t);
+      if(!res.ok) return null;
+      return await res.json();
+    } catch(e){
+      clearTimeout(t);
+      return null;
+    }
   }
 
-  function buildRecommendedCmds() {
-    return [
-      'echo "=== AIO Future Lab: Auto‑Checklist ==="',
-      'ip a || ifconfig',
-      'ping -c 3 8.8.8.8 || ping -c 3 1.1.1.1',
-      'nslookup github.com 8.8.8.8 || nslookup github.com',
-      'date',
-      'which ntpdate >/dev/null 2>&1 && ntpdate -q pool.ntp.org || echo "ntpdate brak"',
-      'df -h',
-      'opkg update || echo "opkg update nie działa"',
-      'python3 -c "import ssl; print(ssl.OPENSSL_VERSION)" 2>/dev/null || python -c "import ssl; print(ssl.OPENSSL_VERSION)"',
-      'wget -S --spider https://github.com 2>&1 | head -n 20'
-    ].join(' && \\\n');
-  }
+  function bindChecklist(){
+    const runBtn = first('#checkRun', '#runChecklistBtn');
+    const copyBtn = first('#checkCopy', '#copyChecklistBtn');
+    const resultsEl = first('#checkResults', '#checklistResults');
+    const cmdBox = first('#checkCmds', '#checklistCmd');
+    if(!runBtn) return;
 
-  async function runChecklist() {
-    const out = qs('#checkResults');
+    runBtn.addEventListener('click', async ()=>{
+      runBtn.disabled = true;
+      if(resultsEl) resultsEl.textContent = T.checklistRunning;
 
-    const set = (html) => {
-      if (out) out.innerHTML = html;
-    };
+      // CORS-friendly endpoints
+      const tests = [
+        {name:'GitHub', fn: ()=>tryFetch('https://api.github.com/zen')},
+        {name:'DNS', fn: ()=>tryJson('https://dns.google/resolve?name=github.com&type=A').then(j=>!!(j && (j.Answer||j.Authority)))},
+        {name:'Time', fn: ()=>tryJson('https://worldtimeapi.org/api/ip').then(j=>!!(j && j.utc_datetime))},
+        {name:'HTTPS', fn: ()=>tryFetch('https://www.cloudflare.com/cdn-cgi/trace')}
+      ];
 
-    set('Testuję…');
-    logLine('Auto‑Checklist: start');
-
-    const results = {
-      net: { ok: false, msg: '' },
-      dns: { ok: false, msg: '' },
-      time: { ok: false, msg: '' },
-      space: { ok: true, msg: '' }
-    };
-
-    // 1) Network/TLS
-    const net = await tryFetch('https://cloudflare.com/cdn-cgi/trace');
-    results.net.ok = !!net.ok;
-    results.net.msg = net.ok ? 'HTTPS działa (Cloudflare trace)' : 'Brak odpowiedzi (sieć / CORS / blokada)';
-
-    // 2) DNS
-    const dns = await tryFetch('https://dns.google/resolve?name=github.com&type=A');
-    let dnsOk = false;
-    if (dns.ok) {
-      try {
-        const j = JSON.parse(dns.text);
-        dnsOk = Array.isArray(j.Answer) && j.Answer.some((a) => String(a.data || '').match(/\d+\.\d+\.\d+\.\d+/));
-      } catch (_) {
-        dnsOk = false;
+      const outcomes = [];
+      for(const t of tests){
+        const ok = await t.fn();
+        outcomes.push({name:t.name, ok});
       }
-    }
-    results.dns.ok = dnsOk;
-    results.dns.msg = dnsOk ? 'DNS resolve github.com (dns.google)' : 'Błąd DNS / brak odpowiedzi';
 
-    // 3) Time
-    const tm = await tryFetch('https://worldtimeapi.org/api/ip');
-    let timeMsg = 'Błąd (time API)';
-    let timeOk = false;
-    if (tm.ok) {
-      try {
-        const j = JSON.parse(tm.text);
-        const remote = j.unixtime ? j.unixtime * 1000 : Date.now();
-        const local = Date.now();
-        const diffSec = Math.round((local - remote) / 1000);
-        timeOk = Math.abs(diffSec) <= 120;
-        timeMsg = `Różnica czasu: ${diffSec}s (${timeOk ? 'OK' : 'sprawdź NTP'})`;
-      } catch (_) {
-        timeOk = false;
-        timeMsg = 'Błąd parsowania czasu';
+      const okCount = outcomes.filter(o=>o.ok).length;
+      const total = outcomes.length;
+
+      if(resultsEl){
+        const parts = outcomes.map(o=>`${o.ok ? '✅' : '❌'} ${o.name}`).join('  ');
+        resultsEl.textContent = `${T.checklistDone(okCount,total)}  ${parts}`;
       }
-    }
-    results.time.ok = timeOk;
-    results.time.msg = timeMsg;
 
-    // 4) Storage estimate
-    try {
-      if (navigator.storage && navigator.storage.estimate) {
-        const est = await navigator.storage.estimate();
-        const used = est.usage || 0;
-        const quota = est.quota || 0;
-        const pct = quota ? Math.round((used / quota) * 100) : 0;
-        results.space.ok = pct < 90;
-        results.space.msg = quota ? `Pamięć przeglądarki: ${pct}%` : 'Pamięć przeglądarki: brak danych';
-      } else {
-        results.space.ok = true;
-        results.space.msg = 'Storage API niedostępne — pomijam';
+      // Recommended tuner commands (for SSH/Telnet)
+      const cmd = [
+        '# AIO-IPTV — diagnostyka tunera',
+        'uname -a',
+        'ip addr || ifconfig -a',
+        'ping -c 2 1.1.1.1',
+        'nslookup github.com || host github.com',
+        'date',
+        'python -c "import ssl; print(ssl.OPENSSL_VERSION)" 2>/dev/null || python3 -c "import ssl; print(ssl.OPENSSL_VERSION)"',
+        'df -h',
+        'opkg update 2>/dev/null || true',
+      ].join(' && \\\n');
+      if(cmdBox) cmdBox.textContent = cmd;
+
+      if(copyBtn){
+        copyBtn.onclick = async ()=>{
+          try{
+            await navigator.clipboard.writeText(cmd);
+            copyBtn.textContent = lang==='pl' ? 'Skopiowano' : 'Copied';
+            setTimeout(()=>copyBtn.textContent = lang==='pl' ? 'Kopiuj komendy do tunera' : 'Copy tuner commands', 1200);
+          }catch(e){
+            alert('Clipboard error');
+          }
+        };
       }
-    } catch (e) {
-      results.space.ok = false;
-      results.space.msg = `Błąd Storage API: ${String(e)}`;
-    }
 
-    const html = `
-      <div style="display:grid; gap:10px">
-        <div>${badge(results.net.ok)} <strong>Sieć/HTTPS:</strong> ${escapeHtml(results.net.msg)}</div>
-        <div>${badge(results.dns.ok)} <strong>DNS:</strong> ${escapeHtml(results.dns.msg)}</div>
-        <div>${badge(results.time.ok)} <strong>Czas:</strong> ${escapeHtml(results.time.msg)}</div>
-        <div>${badge(results.space.ok)} <strong>Storage:</strong> ${escapeHtml(results.space.msg)}</div>
-      </div>
-    `;
-
-    set(html);
-    logLine(
-      `Auto‑Checklist: net=${results.net.ok ? 'OK' : 'ERR'} dns=${results.dns.ok ? 'OK' : 'ERR'} time=${results.time.ok ? 'OK' : 'ERR'} storage=${results.space.ok ? 'OK' : 'ERR'}`
-    );
-
-    const cmds = qs('#checkCmds');
-    if (cmds) cmds.textContent = buildRecommendedCmds();
+      runBtn.disabled = false;
+    });
   }
 
-  function bindChecklist() {
-    const runBtn = qs('#checkRun');
-    const copyBtn = qs('#checkCopy');
+  // ---------- ServiceRef Explorer ----------
+  function parseLamedb(text){
+    const lines = String(text).split(/\r?\n/);
+    const services=[];
+    let inServices=false;
+    for(let i=0;i<lines.length;i++){
+      const l = lines[i];
+      if(l.trim()==='services'){ inServices=true; continue; }
+      if(l.trim()==='end'){ if(inServices) break; continue; }
+      if(!inServices) continue;
 
-    if (runBtn) {
-      runBtn.addEventListener('click', async () => {
-        runBtn.disabled = true;
-        try {
-          await runChecklist();
-        } finally {
-          runBtn.disabled = false;
-        }
-      });
-    }
-
-    copyBtn &&
-      copyBtn.addEventListener('click', async () => {
-        const txt = (qs('#checkCmds')?.textContent || '').trim();
-        if (!txt) return;
-        try {
-          await navigator.clipboard.writeText(txt);
-          logLine('Auto‑Checklist: skopiowano komendy');
-        } catch (_) {
-          logLine('Auto‑Checklist: nie udało się skopiować (brak uprawnień)', 'warn');
-        }
-      });
-  }
-
-  // -------------------------
-  // ServiceRef Explorer
-  // -------------------------
-  function parseLamedb(text) {
-    const lines = String(text || '').split(/\r?\n/);
-    const services = [];
-    let inServices = false;
-
-    for (let i = 0; i < lines.length; i++) {
-      const l = (lines[i] || '').trim();
-      if (l === 'services') {
-        inServices = true;
-        continue;
+      // lamedb services block uses 3 lines per service (ref, name, provider/type)
+      const ref = (lines[i]||'').trim();
+      const name = (lines[i+1]||'').trim();
+      const prov = (lines[i+2]||'').trim();
+      if(ref && name){
+        services.push({ref, name, prov});
       }
-      if (inServices && l === 'end') break;
-      if (!inServices) continue;
-
-      const ref = l;
-      if (!ref) continue;
-      const name = (lines[i + 1] || '').trim();
-      const prov = (lines[i + 2] || '').trim();
-      services.push({ ref, name, prov });
       i += 2;
     }
-
     return services;
   }
 
-  function piconNameFromRef(ref) {
-    let r = String(ref || '').trim();
-    while (r.endsWith(':')) r = r.slice(0, -1);
-    r = r.replace(/:/g, '_');
-    r = r.replace(/[^0-9A-Za-z_]/g, '_');
+  function piconNameFromRef(ref){
+    let r = String(ref||'').trim();
+    while(r.endsWith(':')) r = r.slice(0,-1);
+    r = r.replace(/:/g,'_');
+    r = r.replace(/[^0-9A-Za-z_]/g,'_');
     return r + '.png';
   }
 
-  function refType(ref) {
-    const r = String(ref || '').trim();
-    // common IPTV markers in Enigma2 bouquets/lamedb: 4097, 5001, 5002, 8193
-    if (/^(4097|5001|5002|8193):/.test(r)) return 'IPTV/STREAM';
-    return 'DVB';
-  }
+  function renderServices(list){
+    const qEl = first('#srSearch', '#svcQuery');
+    const q = (qEl?.value || '').trim().toLowerCase();
+    const filtered = !q ? list : list.filter(s =>
+      (s.name||'').toLowerCase().includes(q) ||
+      (s.ref||'').toLowerCase().includes(q) ||
+      (s.prov||'').toLowerCase().includes(q)
+    );
 
-  function renderServices(state) {
-    const list = state.services || [];
-    const q = String(qs('#srSearch')?.value || '').trim().toLowerCase();
+    const summaryEl = first('#srSummary', '#svcCount');
+    const tableEl = first('#srTable', '#svcTable');
+    const tbody = tableEl ? tableEl.querySelector('tbody') : null;
+    if(tbody) tbody.innerHTML = '';
 
-    const filtered = !q
-      ? list
-      : list.filter((s) =>
-          String(s.name || '').toLowerCase().includes(q) ||
-          String(s.prov || '').toLowerCase().includes(q) ||
-          String(s.ref || '').toLowerCase().includes(q)
-        );
+    if(summaryEl){
+      summaryEl.textContent = filtered.length ? `Wyniki: ${filtered.length} / ${list.length}` : (lang==='pl' ? 'Wyniki: 0' : 'Results: 0');
+    }
 
-    const tbody = qs('#srTable tbody');
-    if (!tbody) return;
+    if(!tbody){
+      return;
+    }
 
-    tbody.innerHTML = filtered
-      .slice(0, 700)
-      .map((s) => {
-        const picon = piconNameFromRef(s.ref);
-        const tag = refType(s.ref);
-        return `
-          <tr>
-            <td>
-              <div style="display:flex; align-items:center; gap:10px;">
-                <span class="pill" style="padding:4px 10px; font-size:11px;">${escapeHtml(tag)}</span>
-                <div>
-                  <div style="font-weight:900">${escapeHtml(s.name || '(brak nazwy)')}</div>
-                  <div class="muted" style="font-size:12px">${escapeHtml(s.prov || '')}</div>
-                </div>
-              </div>
-            </td>
-            <td class="mono" title="Kliknij, aby skopiować" data-copy="${escapeHtml(s.ref)}">${escapeHtml(s.ref)}</td>
-            <td class="mono" title="Kliknij, aby skopiować" data-copy="${escapeHtml(picon)}">${escapeHtml(picon)}</td>
-          </tr>
+    if(filtered.length === 0){
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td colspan="3" class="muted">${escapeHtml(T.noServices)}</td>`;
+      tbody.appendChild(tr);
+    } else {
+      for(const s of filtered.slice(0, 500)){
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHtml(s.name)}</td>
+          <td class="mono">${escapeHtml(s.ref)}</td>
+          <td class="mono">${escapeHtml(piconNameFromRef(s.ref))}</td>
         `;
-      })
-      .join('');
-
-    if (!filtered.length) {
-      tbody.innerHTML = `<tr><td colspan="3" class="muted">Brak wyników.</td></tr>`;
-    }
-
-    const summary = qs('#srSummary');
-    if (summary) {
-      summary.textContent = `Wczytano: ${list.length} • Wynik: ${filtered.length}`;
-    }
-
-    // copy-on-click
-    qsa('[data-copy]', tbody).forEach((td) => {
-      td.addEventListener('click', async () => {
-        const val = td.getAttribute('data-copy') || '';
-        if (!val) return;
-        try {
-          await navigator.clipboard.writeText(val);
-          logLine(`ServiceRef Explorer: skopiowano — ${val.slice(0, 80)}`);
-        } catch (_) {
-          logLine('ServiceRef Explorer: kopiowanie zablokowane przez przeglądarkę', 'warn');
-        }
-      });
-    });
-  }
-
-  async function loadSampleLamedb() {
-    const urls = [toBaseUrl('pliki/lamedb'), toBaseUrl('data/lamedb_sample.lamedb')];
-    for (const u of urls) {
-      try {
-        const res = await fetch(u, { cache: 'no-store' });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const txt = await res.text();
-        logLine(`ServiceRef Explorer: wczytano próbkę (${u.split('/').pop()})`);
-        return txt;
-      } catch (e) {
-        logLine(`ServiceRef Explorer: nie można wczytać ${u} (${String(e)})`, 'warn');
+        tbody.appendChild(tr);
       }
     }
-    throw new Error('Brak pliku lamedb (repo)');
-  }
 
-  function exportCsv(services) {
-    const lines = [];
-    lines.push('name,provider,type,serviceRef,picon');
-    for (const s of services) {
-      const picon = piconNameFromRef(s.ref);
-      const type = refType(s.ref);
-      const row = [
-        String(s.name || '').replace(/"/g, '""'),
-        String(s.prov || '').replace(/"/g, '""'),
-        type,
-        String(s.ref || '').replace(/"/g, '""'),
-        picon
-      ].map((x) => `"${x}"`);
-      lines.push(row.join(','));
+    const exportBtn = first('#srExport', '#exportSvcBtn');
+    if(exportBtn){
+      exportBtn.disabled = filtered.length === 0;
+      exportBtn.dataset.csv = filtered.map(s=>{
+        const cols=[s.ref, s.name, piconNameFromRef(s.ref)];
+        return cols.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',');
+      }).join('\n');
     }
-    return lines.join('\n');
   }
 
-  function bindServiceRefExplorer() {
-    const state = { services: [] };
+  function bindServices(){
+    const fileInput = first('#srFile', '#svcFile');
+    const btnSample = first('#srLoadSample', '#loadSampleBtn');
+    const exportBtn = first('#srExport', '#exportSvcBtn');
+    const searchEl = first('#srSearch', '#svcQuery');
+    const listState = {all: []};
+    const summaryEl = first('#srSummary', '#svcCount');
 
-    const search = qs('#srSearch');
-    const file = qs('#srFile');
-    const sampleBtn = qs('#srLoadSample');
-    const exportBtn = qs('#srExport');
+    async function loadText(text){
+      listState.all = parseLamedb(text);
+      if(summaryEl) summaryEl.textContent = T.sampleLoaded(listState.all.length);
+      renderServices(listState.all);
+    }
 
-    if (!search || !sampleBtn || !exportBtn) return;
+    if(fileInput){
+      fileInput.addEventListener('change', async ()=>{
+        const f = fileInput.files?.[0];
+        if(!f) return;
+        await loadText(await f.text());
+      });
+    }
 
-    const setServices = (services) => {
-      state.services = services;
-      exportBtn.disabled = services.length === 0;
-      renderServices(state);
-    };
-
-    search.addEventListener('input', () => renderServices(state));
-
-    file &&
-      file.addEventListener('change', async () => {
-        try {
-          const txt = await readFile(file);
-          if (!txt) return;
-          const services = parseLamedb(txt);
-          setServices(services);
-          logLine(`ServiceRef Explorer: wczytano plik użytkownika (${services.length} usług)`);
-        } catch (e) {
-          logLine(`ServiceRef Explorer: błąd pliku — ${String(e)}`, 'err');
+    if(btnSample){
+      btnSample.addEventListener('click', async ()=>{
+        if(summaryEl) summaryEl.textContent = T.sampleLoading;
+        try{
+          // priority: repo sample in /pliki/lamedb
+          let res = await fetch('pliki/lamedb', {cache:'no-store'});
+          if(!res.ok){
+            res = await fetch('data/lamedb_sample.lamedb', {cache:'no-store'});
+          }
+          if(!res.ok) throw new Error('fetch fail');
+          await loadText(await res.text());
+        }catch(e){
+          if(summaryEl) summaryEl.textContent = T.sampleFail;
         }
       });
+    }
 
-    sampleBtn.addEventListener('click', async () => {
-      try {
-        const txt = await loadSampleLamedb();
-        const services = parseLamedb(txt);
-        setServices(services);
-      } catch (e) {
-        alert('Nie udało się wczytać próbki lamedb z repo. Sprawdź, czy istnieje plik /pliki/lamedb.');
-        logLine(`ServiceRef Explorer: błąd próbki — ${String(e)}`, 'err');
-      }
-    });
+    if(searchEl){
+      searchEl.addEventListener('input', ()=>renderServices(listState.all));
+    }
 
-    exportBtn.addEventListener('click', () => {
-      if (!state.services.length) return;
-      const csv = exportCsv(state.services);
-      downloadText('serviceref_picon_map.csv', csv);
-      logLine(`ServiceRef Explorer: eksport CSV (${state.services.length} usług)`);
-    });
+    if(exportBtn){
+      exportBtn.addEventListener('click', ()=>{
+        const csv = exportBtn.dataset.csv || '';
+        if(!csv){
+          alert(T.exportEmpty);
+          return;
+        }
+        downloadText('serviceref-picons.csv', csv);
+      });
+    }
   }
 
-  // -------------------------
-  // Init
-  // -------------------------
-  function init() {
+  // Boot
+  document.addEventListener('DOMContentLoaded', ()=>{
     bindConfigDiff();
     bindChecklist();
-    bindServiceRefExplorer();
-
-    // Ensure log panel exists only if the page is actually Future Lab
-    if (qs('#cfgDiffBtn') || qs('#srTable') || qs('#checkRun')) {
-      ensureLogPanel();
-      logLine('Future Lab: gotowe');
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', init);
+    bindServices();
+  });
 })();
