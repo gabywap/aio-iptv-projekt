@@ -1,7 +1,6 @@
-/* style.css - Arkusz stylów dla AIO-IPTV.pl - WERSJA POPRAWIONA */
+/* style.css - Arkusz stylów dla AIO-IPTV.pl - WERSJA MOBILE FIX */
 
-/* 1. NAPRAWA SZEROKOŚCI NA TELEFONACH (Mobile Fix) */
-/* To zapobiega wychodzeniu elementów poza ekran i poziomemu przewijaniu */
+/* 1. PODSTAWY */
 html, body {
     max-width: 100vw;
     overflow-x: hidden;
@@ -25,9 +24,7 @@ body {
     background-image: radial-gradient(circle at 50% 0, #1f242c 0%, #0d1117 60%);
 }
 
-/* --- ORYGINALNE STYLE (ZACHOWANE) --- */
-
-/* NAGŁÓWEK (Stary header - zachowany dla kompatybilności) */
+/* 2. NAGŁÓWEK I TOPBAR */
 header {
     text-align: center;
     padding: 40px 20px 20px;
@@ -37,227 +34,6 @@ header {
     transition: transform 0.3s ease;
 }
 
-.logo-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-}
-
-.xmas-decor {
-    font-size: 2.5rem;
-    animation: sway 3s infinite ease-in-out;
-    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4));
-    line-height: 1;
-}
-
-@keyframes sway {
-    0%, 100% { transform: rotate(-10deg); }
-    50% { transform: rotate(10deg); }
-}
-
-.site-logo {
-    max-width: 280px;
-    height: auto;
-    display: inline-block;
-    transition: all 0.3s ease;
-    filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.2));
-}
-
-.nav-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 15px;
-}
-
-.nav-btn {
-    background-color: #21262d;
-    color: #c9d1d9;
-    border: 1px solid #30363d;
-    padding: 8px 16px;
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: 500;
-    transition: all 0.2s;
-    cursor: pointer;
-    font-size: 0.95rem;
-    font-family: inherit;
-}
-
-.nav-btn:hover {
-    background-color: #3b82f6;
-    color: white;
-    border-color: #3b82f6;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-}
-
-/* CONTAINER */
-.container {
-    max-width: 1500px;
-    margin: 40px auto;
-    padding: 0 20px;
-    /* Domyślnie blok, Grid włączany przez media queries poniżej */
-    width: 100%;
-}
-
-/* KARTA */
-.card {
-    background-color: rgba(22, 27, 34, 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(48, 54, 61, 0.6);
-    border-radius: 8px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    scroll-margin-top: 120px; 
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    border-color: #58a6ff;
-}
-
-.card h2 {
-    color: #58a6ff;
-    font-size: 1.2rem;
-    margin-top: 0;
-    border-bottom: 1px solid #30363d;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-}
-
-.card h3 {
-    margin-top: 0;
-    color: #c9d1d9;
-}
-
-.card p { font-size: 0.9rem; margin-bottom: 15px; }
-
-/* Inne elementy UI */
-.terminal-bar {
-    background: #0d1117;
-    border-bottom: 1px solid #30363d;
-    padding: 8px 10px;
-    margin: -20px -20px 15px -20px;
-    border-radius: 8px 8px 0 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.terminal-dots { display: flex; gap: 6px; }
-.dot { width: 10px; height: 10px; border-radius: 50%; }
-.red { background: #ff5f56; }
-.yellow { background: #ffbd2e; }
-.green { background: #27c93f; }
-
-.search-container {
-    grid-column: 1 / -1;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-#searchBox {
-    width: 100%;
-    max-width: 600px;
-    padding: 12px 20px;
-    font-size: 1rem;
-    border-radius: 25px;
-    border: 2px solid #30363d;
-    background-color: #0d1117;
-    color: #e2e8f0;
-    outline: none;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-#searchBox:focus { border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2); }
-
-/* Przyciski i linki */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 16px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.9rem;
-    transition: all 0.2s;
-    background: #21262d;
-    color: #c9d1d9;
-    border: 1px solid #30363d;
-    cursor: pointer;
-}
-.btn:hover {
-    background: #30363d;
-    border-color: #8b949e;
-    color: #fff;
-}
-.btn.primary {
-    background: #238636;
-    border-color: #238636;
-    color: #fff;
-}
-.btn.primary:hover {
-    background: #2ea043;
-    border-color: #2ea043;
-}
-
-.link-row {
-    display: flex;
-    gap: 10px;
-    margin-top: auto;
-    flex-wrap: wrap;
-}
-
-/* Generator One-Liner */
-.generator-options { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0 15px; }
-.gen-option {
-    display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px;
-    border-radius: 999px; border: 1px solid #30363d; background: rgba(13, 17, 23, 0.6);
-    cursor: pointer; font-size: 0.9rem; user-select: none; transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.1s ease;
-}
-.gen-option input { accent-color: #22c55e; }
-.gen-option:hover { border-color: #3fb950; background-color: rgba(46, 160, 67, 0.15); transform: translateY(-1px); }
-
-/* Command box */
-.command-box {
-    background-color: #0d1117;
-    border: 1px solid #30363d;
-    padding: 12px 12px; /* Zmniejszone paddingi dla mobile */
-    border-radius: 6px;
-    font-family: 'Courier New', Courier, monospace;
-    color: #e2e8f0;
-    font-size: 0.85em;
-    word-break: break-all;
-    user-select: all;
-    border-left: 3px solid #238636; 
-    position: relative;
-    overflow-x: auto; /* Scroll zamiast ucięcia */
-}
-
-/* Stopka */
-footer:not(.site-footer) {
-    text-align: center; padding: 40px 0; font-size: 0.9rem; color: #8b949e;
-    border-top: 1px solid #30363d; margin-top: 40px; background-color: #0d1117;
-}
-
-/* ==========================================================================
-   MOBILE FIXES & RESPONSIVE LAYOUT (Nowe definicje dla index.html)
-   ========================================================================== */
-
-/* 1. Obrazki responsywne */
-img, video, iframe {
-    max-width: 100%;
-    height: auto;
-}
-
-/* 2. Topbar (Górny pasek) */
 .topbar {
     background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
     border-bottom: 1px solid #30363d;
@@ -267,11 +43,12 @@ img, video, iframe {
 .topbar-inner {
     display: flex;
     align-items: center;
-    flex-wrap: wrap; /* Kluczowe dla mobile */
-    gap: 15px;
     justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 15px;
 }
 
+/* LOGO */
 .brand {
     display: flex;
     align-items: center;
@@ -283,6 +60,7 @@ img, video, iframe {
 .brand .name { font-weight: bold; font-size: 1.2rem; color: #58a6ff; line-height: 1.2; }
 .brand .tag { font-size: 0.75rem; color: #8b949e; display: block; }
 
+/* PRZYCISKI W NAGŁÓWKU */
 .pill {
     display: inline-flex;
     flex-direction: column;
@@ -298,7 +76,6 @@ img, video, iframe {
     color: #58a6ff;
 }
 
-/* Ikony w nagłówku (hamburger, dzwonek) */
 .icon-btn {
     background: transparent;
     border: none;
@@ -306,9 +83,12 @@ img, video, iframe {
     font-size: 1.5rem;
     cursor: pointer;
     padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* 3. Nawigacja (Nav) */
+/* 3. NAWIGACJA */
 .nav {
     background: #0d1117;
     border-bottom: 1px solid #30363d;
@@ -317,12 +97,12 @@ img, video, iframe {
     display: flex;
     gap: 20px;
     padding: 10px 0;
-    overflow-x: auto; /* Przewijanie na boki na mobile */
+    overflow-x: auto;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none;
 }
-.nav-inner::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+.nav-inner::-webkit-scrollbar { display: none; }
 
 .nav-inner a {
     color: #8b949e;
@@ -330,11 +110,16 @@ img, video, iframe {
     font-size: 0.95rem;
     font-weight: 500;
 }
-.nav-inner a.active, .nav-inner a:hover {
-    color: #58a6ff;
+.nav-inner a.active, .nav-inner a:hover { color: #58a6ff; }
+
+/* 4. LAYOUT I KARTY */
+.container {
+    max-width: 1500px;
+    margin: 40px auto;
+    padding: 0 20px;
+    width: 100%;
 }
 
-/* 4. Hero Section & Grid */
 .hero-grid {
     display: grid;
     grid-template-columns: 1.5fr 1fr;
@@ -350,36 +135,51 @@ img, video, iframe {
 }
 .hero-card h1 { margin-top: 0; color: #58a6ff; font-size: 1.8rem; }
 
-.hero-actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 20px;
-}
+.hero-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
 
-/* KPI (Kafelki w Hero) */
-.kpi {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-.kpi .k {
-    background: rgba(33, 38, 45, 0.5);
-    padding: 12px;
-    border-radius: 8px;
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    background: #21262d;
+    color: #c9d1d9;
     border: 1px solid #30363d;
+    cursor: pointer;
 }
+.btn.primary { background: #238636; border-color: #238636; color: #fff; }
+.btn:hover { background: #30363d; color: #fff; }
+
+/* KPI */
+.kpi { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.kpi .k { background: rgba(33, 38, 45, 0.5); padding: 12px; border-radius: 8px; border: 1px solid #30363d; }
 .kpi .t { font-size: 0.75rem; color: #8b949e; text-transform: uppercase; }
 .kpi .v { font-size: 1.1rem; font-weight: bold; color: #e6edf3; }
 
-/* Grid główny */
+/* GRID GŁÓWNY */
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
 }
 
-/* 5. Footer (Site Footer) */
+.card {
+    background-color: rgba(22, 27, 34, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(48, 54, 61, 0.6);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+.card h3 { margin-top: 0; color: #c9d1d9; }
+
+/* 5. STOPKA */
 .site-footer {
     background: #0d1117;
     border-top: 1px solid #30363d;
@@ -394,8 +194,6 @@ img, video, iframe {
 }
 .footer-title { color: #c9d1d9; font-weight: bold; margin-bottom: 15px; }
 .footer-link { display: block; color: #8b949e; text-decoration: none; margin-bottom: 8px; }
-.footer-link:hover { color: #58a6ff; }
-.footer-link.inline { display: inline; }
 .footer-bottom {
     border-top: 1px solid #30363d;
     margin-top: 30px;
@@ -405,52 +203,69 @@ img, video, iframe {
     color: #6e7681;
 }
 
-/* MEDIA QUERIES (Konkretne poprawki dla urządzeń mobilnych) */
+/* Inne elementy pomocnicze z oryginału */
+.search-container { margin-bottom: 10px; text-align: center; }
+#searchBox { width: 100%; max-width: 600px; padding: 12px 20px; border-radius: 25px; border: 2px solid #30363d; background: #0d1117; color: #fff; }
+.notif-panel { display: none; position: absolute; right: 0; top: 100%; background: #161b22; border: 1px solid #30363d; z-index: 100; width: 300px; }
+.notif-panel.open { display: block; }
+
+/* ========================================= */
+/* MEDIA QUERIES - MOBILE FIXES & REORDERING */
+/* ========================================= */
 
 @media (max-width: 900px) {
-    /* Ukryj duży przycisk 'Aktualizacja' w nagłówku na mobile - jest on w menu */
-    .topbar .pill-accent {
-        display: none;
-    }
+    /* 1. Ukrywamy duży przycisk aktualizacji na mobile */
+    .topbar .pill-accent { display: none; }
     
-    .hero-grid {
-        grid-template-columns: 1fr; /* Hero jeden pod drugim */
+    /* 2. Zmiana układu Hero i Stopki na kolumnowy */
+    .hero-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+
+    /* 3. REORDERING NAGŁÓWKA (Ikony lewo, Logo prawo) */
+    .topbar-inner {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        /* Ważne: usuwamy space-between, bo użyjemy margin-left:auto */
+        justify-content: flex-start;
     }
+
+    /* Ukrywamy spacer, bo psułby układ */
+    .topbar-inner .spacer { display: none; }
+
+    /* Ustawiamy kolejność (order) */
     
-    .footer-grid {
-        grid-template-columns: 1fr 1fr; /* Stopka: 2 kolumny */
+    /* Przycisk Menu (Hamburger) - Pierwszy z lewej */
+    #navToggle {
+        order: 1;
+        margin-right: 5px; /* lekki odstęp od dzwonka */
+    }
+
+    /* Dzwonek (Powiadomienia) - Drugi z lewej */
+    .notif {
+        order: 2;
+    }
+
+    /* Logo - Trzecie (Przesunięte na prawo) */
+    .brand {
+        order: 3;
+        margin-left: auto; /* To wypycha logo maksymalnie do prawej */
     }
 }
 
 @media (max-width: 600px) {
-    /* Container z mniejszym paddingiem */
-    .container {
-        padding: 0 15px;
-    }
-
-    /* Topbar */
+    .container { padding: 0 15px; }
     .brand .name { font-size: 1.1rem; }
-    .brand .tag { font-size: 0.7rem; }
-    
-    /* Hero */
     .hero-card h1 { font-size: 1.4rem; }
-    .hero-actions .btn { flex: 1 1 45%; } /* Przyciski na pełną szerokość */
-    
-    /* KPI - zawijanie na bardzo małych ekranach */
     .kpi { grid-template-columns: 1fr 1fr; }
-    
-    /* Grid główny - jedna kolumna */
     .grid { grid-template-columns: 1fr; }
-    
-    /* Stopka - jedna kolumna */
     .footer-grid { grid-template-columns: 1fr; text-align: center; }
-    .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+    .footer-bottom { flex-direction: column; text-align: center; gap: 10px; }
     
     /* Reklamy */
     .banner-desktop { display: none; }
-    .banner-mobile { display: block; margin: 0 auto; width: 100%; max-width: 320px; }
+    .banner-mobile { display: block; margin: 0 auto; max-width: 100%; }
 }
 
-/* Reklamy (Domyślne desktop) */
-.banner-desktop { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+.banner-desktop { display: block; width: 100%; height: auto; }
 .banner-mobile { display: none; }
