@@ -3,30 +3,22 @@
 */
 
 body[data-page="home"] {
-  /* Desktop sizing: keep the whole layout comfortable at 100% zoom on common laptop widths.
-     We still allow a wider layout on very large displays via the media query below. */
   --page-max: 1280px;
   --page-pad: 18px;
 
-  --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  --secondary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  /* OpenATV 7.6 / MyMetrix-like palette */
+  --bg: #061526;
+  --glass: rgba(12, 36, 58, 0.92);
+  --card-bg: rgba(15, 45, 71, 0.96);
+  --border: rgba(27, 70, 104, 0.95);
+  --text: #e9f2fb;
+  --text-muted: #a8bbce;
 
-  --bg: #0f172a;
-  --glass: rgba(15, 23, 42, 0.72);
-  --card-bg: rgba(30, 41, 59, 0.72);
-  --border: rgba(148, 163, 184, 0.14);
-  --text: #f1f5f9;
-  --text-muted: #94a3b8;
-
-  background: radial-gradient(circle at 20% -10%, rgba(139, 92, 246, 0.22), transparent 50%),
-              radial-gradient(circle at 90% 20%, rgba(16, 185, 129, 0.18), transparent 45%),
-              radial-gradient(circle at 50% 120%, rgba(59, 130, 246, 0.14), transparent 50%),
-              var(--bg);
+  background: var(--bg);
   color: var(--text);
-
-  /* Safety: prevent horizontal scroll caused by long labels on narrower desktops */
   overflow-x: hidden;
 }
+
 
 /* Allow a wider layout only on very large displays */
 @media (min-width: 1600px){
@@ -43,10 +35,10 @@ body[data-page="home"] #particles-js {
 
 /* Top support + weather bar (replaces the old decorative top bar) */
 body[data-page="home"] .top-support-bar{
-  background: rgba(10, 15, 30, 0.70);
+  background: rgba(12, 36, 58, 0.96);
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(12px);
 }
+
 
 body[data-page="home"] .top-support-inner{
   max-width: var(--page-max);
@@ -208,9 +200,7 @@ body[data-page="home"] .container {
 /* Top bar */
 body[data-page="home"] .top-info-bar {
   background: var(--glass);
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(10px);
-}
+  border-bottom: 1px solid var(--border);}
 
 body[data-page="home"] .top-btn-small {
   background: rgba(15, 23, 42, 0.75);
@@ -226,9 +216,7 @@ body[data-page="home"] .top-btn-small:hover {
 /* Hero */
 body[data-page="home"] .hero-header {
   background: linear-gradient(135deg, rgba(30, 41, 59, 0.72), rgba(15, 23, 42, 0.82));
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(10px);
-}
+  border-bottom: 1px solid var(--border);}
 
 body[data-page="home"] .brand-text h1 {
   background: var(--primary-gradient);
@@ -254,8 +242,6 @@ body[data-page="home"] .h-stat-label {
 body[data-page="home"] .main-navigation-bar {
   background: rgba(15, 23, 42, 0.85);
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(10px);
-
   /* Keep the navigation usable at 100% zoom on typical desktop widths */
   padding-left: var(--page-pad) !important;
   padding-right: var(--page-pad) !important;
@@ -484,9 +470,7 @@ body[data-page="home"] .span-all { grid-column: 1 / -1; }
 body[data-page="home"] .card-intro {
   padding: 26px;
   background: linear-gradient(135deg, rgba(30, 41, 59, 0.78), rgba(15, 23, 42, 0.86));
-  border: 1px solid rgba(148, 163, 184, 0.16);
-  backdrop-filter: blur(12px);
-}
+  border: 1px solid rgba(148, 163, 184, 0.16);}
 
 body[data-page="home"] .intro-head {
   display: flex;
@@ -844,10 +828,7 @@ body[data-page="home"] .footer-legal a:hover { color: #94a3b8; }
     background: rgba(15, 23, 42, 0.82);
     color: #f1f5f9;
     padding: 10px 14px;
-    border-radius: 999px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    border-radius: 999px;    -webkit-    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
     font-weight: 700;
     font-size: 0.92rem;
     letter-spacing: 0.2px;
@@ -1001,10 +982,7 @@ html.no-scroll, body.no-scroll { overflow: hidden !important; }
   background: rgba(17,24,39,0.92);
   border: 1px solid rgba(148,163,184,0.22);
   border-radius: 18px;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.65);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  z-index: 1;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.65);  -webkit-  z-index: 1;
 }
 
 /* Floating buttons */
@@ -1016,10 +994,7 @@ html.no-scroll, body.no-scroll { overflow: hidden !important; }
   padding: 10px 14px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,.18);
-  background: rgba(17,24,39,.80);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color:#fff;
+  background: rgba(17,24,39,.80);  -webkit-  color:#fff;
   font-weight:800;
   font-size: 13px;
   box-shadow: 0 10px 30px rgba(0,0,0,.35);
@@ -1058,10 +1033,7 @@ html.no-scroll, body.no-scroll { overflow: hidden !important; }
   border: 1px solid rgba(148,163,184,0.22);
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.65);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  z-index: 1;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.65);  -webkit-  z-index: 1;
 }
 .ai-chat-drawer__header{
   display:flex;
@@ -1170,10 +1142,7 @@ html.no-scroll, body.no-scroll { overflow: hidden !important; }
   border-radius: 14px;
   box-shadow: 0 24px 80px rgba(0,0,0,0.65);
   z-index: 2100;
-  overflow: hidden;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
+  overflow: hidden;  -webkit-}
 .notifications-dropdown.show{ display:block; }
 .notif-header{
   display:flex;
@@ -1343,10 +1312,7 @@ html.no-scroll, body.no-scroll { overflow: hidden !important; }
     z-index: 9999;
     margin: 0;
     padding: 6px 10px;
-    min-height: 50px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
+    min-height: 50px;    -webkit-  }
 
   /* Mobile CTA: "Aktualizacja AIO Panel v5.0 — Pobierz teraz" (above controls) */
   body[data-page="home"] .mobile-update-cta{
@@ -1411,9 +1377,7 @@ body[data-page="home"] .weather-mini .weather-temp{ font-weight: 900; font-size:
 /* Simple header (mobile-friendly replacement for top-info-bar) */
 body[data-page="home"] .site-header-simple {
   background: rgba(15, 23, 42, 0.65);
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(10px);
-}
+  border-bottom: 1px solid var(--border);}
 
 body[data-page="home"] .site-header-inner {
   max-width: var(--page-max);
