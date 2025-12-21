@@ -126,6 +126,15 @@ a{color:inherit} a:hover{color:var(--accent)}
 .kpi .k .t{color:var(--muted); font-size:.8rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em}
 .kpi .k .v{font-weight:900; margin-top:6px}
 
+
+/* KPI links (Home quick tiles) */
+.kpi a.k{display:block; text-decoration:none; color:inherit}
+.kpi a.k{transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease}
+.kpi a.k:hover{border-color:var(--accent); box-shadow:0 8px 20px rgba(0,0,0,.22); transform:translateY(-1px)}
+.kpi a.k:active{transform:translateY(0)}
+.kpi a.k:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+.kpi a.k{cursor:pointer}
+
 /* Content blocks */
 .section{padding:14px 0 24px}
 .section-head{display:flex; align-items:flex-end; justify-content:space-between; gap:14px; margin:8px 0 12px}
