@@ -138,6 +138,19 @@
     return await res.json();
   }
 
+  // Helper to ensure Supabase is loaded (Moved to top scope to fix errors)
+  function ensureSupabaseV2() {
+    return new Promise((resolve) => {
+      if (window.supabase && typeof window.supabase.createClient === 'function') return resolve(true);
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+      s.async = true;
+      s.onload = () => resolve(true);
+      s.onerror = () => resolve(false);
+      document.head.appendChild(s);
+    });
+  }
+
   window.copyToClipboard = async function (elementId) {
     const el = document.getElementById(elementId);
     if (!el) return;
@@ -182,13 +195,11 @@
   // Analytics (GA4 tag injection)
   // -------------------------
   async function initAnalytics() {
-    // Optional config file. Safe for GitHub Pages (no secrets).
     try {
       const cfg = await safeFetchJSON(relUrl('data/analytics_config.json'));
       const mid = (cfg && cfg.measurement_id) ? String(cfg.measurement_id).trim() : '';
       if (!mid) return;
 
-      // Avoid double-inject
       if (window.__aioGtagLoaded) return;
 
       window.dataLayer = window.dataLayer || [];
@@ -253,7 +264,7 @@
   }
 
   // -------------------------
-  // Notifications bell (changelog from data/updates.json)
+  // Notifications bell
   // -------------------------
   function parseTs(it) {
     if (typeof it.ts === 'number' && isFinite(it.ts)) return it.ts;
@@ -275,7 +286,6 @@
     const panel = qs('#notifPanel');
     if (!bell || !panel) return;
 
-    // Badge
     let badge = bell.querySelector('.bell-badge');
     if (!badge) {
       badge = document.createElement('span');
@@ -336,8 +346,6 @@
         panel.dataset.loaded = '1';
       }
       panel.classList.add('open');
-
-      // Mark as read (on open)
       const newest = Number(panel.dataset.newestTs || '0') || 0;
       if (newest > 0) setSeen(newest);
       badge.style.display = 'none';
@@ -357,12 +365,11 @@
       }
     });
 
-    // refresh badge in background
     load().catch(() => {});
   }
 
   // -------------------------
-  // PayPal obfuscation (personal)
+  // PayPal obfuscation
   // -------------------------
   function initPayPal() {
     const btn = qs('#paypalSupportBtn');
@@ -375,7 +382,7 @@
   }
 
   // -------------------------
-  // Top marquee (coffee + holiday)
+  // Top marquee
   // -------------------------
   function initMarquee() {
     if (qs('#aioMarqueeBar')) return;
@@ -400,7 +407,7 @@
   }
 
   // -----------------------------
-  // AI-Chat Enigma2 (drawer, offline KB + optional online endpoint / Supabase)
+  // AI-Chat Enigma2
   // -----------------------------
   function injectAIChatMarkup() {
     if (document.getElementById('ai-chat-fab')) return;
@@ -532,9 +539,6 @@
   }
 
   function makeOnlineClient(cfg) {
-    // Supported configurations:
-    // 1) Supabase (recommended): { mode:"online", supabase:{ url, anonKey, function:"ai-chat" } }
-    // 2) Generic endpoint: { mode:"online", endpoint:"https://...", headers:{...} }
     const supa = cfg && cfg.supabase ? cfg.supabase : null;
     if (cfg && cfg.mode === 'online' && supa && supa.url && supa.anonKey) {
       const fn = supa.function || 'ai-chat';
@@ -648,10 +652,8 @@
     update();
   }
 
-  
   // -------------------------
-  // Mobile header layout (mobile portrait)
-  // Move: Bell + Menu + Coffee to the LEFT in one row; optionally hide horizontal nav bar.
+  // Mobile header icons (brightness fix & layout)
   // -------------------------
   function findCoffeeBtn() {
     const header = qs('.topbar') || qs('header') || document;
@@ -678,7 +680,7 @@
     const mq = window.matchMedia('(max-width: 820px)');
     const isPortrait = () => window.innerHeight > window.innerWidth;
 
-    const moved = new Map(); // element -> {parent,next}
+    const moved = new Map();
     const store = (el) => {
       if (!el || moved.has(el) || !el.parentNode) return;
       moved.set(el, { parent: el.parentNode, next: el.nextSibling });
@@ -703,7 +705,6 @@
       if (row) row.remove();
       for (const [el, info] of moved.entries()) {
         if (info.parent) info.parent.insertBefore(el, info.next || null);
-        // cleanup inline tweaks
         if (el && el.id === 'navToggle') {
           el.style.filter = '';
           el.style.opacity = '';
@@ -727,7 +728,6 @@
       const coffee = findCoffeeBtn();
 
       if (!menu || !coffee) {
-        // still hide horizontal nav on tiny portrait to avoid "hidden" menu items
         hideNav();
         return;
       }
@@ -746,43 +746,158 @@
         row.style.marginRight = '10px';
       }
 
-      // Put row on the LEFT
       topInner.insertBefore(row, topInner.firstChild);
 
       if (bell) row.appendChild(bell);
       row.appendChild(menu);
       row.appendChild(coffee);
 
-      // Brighten hamburger
-      menu.style.filter = 'brightness(1.9) contrast(1.15)';
+      // POPRAWIONE: Ikonka "hamburgera" całkowicie biała
+      menu.style.filter = 'brightness(100) drop-shadow(0 0 2px rgba(0,0,0,0.5))';
       menu.style.opacity = '1';
 
-      // Disable horizontal nav bar on mobile portrait (drawer is the navigation)
       hideNav();
     };
 
-    // Run now + on resize/orientation
     apply();
     window.addEventListener('resize', apply, { passive: true });
     window.addEventListener('orientationchange', apply, { passive: true });
   }
 
   // -------------------------
-  // Contact: Supabase comments (only in #kontakt)
-  // Shows existing comments (any page) + allows adding new ones with page="kontakt"
+  // Public comments (Supabase)
   // -------------------------
-  function ensureSupabaseV2() {
-    return new Promise((resolve) => {
-      if (window.supabase && typeof window.supabase.createClient === 'function') return resolve(true);
-      const s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-      s.async = true;
-      s.onload = () => resolve(true);
-      s.onerror = () => resolve(false);
-      document.head.appendChild(s);
-    });
+  function getSupabaseConfig() {
+    const cfg = window.AIO_SITE || {};
+    return {
+      url: (cfg.supabaseUrl || '').trim(),
+      anon: (cfg.supabaseAnonKey || '').trim(),
+    };
   }
 
+  function renderStars(n) {
+    const v = Number(n);
+    if (!v || v < 1 || v > 5) return '';
+    return '★★★★★'.slice(0, v) + '☆☆☆☆☆'.slice(0, 5 - v);
+  }
+
+  async function initPublicComments() {
+    const root = document.getElementById('comments-public');
+    if (!root) return;
+
+    // Wait for Supabase lib
+    const ok = await ensureSupabaseV2();
+    if (!ok) {
+        if(document.getElementById('commentsStatus')) document.getElementById('commentsStatus').textContent = 'Błąd ładowania biblioteki Supabase.';
+        return;
+    }
+
+    const statusEl = document.getElementById('commentsStatus');
+    const listEl = document.getElementById('commentsListPublic');
+    const btnSend = document.getElementById('commentSubmitBtn');
+    const btnRefresh = document.getElementById('commentRefreshBtn');
+
+    const cfg = getSupabaseConfig();
+
+    if (!window.supabase || !cfg.url || !cfg.anon) {
+      if (statusEl) {
+        statusEl.textContent = 'Komentarze publiczne wymagają konfiguracji. Uzupełnij AIO_SITE.supabaseUrl oraz AIO_SITE.supabaseAnonKey w script.js.';
+      }
+      if (btnSend) btnSend.disabled = true;
+      return;
+    }
+
+    const client = window.supabase.createClient(cfg.url, cfg.anon);
+    const page = location.pathname || '/';
+
+    const load = async () => {
+      if (statusEl) statusEl.textContent = 'Ładowanie komentarzy...';
+      const { data, error } = await client
+        .from('comments')
+        .select('id,page,name,message,rating,created_at')
+        .eq('page', page)
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (error) {
+        console.error(error);
+        if (statusEl) statusEl.textContent = 'Nie udało się pobrać komentarzy. Sprawdź konfigurację Supabase oraz polityki RLS.';
+        return;
+      }
+
+      if (statusEl) statusEl.textContent = data && data.length ? `Komentarze: ${data.length}` : 'Brak komentarzy. Bądź pierwszy.';
+      if (listEl) {
+        listEl.innerHTML = (data || []).map((c) => {
+          const nick = escapeHtml(c.name || 'Anonim');
+          const msg = escapeHtml(c.message || '');
+          const stars = c.rating ? `<span class="comment-stars">${escapeHtml(renderStars(c.rating))}</span>` : '';
+          const dt = c.created_at ? new Date(c.created_at).toLocaleString('pl-PL') : '';
+          return `
+            <div class="comment-item">
+              <div class="comment-meta">
+                <span class="comment-author">${nick}</span>
+                ${stars}
+                <span class="comment-date">${escapeHtml(dt)}</span>
+              </div>
+              <div class="comment-body">${msg.replaceAll('\n','<br>')}</div>
+            </div>
+          `;
+        }).join('');
+      }
+    };
+
+    const send = async () => {
+      const nameEl = document.getElementById('commentNamePublic');
+      const bodyEl = document.getElementById('commentBodyPublic');
+      const ratingEl = document.getElementById('commentRatingPublic');
+
+      const name = (nameEl && nameEl.value ? nameEl.value : (localStorage.getItem('aio_user_name') || '')) || 'Anonim';
+      const message = (bodyEl && bodyEl.value || '').trim();
+      const rating = ratingEl && ratingEl.value ? Number(ratingEl.value) : null;
+
+      if (!message || message.length < 3) {
+        if (statusEl) statusEl.textContent = 'Komentarz jest zbyt krótki.';
+        return;
+      }
+
+      if (btnSend) btnSend.disabled = true;
+      if (statusEl) statusEl.textContent = 'Wysyłanie...';
+
+      const payload = { page, name: name.trim().slice(0, 40), message: message.slice(0, 2000) };
+      if (rating && rating >= 1 && rating <= 5) payload.rating = rating;
+
+      const { error } = await client.from('comments').insert(payload);
+      if (error) {
+        console.error(error);
+        if (statusEl) statusEl.textContent = 'Nie udało się dodać komentarza. Sprawdź polityki RLS dla INSERT.';
+        if (btnSend) btnSend.disabled = false;
+        return;
+      }
+
+      if (bodyEl) bodyEl.value = '';
+      if (ratingEl) ratingEl.value = '';
+      if (statusEl) statusEl.textContent = 'Dodano komentarz.';
+      if (btnSend) btnSend.disabled = false;
+
+      await load();
+    };
+
+    // Prefill name from local login
+    const nameEl = document.getElementById('commentNamePublic');
+    if (nameEl) {
+      const saved = localStorage.getItem('aio_user_name') || '';
+      if (saved && !nameEl.value) nameEl.value = saved;
+    }
+
+    if (btnSend) btnSend.addEventListener('click', (e) => { e.preventDefault(); send(); });
+    if (btnRefresh) btnRefresh.addEventListener('click', (e) => { e.preventDefault(); load(); });
+
+    await load();
+  }
+
+  // -------------------------
+  // Contact: Supabase comments
+  // -------------------------
   function initContactComments() {
     const contact = qs('#kontakt');
     if (!contact) return;
@@ -792,10 +907,8 @@
     const anon = cfg.supabaseAnonKey;
     if (!url || !anon) return;
 
-    // Remove the "Technologie / Supabase" block if present (user requested)
     removeContactTechBlock();
 
-    // Inject UI container if not present
     let wrap = qs('#contactComments', contact);
     if (!wrap) {
       wrap = document.createElement('div');
@@ -822,7 +935,6 @@
     const elStatus = qs('#ccStatus', wrap);
     const elList = qs('#ccList', wrap);
 
-    // basic styling fallback (if not covered by CSS)
     [elName, elMsg].forEach((el) => {
       if (!el) return;
       el.style.background = 'rgba(255,255,255,0.06)';
@@ -878,8 +990,6 @@
           .limit(200);
 
         if (error) throw error;
-
-        // Show everything here to avoid losing older comments that used different "page" values.
         render(Array.isArray(data) ? data : []);
         setStatus('');
       } catch (e) {
@@ -923,7 +1033,6 @@
   function removeContactTechBlock() {
     const contact = qs('#kontakt');
     if (!contact) return;
-    // Find header containing "Technologie" and remove its parent card/section if it references Supabase
     const heads = qsa('h2,h3,h4', contact);
     const h = heads.find((x) => /technologie/i.test(x.textContent || ''));
     if (!h) return;
@@ -945,5 +1054,6 @@
     initMarquee();
     initAIChatDrawer();
     initOneLinerGenerator();
+    initPublicComments();
   });
 })();
