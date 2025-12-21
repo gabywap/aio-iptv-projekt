@@ -241,6 +241,159 @@
   }
 
   // -------------------------
+  // Mobile top icons layout (mobile portrait)
+  // Desired order (left): bell, menu, coffee
+  // -------------------------
+  function isMobilePortrait() {
+    return (window.innerWidth <= 720) && (window.innerHeight >= window.innerWidth);
+  }
+
+  function ensureCoffeeLink(coffeeEl) {
+    if (!coffeeEl) return null;
+
+    // If it's already a link/button, keep it
+    if (coffeeEl.tagName === 'A' || coffeeEl.tagName === 'BUTTON') return coffeeEl;
+
+    // If it's a span/icon (e.g. <span class="support-ico">☕</span>), wrap it with a link
+    const a = document.createElement('a');
+    a.href = '#wsparcie';
+    a.className = 'mobile-coffee-link';
+    a.setAttribute('aria-label', 'Wsparcie (Postaw kawę)');
+    a.style.display = 'inline-flex';
+    a.style.alignItems = 'center';
+    a.style.justifyContent = 'center';
+    a.style.width = '38px';
+    a.style.height = '38px';
+    a.style.borderRadius = '999px';
+    a.style.border = '1px solid rgba(255,255,255,.18)';
+    a.style.background = 'rgba(255,255,255,.06)';
+    a.style.boxShadow = '0 10px 28px rgba(0,0,0,.35)';
+    a.style.backdropFilter = 'blur(10px)';
+    a.style.textDecoration = 'none';
+    a.style.fontSize = '18px';
+    a.style.color = '#fff';
+
+    // move node inside link
+    const parent = coffeeEl.parentNode;
+    a.appendChild(coffeeEl);
+    if (parent) parent.insertBefore(a, coffeeEl.nextSibling);
+    return a;
+  }
+
+  function moveMobileTopIcons() {
+    // Only on mobile portrait
+    if (!isMobilePortrait()) return;
+
+    // Prefer explicit elements
+    const menuBtn = qs('#navToggle');
+    if (menuBtn) {
+      // Make hamburger more visible
+      menuBtn.style.color = '#fff';
+      menuBtn.style.filter = 'brightness(1.9) saturate(1.2)';
+      menuBtn.style.textShadow = '0 0 8px rgba(255,255,255,.18)';
+    }
+
+    const bellBtn = qs('#bellBtn') || qs('#newsBellBtn') || qs('#notifBtn');
+    if (bellBtn) {
+      bellBtn.style.color = '#fff';
+      bellBtn.style.filter = 'brightness(1.2) saturate(1.1)';
+    }
+
+    // Find the "coffee" icon near top bar (best effort)
+    const topBar = qs('.top-support-bar') || qs('.topbar') || qs('header') || document.body;
+    let coffeeEl =
+      qs('.support-ico', topBar) ||
+      qs('.coffee', topBar) ||
+      qs('.coffee-btn', topBar) ||
+      qs('a[aria-label*="kaw" i],a[title*="kaw" i],a[href*="wspar" i],a[href*="coffee" i]', topBar) ||
+      null;
+
+    // If we found a span icon, wrap it into a link
+    if (coffeeEl && coffeeEl.tagName === 'SPAN') {
+      coffeeEl = ensureCoffeeLink(coffeeEl);
+    }
+
+    // If we still don't have coffee, create a fallback link (to #wsparcie)
+    if (!coffeeEl) {
+      const fallback = document.createElement('a');
+      fallback.href = '#wsparcie';
+      fallback.className = 'mobile-coffee-link';
+      fallback.setAttribute('aria-label', 'Wsparcie (Postaw kawę)');
+      fallback.textContent = '☕';
+      fallback.style.display = 'inline-flex';
+      fallback.style.alignItems = 'center';
+      fallback.style.justifyContent = 'center';
+      fallback.style.width = '38px';
+      fallback.style.height = '38px';
+      fallback.style.borderRadius = '999px';
+      fallback.style.border = '1px solid rgba(255,255,255,.18)';
+      fallback.style.background = 'rgba(255,255,255,.06)';
+      fallback.style.boxShadow = '0 10px 28px rgba(0,0,0,.35)';
+      fallback.style.backdropFilter = 'blur(10px)';
+      fallback.style.textDecoration = 'none';
+      fallback.style.fontSize = '18px';
+      fallback.style.color = '#fff';
+      coffeeEl = fallback;
+    }
+
+    // Choose insertion point: the support copy area in top bar
+    const target =
+      qs('.support-copy', topBar) ||
+      qs('.top-support-inner', topBar) ||
+      qs('.top-support-bar', topBar) ||
+      topBar;
+
+    // Create (or reuse) row container
+    let row = qs('#mobileTopIconRow', topBar);
+    if (!row) {
+      row = document.createElement('div');
+      row.id = 'mobileTopIconRow';
+      row.style.display = 'inline-flex';
+      row.style.alignItems = 'center';
+      row.style.gap = '8px';
+      row.style.marginRight = '10px';
+      row.style.flex = '0 0 auto';
+    }
+
+    // Insert row at the beginning of target
+    if (target && row.parentNode !== target) {
+      target.insertBefore(row, target.firstChild);
+    }
+
+    // Move elements into row in desired order
+    // Important: moving nodes preserves event listeners
+    if (bellBtn && bellBtn.parentNode !== row) row.appendChild(bellBtn);
+    if (menuBtn && menuBtn.parentNode !== row) row.appendChild(menuBtn);
+
+    // Put coffee as the third icon (ensure it's a node in DOM)
+    if (coffeeEl) {
+      // If coffeeEl is not in DOM (fallback), add it now
+      if (!coffeeEl.isConnected) row.appendChild(coffeeEl);
+      else if (coffeeEl.parentNode !== row) row.appendChild(coffeeEl);
+    }
+
+    // Hide the horizontal navigation bar on mobile to avoid misleading swipe
+    const navBar = qs('.nav') || qs('.main-nav') || qs('#mainNav');
+    if (navBar) {
+      navBar.style.display = 'none';
+    }
+  }
+
+  function setupMobileTopIcons() {
+    // Run once after layout
+    moveMobileTopIcons();
+    // Re-run on rotation / resize (throttled)
+    let t = null;
+    const rerun = () => {
+      if (t) clearTimeout(t);
+      t = setTimeout(moveMobileTopIcons, 120);
+    };
+    window.addEventListener('resize', rerun);
+    window.addEventListener('orientationchange', rerun);
+  }
+
+
+  // -------------------------
   // Active nav
   // -------------------------
   function setActiveNav() {
@@ -648,156 +801,11 @@
     update();
   }
 
-  
-
-  // -------------------------
-  // Mobile header UX (icons order + hide horizontal nav on small screens)
-  // Desired on mobile: [Bell][Menu][Coffee] on the left, AI Chat FAB on the right/other side.
-  // -------------------------
-  function isMobilePortrait() {
-    try {
-      const w = window.innerWidth || 0;
-      const h = window.innerHeight || 0;
-      return w > 0 && w <= 620 && h >= w; // portrait-ish
-    } catch (_) {
-      return false;
-    }
-  }
-
-  function findCoffeeElement() {
-    // Prefer explicit ids/classes if present
-    const direct =
-      qs('#coffeeBtn') ||
-      qs('#coffeeIcon') ||
-      qs('[data-coffee]') ||
-      qs('.coffee-icon') ||
-      qs('.coffeeBtn') ||
-      qs('.coffee');
-    if (direct) return direct;
-
-    // Heuristic: link/button containing ☕ or labeled kawa/coffee
-    const candidates = Array.from(document.querySelectorAll('a,button,div'));
-    const score = (el) => {
-      const txt = (el.textContent || '').trim();
-      const aria = (el.getAttribute('aria-label') || '').toLowerCase();
-      const title = (el.getAttribute('title') || '').toLowerCase();
-      const href = (el.getAttribute('href') || '').toLowerCase();
-      const cls = (el.className || '').toLowerCase();
-      let s = 0;
-      if (txt.includes('☕')) s += 5;
-      if (aria.includes('kaw') || aria.includes('coffee')) s += 4;
-      if (title.includes('kaw') || title.includes('coffee')) s += 3;
-      if (href.includes('kaw') || href.includes('coffee') || href.includes('wspar') || href.includes('support')) s += 3;
-      if (cls.includes('coffee') || cls.includes('kawa')) s += 2;
-      // avoid huge wrappers
-      if (txt.length > 50) s -= 2;
-      return s;
-    };
-    let best = null, bestScore = 0;
-    for (const el of candidates) {
-      const s = score(el);
-      if (s > bestScore) {
-        bestScore = s;
-        best = el;
-      }
-    }
-    return bestScore >= 4 ? best : null;
-  }
-
-  function setInlineIconStyle(el) {
-    if (!el) return;
-    el.style.display = 'inline-flex';
-    el.style.alignItems = 'center';
-    el.style.justifyContent = 'center';
-  }
-
-  function layoutMobileHeaderIcons() {
-    const mobile = isMobilePortrait();
-
-    const bell = qs('#bellBtn');
-    const menuBtn = qs('#navToggle');
-    const coffee = findCoffeeElement();
-
-    // Hide horizontal nav strip on mobile portrait (avoid "swipe to see more")
-    const navStrip =
-      qs('.nav') || qs('#topNav') || qs('#mainNav') || qs('.top-nav') || qs('.nav-links') || qs('.navBar');
-    if (navStrip) {
-      navStrip.style.display = mobile ? 'none' : '';
-    }
-
-    // Move AI Chat FAB to the opposite side on mobile (left side)
-    const fab = qs('#ai-chat-fab');
-    if (fab) {
-      if (mobile) {
-        fab.style.left = '18px';
-        fab.style.right = 'auto';
-      } else {
-        fab.style.right = '18px';
-        fab.style.left = 'auto';
-      }
-    }
-
-    if (!mobile) return; // only rearrange in mobile portrait
-
-    if (!coffee || !coffee.parentElement) return;
-    if (!bell || !menuBtn) return;
-
-    // Create/locate a small row container in the coffee's parent.
-    const parent = coffee.parentElement;
-    let row = qs('#mobile-left-icons', parent);
-    if (!row) {
-      row = document.createElement('div');
-      row.id = 'mobile-left-icons';
-      row.style.display = 'inline-flex';
-      row.style.alignItems = 'center';
-      row.style.gap = '10px';
-      row.style.marginRight = '10px';
-      row.style.verticalAlign = 'middle';
-      // Insert at the beginning of parent
-      parent.insertBefore(row, parent.firstChild);
-    }
-
-    // Make icons clearer on mobile
-    if (menuBtn) {
-      menuBtn.style.opacity = '1';
-      menuBtn.style.filter = 'brightness(1.35) contrast(1.1)';
-    }
-
-    // Move elements into desired order: bell, menu, coffee
-    try {
-      if (bell.parentElement !== row) row.appendChild(bell);
-      if (menuBtn.parentElement !== row) row.appendChild(menuBtn);
-      if (coffee.parentElement !== row) row.appendChild(coffee);
-
-      setInlineIconStyle(bell);
-      setInlineIconStyle(menuBtn);
-      setInlineIconStyle(coffee);
-    } catch (_) {
-      // no-op
-    }
-  }
-
-  function initMobileHeaderLayout() {
-    let t = null;
-    const run = () => {
-      try { layoutMobileHeaderIcons(); } catch (_) {}
-    };
-    run();
-    window.addEventListener('resize', () => {
-      clearTimeout(t);
-      t = setTimeout(run, 150);
-    }, { passive: true });
-    window.addEventListener('orientationchange', () => {
-      clearTimeout(t);
-      t = setTimeout(run, 150);
-    }, { passive: true });
-  }
-
-document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () => {
     applyI18n();
     initAnalytics();
     initDrawer();
-    initMobileHeaderLayout();
+    setupMobileTopIcons();
     setActiveNav();
     initUpdates();
     initPayPal();
