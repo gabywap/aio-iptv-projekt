@@ -1,44 +1,58 @@
 [
   {
-    "date": "2025-12-20",
-    "ts": 1766188800000,
+    "date": "2025-12-21",
+    "ts": 1766275200000,
+    "type": "fix",
+    "title": "Future Lab: pełne uruchomienie narzędzi + log",
+    "details": "Naprawiono obsługę Config Diff / Auto‑Checklist / ServiceRef Explorer oraz dodano panel logów działań." 
+  },
+  {
+    "date": "2025-12-21",
+    "ts": 1766275200000,
     "type": "change",
-    "title": "Statystyki + dzwonek (changelog) + AI‑Chat ONLINE",
-    "details": "Dodano zakładkę „Statystyki” i panel GA4 (przez endpoint), poprawiono dzwoneczek (licznik nieprzeczytanych) i ustabilizowano tryb ONLINE w AI‑Chat (Supabase). Usunięto licznik zewnętrzny w stopce."
+    "title": "UI: dzwoneczek (nieprzeczytane) + menu mobilne + akordeony",
+    "details": "Dodano licznik nieprzeczytanych aktualizacji, poprawiono interakcje menu na mobile i przywrócono rozwijanie sekcji w FAQ/Pomoc." 
+  },
+  {
+    "date": "2025-12-21",
+    "ts": 1766275200000,
+    "type": "feature",
+    "title": "UI: przycisk „Do góry” + szybkie odświeżenie cache",
+    "details": "Pojawia się po przewinięciu strony; dodatkowo w panelu aktualizacji dodano przycisk do czyszczenia cache UI." 
   },
   {
     "date": "2025-12-19",
-    "title": "AIO Panel v5.0 — aktualizacja wtyczki",
-    "details": "Dodano nową paczkę do pobrania: enigma2-plugin-extensions-panelaio_5.0_all.ipk (repozytorium strony).",
     "ts": 1766102400000,
-    "type": "feature"
+    "type": "release",
+    "title": "AIO Panel v5.0 — aktualizacja wtyczki",
+    "details": "Dodano nową paczkę do pobrania: enigma2-plugin-extensions-panelaio_5.0_all.ipk (repozytorium strony)."
   },
   {
     "date": "2025-12-16",
+    "ts": 1765843200000,
+    "type": "feature",
     "title": "AI Chat Enigma2 + Centrum wiedzy",
-    "details": "Dodano czat offline, wyszukiwarkę tematów, tagi i kopiowanie komend.",
-    "ts": 1765843200000,
-    "type": "feature"
+    "details": "Dodano czat offline, wyszukiwarkę tematów, tagi i kopiowanie komend."
   },
   {
     "date": "2025-12-16",
+    "ts": 1765843200000,
+    "type": "fix",
     "title": "Naprawa: przycisk ☕ Wsparcie na mobile",
-    "details": "Poprawione warstwy (z-index) i obsługa dotyku.",
-    "ts": 1765843200000,
-    "type": "fix"
+    "details": "Poprawione warstwy (z-index) i obsługa dotyku."
   },
   {
     "date": "2025-12-16",
+    "ts": 1765843200000,
+    "type": "change",
     "title": "Powiadomienia (dzwonek) — changelog",
-    "details": "Dzwonek pokazuje wszystkie zmiany z data/updates.json, licznik nieprzeczytanych i zapis w localStorage.",
-    "ts": 1765843200000,
-    "type": "feature"
+    "details": "Dzwonek pokazuje wszystkie zmiany z data/updates.json, licznik nieprzeczytanych i zapis w localStorage."
   },
   {
     "date": "2025-12-16",
-    "title": "PWA / offline",
-    "details": "Dodano manifest, ikony, service worker i stronę offline.",
     "ts": 1765843200000,
-    "type": "feature"
+    "type": "feature",
+    "title": "PWA / offline",
+    "details": "Dodano manifest, ikony, service worker i stronę offline."
   }
 ]

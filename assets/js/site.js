@@ -19,10 +19,6 @@
   const lang = detectLang();
   document.documentElement.setAttribute('lang', lang);
 
-  function getLang() {
-    return lang;
-  }
-
   const dict = {
     pl: {
       nav_home: 'Start',
@@ -42,7 +38,11 @@
       cta_download: 'Pobierz teraz',
 
       updates: 'Nowości',
-      support: 'Wesprzyj projekt',
+      mark_read: 'Oznacz jako przeczytane',
+      clear_cache: 'Wyczyść cache UI',
+      reload: 'Odśwież',
+      no_updates: 'Brak aktualności do wyświetlenia.',
+      updates_failed: 'Nie udało się wczytać aktualizacji.',
 
       marquee_text:
         'Wesprzyj AIO‑IPTV — kawa pomaga rozwijać stronę i autorskie wtyczki: AIO Panel, IPTV Dream i inne.',
@@ -51,13 +51,17 @@
         'Paweł Pawełek — życzy Zdrowych Wesołych Świąt',
 
       generator_hint: '# Zaznacz przynajmniej jedną opcję powyżej...',
+      show_more: 'Pokaż więcej',
+      show_less: 'Pokaż mniej',
 
-      // AI Chat
+      copy: 'Kopiuj',
+
       ai_placeholder: 'Zadaj pytanie o Enigma2…',
       ai_send: 'Wyślij',
-      ai_hint: 'Podpowiedź: pytaj np. „jak zainstalować softcam feed?” albo „gdzie są picony?”.',
+      ai_mode_online: 'Tryb: ONLINE',
       ai_mode_offline: 'Tryb: OFFLINE (baza wiedzy)',
-      ai_mode_online: 'Tryb: ONLINE'
+
+      back_to_top: 'Do góry'
     },
     en: {
       nav_home: 'Home',
@@ -77,7 +81,11 @@
       cta_download: 'Download now',
 
       updates: 'Updates',
-      support: 'Support the project',
+      mark_read: 'Mark as read',
+      clear_cache: 'Clear UI cache',
+      reload: 'Reload',
+      no_updates: 'No updates to display.',
+      updates_failed: 'Failed to load updates.',
 
       marquee_text:
         'Support AIO‑IPTV — coffee helps build the site and original plugins: AIO Panel, IPTV Dream and more.',
@@ -86,13 +94,17 @@
         'Paweł Pawełek — wishes you a joyful holiday season',
 
       generator_hint: '# Select at least one option above...',
+      show_more: 'Show more',
+      show_less: 'Show less',
 
-      // AI Chat
+      copy: 'Copy',
+
       ai_placeholder: 'Ask about Enigma2…',
       ai_send: 'Send',
-      ai_hint: 'Tip: ask “how to install softcam feed?” or “where are picons?”.',
+      ai_mode_online: 'Mode: ONLINE',
       ai_mode_offline: 'Mode: OFFLINE (knowledge base)',
-      ai_mode_online: 'Mode: ONLINE'
+
+      back_to_top: 'Back to top'
     }
   };
 
@@ -127,15 +139,17 @@
     );
   }
 
-  function relUrl(path) {
-    // Works on GitHub Pages subpaths
-    return new URL(path, document.baseURI).toString();
+  function absUrl(pathLike) {
+    // Always resolve via current document base (GitHub Pages subpaths safe)
+    return new URL(pathLike, document.baseURI).toString();
   }
 
-  async function safeFetchJSON(url) {
-    const res = await fetch(url, { cache: 'no-store' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    return await res.json();
+  function safeJsonParse(s) {
+    try {
+      return JSON.parse(s);
+    } catch (_) {
+      return null;
+    }
   }
 
   window.copyToClipboard = async function (elementId) {
@@ -145,6 +159,7 @@
     if (!text) return;
 
     const btn = (function () {
+      // Expected layout: <div id="..."> + <button class="copy-btn">
       const maybe = el.parentElement ? el.parentElement.querySelector('button.copy-btn') : null;
       return maybe;
     })();
@@ -172,45 +187,16 @@
       ta.select();
       try {
         document.execCommand('copy');
-      } catch (e) {}
+      } catch (e) {
+        // ignore
+      }
       document.body.removeChild(ta);
       flash();
     }
   };
 
   // -------------------------
-  // Analytics (GA4 tag injection)
-  // -------------------------
-  async function initAnalytics() {
-    // Optional config file. Safe for GitHub Pages (no secrets).
-    try {
-      const cfg = await safeFetchJSON(relUrl('data/analytics_config.json'));
-      const mid = (cfg && cfg.measurement_id) ? String(cfg.measurement_id).trim() : '';
-      if (!mid) return;
-
-      // Avoid double-inject
-      if (window.__aioGtagLoaded) return;
-
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){ window.dataLayer.push(arguments); }
-      window.gtag = window.gtag || gtag;
-
-      const s = document.createElement('script');
-      s.async = true;
-      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(mid);
-      document.head.appendChild(s);
-
-      gtag('js', new Date());
-      gtag('config', mid, { anonymize_ip: true });
-
-      window.__aioGtagLoaded = true;
-    } catch (_) {
-      // ignore
-    }
-  }
-
-  // -------------------------
-  // Mobile drawer
+  // Mobile drawer (hamburger)
   // -------------------------
   function initDrawer() {
     const btn = qs('#navToggle');
@@ -221,13 +207,13 @@
     const open = () => {
       drawer.classList.add('open');
       back.classList.add('open');
-      document.body.style.overflow = 'hidden';
+      document.body.classList.add('no-scroll');
       drawer.setAttribute('aria-hidden', 'false');
     };
     const close = () => {
       drawer.classList.remove('open');
       back.classList.remove('open');
-      document.body.style.overflow = '';
+      document.body.classList.remove('no-scroll');
       drawer.setAttribute('aria-hidden', 'true');
     };
 
@@ -253,112 +239,198 @@
   }
 
   // -------------------------
-  // Notifications bell (changelog from data/updates.json)
+  // Accordions (Guides / Pomoc / Contact)
   // -------------------------
-  function parseTs(it) {
-    if (typeof it.ts === 'number' && isFinite(it.ts)) return it.ts;
-    const d = Date.parse(it.date || '');
-    return isNaN(d) ? 0 : d;
+  function initAccordions() {
+    // Supports markup:
+    // <div class="accordion-item"><button class="accordion-header">..</button><div class="accordion-content">..</div></div>
+    qsa('.accordion-item').forEach((item) => {
+      const header = qs('.accordion-header', item);
+      const content = qs('.accordion-content', item);
+      if (!header || !content) return;
+      if (header.dataset.bound === '1') return;
+      header.dataset.bound = '1';
+
+      // Ensure collapsed state is applied via class (CSS handles height)
+      item.classList.remove('open');
+      header.setAttribute('aria-expanded', 'false');
+
+      header.addEventListener('click', () => {
+        const isOpen = item.classList.toggle('open');
+        header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+    });
   }
 
-  function iconForType(type) {
-    const t = String(type || '').toLowerCase();
-    if (t === 'fix') return '🛠';
-    if (t === 'feature') return '✨';
-    if (t === 'change') return '🔁';
-    if (t === 'release') return '📦';
-    return '🔔';
+  // -------------------------
+  // Notifications bell (Updates Center)
+  // -------------------------
+  const UPDATES_SEEN_KEY = 'aio_updates_seen_ts';
+
+  function parseDateToTs(dateStr) {
+    // Accept YYYY-MM-DD
+    const m = String(dateStr || '').trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return 0;
+    const y = Number(m[1]);
+    const mo = Number(m[2]) - 1;
+    const d = Number(m[3]);
+    const dt = new Date(Date.UTC(y, mo, d, 12, 0, 0));
+    return dt.getTime();
   }
 
-  function initUpdates() {
+  function initUpdatesCenter() {
     const bell = qs('#bellBtn');
     const panel = qs('#notifPanel');
     if (!bell || !panel) return;
 
     // Badge
-    let badge = bell.querySelector('.bell-badge');
+    let badge = qs('.notif-badge', bell.parentElement || bell);
     if (!badge) {
       badge = document.createElement('span');
-      badge.className = 'bell-badge';
-      badge.style.display = 'none';
-      bell.appendChild(badge);
+      badge.className = 'notif-badge';
+      badge.textContent = '0';
+      (bell.parentElement || bell).style.position = 'relative';
+      (bell.parentElement || bell).appendChild(badge);
     }
 
-    const SEEN_KEY = 'aio_updates_seen_ts';
-    const seenTs = () => Number(localStorage.getItem(SEEN_KEY) || '0') || 0;
-    const setSeen = (ts) => localStorage.setItem(SEEN_KEY, String(ts || 0));
+    async function loadUpdates() {
+      const res = await fetch(absUrl('data/updates.json'), { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const items = await res.json();
+      return Array.isArray(items) ? items : [];
+    }
+
+    function getSeenTs() {
+      return Number(localStorage.getItem(UPDATES_SEEN_KEY) || '0') || 0;
+    }
+
+    function setSeenTs(ts) {
+      localStorage.setItem(UPDATES_SEEN_KEY, String(ts || Date.now()));
+    }
+
+    function computeTs(item) {
+      if (item && typeof item.ts === 'number' && item.ts > 0) return item.ts;
+      return parseDateToTs(item?.date);
+    }
+
+    function iconForType(type) {
+      const t0 = String(type || '').toLowerCase();
+      if (t0 === 'fix') return '🛠';
+      if (t0 === 'change') return '✨';
+      if (t0 === 'release') return '🚀';
+      if (t0 === 'feature') return '🧩';
+      return '🔔';
+    }
+
+    function renderPanel(items) {
+      const seenTs = getSeenTs();
+      const normalized = items
+        .map((it) => ({ ...it, _ts: computeTs(it) }))
+        .sort((a, b) => (b._ts || 0) - (a._ts || 0));
+
+      const unread = normalized.filter((it) => (it._ts || 0) > seenTs);
+      badge.textContent = String(unread.length);
+      badge.classList.toggle('is-hidden', unread.length === 0);
+
+      const head = `
+        <div class="notif-head">
+          <div class="notif-title">${escapeHtml(t('updates'))}</div>
+          <div class="notif-actions">
+            <button type="button" class="notif-action" data-action="read">${escapeHtml(t('mark_read'))}</button>
+            <button type="button" class="notif-action" data-action="clear">${escapeHtml(t('clear_cache'))}</button>
+            <button type="button" class="notif-action" data-action="reload">${escapeHtml(t('reload'))}</button>
+          </div>
+        </div>
+      `;
+
+      const body = normalized.length
+        ? normalized.slice(0, 18).map((it) => {
+            const icon = iconForType(it.type);
+            const isUnread = (it._ts || 0) > seenTs;
+            return `
+              <div class="notif-item ${isUnread ? 'unread' : ''}">
+                <div class="notif-ico">${icon}</div>
+                <div>
+                  <div class="notif-item-title">${escapeHtml(it.title || '')}</div>
+                  <div class="notif-item-date">${escapeHtml(it.date || '')}</div>
+                  ${it.details ? `<div class="notif-item-details">${escapeHtml(it.details)}</div>` : ''}
+                </div>
+              </div>
+            `;
+          }).join('')
+        : `<div class="notif-empty">${escapeHtml(t('no_updates'))}</div>`;
+
+      panel.innerHTML = head + body;
+
+      qsa('button.notif-action', panel).forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const act = btn.getAttribute('data-action');
+          if (act === 'read') {
+            // Mark as read to latest update timestamp
+            const latest = normalized[0]?._ts || Date.now();
+            setSeenTs(latest);
+            renderPanel(items);
+          } else if (act === 'clear') {
+            // Clear only project UI keys (no destructive full clear)
+            const keys = [
+              UPDATES_SEEN_KEY,
+              'aio_lang',
+              'aio_ai_seen_hint',
+              'aio_ai_mode'
+            ];
+            keys.forEach((k) => localStorage.removeItem(k));
+            // Force a hard reload with cache buster
+            location.href = location.pathname + '?v=' + Date.now();
+          } else if (act === 'reload') {
+            location.reload();
+          }
+        });
+      });
+    }
 
     let cachedItems = null;
 
-    async function load() {
+    async function ensureLoaded() {
+      if (cachedItems) return cachedItems;
+      cachedItems = await loadUpdates();
+      return cachedItems;
+    }
+
+    async function refreshBadgeOnly() {
       try {
-        const items = await safeFetchJSON(relUrl('data/updates.json'));
-        cachedItems = Array.isArray(items) ? items : [];
-        const newest = cachedItems.reduce((m, x) => Math.max(m, parseTs(x)), 0);
-        const unread = cachedItems.filter((x) => parseTs(x) > seenTs()).length;
-
-        if (unread > 0) {
-          badge.textContent = unread > 99 ? '99+' : String(unread);
-          badge.style.display = 'inline-flex';
-        } else {
-          badge.style.display = 'none';
-        }
-
-        panel.innerHTML = `<div class="notif-title">${escapeHtml(t('updates'))}</div>`;
-        cachedItems
-          .slice()
-          .sort((a, b) => parseTs(b) - parseTs(a))
-          .slice(0, 20)
-          .forEach((it) => {
-            const div = document.createElement('div');
-            div.className = 'notif-item';
-            const ic = iconForType(it.type);
-            div.innerHTML = `
-              <div class="notif-ic">${escapeHtml(ic)}</div>
-              <div>
-                <div class="notif-h">${escapeHtml(it.title || '')}</div>
-                <div class="date">${escapeHtml(it.date || '')}</div>
-                ${it.details ? `<div class="notif-d">${escapeHtml(it.details)}</div>` : ''}
-              </div>
-            `;
-            panel.appendChild(div);
-          });
-
-        panel.dataset.newestTs = String(newest || 0);
-      } catch (e) {
-        panel.innerHTML = `<div class="notif-item"><div>⚠️</div><div>${lang === 'pl' ? 'Nie udało się wczytać aktualizacji.' : 'Failed to load updates.'}</div></div>`;
+        const items = await loadUpdates();
+        cachedItems = items;
+        const seenTs = getSeenTs();
+        const unread = items.map((it) => computeTs(it)).filter((ts) => ts > seenTs);
+        badge.textContent = String(unread.length);
+        badge.classList.toggle('is-hidden', unread.length === 0);
+      } catch (_) {
+        // Keep silent
       }
     }
 
-    const openPanel = async () => {
-      if (!panel.dataset.loaded) {
-        await load();
-        panel.dataset.loaded = '1';
-      }
-      panel.classList.add('open');
+    // Initial badge compute
+    refreshBadgeOnly();
 
-      // Mark as read (on open)
-      const newest = Number(panel.dataset.newestTs || '0') || 0;
-      if (newest > 0) setSeen(newest);
-      badge.style.display = 'none';
+    const toggle = async () => {
+      const open = panel.classList.toggle('open');
+      if (!open) return;
+      try {
+        const items = await ensureLoaded();
+        renderPanel(items);
+      } catch (e) {
+        panel.innerHTML = `<div class="notif-empty">⚠️ ${escapeHtml(t('updates_failed'))}</div>`;
+      }
     };
 
-    const closePanel = () => panel.classList.remove('open');
-
-    bell.addEventListener('click', async (e) => {
-      e.stopPropagation();
-      if (panel.classList.contains('open')) closePanel();
-      else await openPanel();
-    });
+    bell.addEventListener('click', toggle);
 
     document.addEventListener('click', (e) => {
-      if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== bell) {
-        closePanel();
-      }
+      if (!panel.classList.contains('open')) return;
+      const target = e.target;
+      if (panel.contains(target) || target === bell) return;
+      panel.classList.remove('open');
     });
-
-    // refresh badge in background
-    load().catch(() => {});
   }
 
   // -------------------------
@@ -371,7 +443,9 @@
       const b64 = btn.getAttribute('data-paypal');
       if (!b64) return;
       btn.setAttribute('href', atob(b64));
-    } catch (_) {}
+    } catch (_) {
+      // ignore
+    }
   }
 
   // -------------------------
@@ -399,8 +473,59 @@
     document.body.insertBefore(bar, document.body.firstChild);
   }
 
+  // -------------------------
+  // Generator One-Liner
+  // -------------------------
+  function initOneLinerGenerator() {
+    const output = qs('#generator-output');
+    if (!output) return;
+
+    const checks = qsa('input[type="checkbox"][data-target]');
+    if (!checks.length) return;
+
+    const update = () => {
+      const parts = [];
+      for (const cb of checks) {
+        if (!cb.checked) continue;
+        const tid = cb.getAttribute('data-target');
+        const src = tid ? document.getElementById(tid) : null;
+        const txt = src ? String(src.innerText || src.textContent || '').trim() : '';
+        if (txt) parts.push(txt);
+      }
+      output.textContent = parts.length ? parts.join(' && ') : t('generator_hint');
+    };
+
+    checks.forEach((cb) => cb.addEventListener('change', update));
+    update();
+  }
+
   // -----------------------------
-  // AI-Chat Enigma2 (drawer, offline KB + optional online endpoint / Supabase)
+  // Back to top
+  // -----------------------------
+  function initBackToTop() {
+    if (qs('#backToTop')) return;
+    const btn = document.createElement('button');
+    btn.id = 'backToTop';
+    btn.className = 'back-to-top';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', t('back_to_top'));
+    btn.innerHTML = '↑';
+    document.body.appendChild(btn);
+
+    const onScroll = () => {
+      const y = window.scrollY || document.documentElement.scrollTop || 0;
+      btn.classList.toggle('show', y > 500);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    btn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // -----------------------------
+  // AI-Chat Enigma2 (drawer, offline KB + optional online endpoint)
   // -----------------------------
   function injectAIChatMarkup() {
     if (document.getElementById('ai-chat-fab')) return;
@@ -424,15 +549,19 @@
     drawer.innerHTML = `
       <div class="ai-drawer__head">
         <div class="ai-drawer__title">AI‑Chat Enigma2</div>
-        <button type="button" class="ai-drawer__close" id="ai-chat-close" aria-label="Close">✕</button>
+        <button type="button" class="ai-drawer__close" id="ai-chat-close" aria-label="Zamknij">✕</button>
       </div>
       <div class="ai-drawer__meta" id="ai-chat-meta"></div>
       <div class="ai-drawer__messages" id="aiChatMessages"></div>
       <form class="ai-drawer__form" id="aiChatForm" autocomplete="off">
-        <input id="aiChatInput" class="ai-drawer__input" type="text" data-i18n-placeholder="ai_placeholder" placeholder="${escapeHtml(t('ai_placeholder'))}" />
-        <button class="ai-drawer__send" type="submit" data-i18n="ai_send">${escapeHtml(t('ai_send'))}</button>
+        <input id="aiChatInput" class="ai-drawer__input" type="text" placeholder="${escapeHtml(t('ai_placeholder'))}" />
+        <button class="ai-drawer__send" type="submit">${escapeHtml(t('ai_send'))}</button>
       </form>
-      <div class="ai-drawer__hint" data-i18n="ai_hint">${escapeHtml(t('ai_hint'))}</div>
+      <div class="ai-drawer__hint">${
+        lang === 'pl'
+          ? 'Podpowiedź: pytaj np. „jak zainstalować softcam feed?” albo „gdzie są picony?”.'
+          : 'Tip: ask e.g. “how to install softcam feed?” or “where are picons?”.'
+      }</div>
     `;
     document.body.appendChild(drawer);
   }
@@ -465,7 +594,10 @@
   function scoreKBItem(item, q) {
     const nq = normText(q);
     if (!nq) return 0;
-    const words = nq.split(' ').filter((w) => w.length > 2).slice(0, 8);
+    const words = nq
+      .split(' ')
+      .filter((w) => w.length > 2)
+      .slice(0, 10);
 
     const title = normText(item.title);
     const tags = (item.tags || []).map(normText).join(' ');
@@ -490,25 +622,21 @@
       .slice(0, 3);
 
     if (!scored.length) {
-      return [
-        lang === 'pl'
-          ? 'Nie znalazłem dokładnej odpowiedzi w bazie offline.'
-          : 'I could not find an exact answer in the offline knowledge base.',
-        lang === 'pl'
-          ? 'Spróbuj doprecyzować: model tunera / image (OpenATV/OpenPLi) / błąd z logu.'
-          : 'Try to уточнить: receiver model / image (OpenATV/OpenPLi) / error log.',
-        lang === 'pl'
-          ? 'Jeżeli masz tryb ONLINE (API), skonfiguruj go w data/aichat_config.json.'
-          : 'If you have ONLINE mode (API), configure it in data/aichat_config.json.'
-      ];
+      return lang === 'pl'
+        ? [
+            'Nie znalazłem dokładnej odpowiedzi w bazie offline.',
+            'Spróbuj doprecyzować: model tunera / image (OpenATV/OpenPLi) / błąd z logu.',
+            'Jeżeli masz tryb ONLINE (API), ustaw go w data/aichat_config.json.'
+          ]
+        : [
+            'I could not find an exact match in the offline knowledge base.',
+            'Try adding: tuner model / image (OpenATV/OpenPLi) / error from logs.',
+            'If you have ONLINE mode (API), configure it in data/aichat_config.json.'
+          ];
     }
 
     const out = [];
-    out.push(
-      (lang === 'pl' ? 'Znalazłem w bazie offline ' : 'Found in offline KB ') +
-        scored.length +
-        (lang === 'pl' ? ' pasujące tematy:' : ' matching topics:')
-    );
+    out.push(lang === 'pl' ? 'Znalazłem w bazie offline pasujące tematy:' : 'I found matching topics in the offline KB:');
     scored.forEach((x, i) => {
       out.push(`${i + 1}) ${x.it.title}`);
       if (x.it.summary) out.push(`— ${x.it.summary}`);
@@ -531,33 +659,28 @@
     messages.scrollTop = messages.scrollHeight;
   }
 
-  function makeOnlineClient(cfg) {
-    // Supported configurations:
-    // 1) Supabase (recommended): { mode:"online", supabase:{ url, anonKey, function:"ai-chat" } }
-    // 2) Generic endpoint: { mode:"online", endpoint:"https://...", headers:{...} }
-    const supa = cfg && cfg.supabase ? cfg.supabase : null;
-    if (cfg && cfg.mode === 'online' && supa && supa.url && supa.anonKey) {
-      const fn = supa.function || 'ai-chat';
-      const endpoint = String(supa.url).replace(/\/+$/, '') + '/functions/v1/' + fn;
-      const headers = {
+  async function safeFetchJSON(url) {
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  }
+
+  async function postJSON(url, payload, headers = {}) {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
         'Content-Type': 'application/json',
-        apikey: String(supa.anonKey),
-        Authorization: 'Bearer ' + String(supa.anonKey)
-      };
-      return { endpoint, headers };
-    }
-
-    if (cfg && cfg.mode === 'online' && cfg.endpoint) {
-      const headers = Object.assign({ 'Content-Type': 'application/json' }, cfg.headers || {});
-      return { endpoint: cfg.endpoint, headers };
-    }
-
-    return null;
+        ...headers
+      },
+      body: JSON.stringify(payload)
+    });
+    const txt = await res.text();
+    if (!res.ok) throw new Error(txt || ('HTTP ' + res.status));
+    return safeJsonParse(txt) || { reply: txt };
   }
 
   async function initAIChatDrawer() {
     injectAIChatMarkup();
-    applyI18n();
 
     const fab = document.getElementById('ai-chat-fab');
     const closeBtn = document.getElementById('ai-chat-close');
@@ -571,92 +694,98 @@
     const input = document.getElementById('aiChatInput');
     const meta = document.getElementById('ai-chat-meta');
 
-    let cfg = { mode: 'offline' };
+    let cfg = { mode: 'offline', endpoint: '' };
     try {
-      cfg = await safeFetchJSON(relUrl('data/aichat_config.json'));
-    } catch (_) {}
+      cfg = await safeFetchJSON(absUrl('data/aichat_config.json'));
+    } catch (_) {
+      // keep offline
+    }
 
-    const online = makeOnlineClient(cfg);
-    meta.textContent = online ? t('ai_mode_online') : t('ai_mode_offline');
+    const isOnline = cfg && cfg.mode === 'online' && cfg.endpoint;
+    meta.textContent = isOnline ? t('ai_mode_online') : t('ai_mode_offline');
 
     let kb = [];
     try {
-      kb = await safeFetchJSON(relUrl('data/knowledge.json'));
+      kb = await safeFetchJSON(absUrl('data/knowledge.json'));
     } catch (_) {
       kb = [];
+    }
+
+    // Online mode supports either:
+    // 1) Supabase Edge Function (endpoint = https://.../functions/v1/ai-chat, apikey+anon optional)
+    // 2) Generic endpoint returning {reply} or {text}
+
+    async function askOnline(question) {
+      const ep = String(cfg.endpoint || '').trim();
+      if (!ep) throw new Error('No endpoint');
+
+      // Supabase config: allow passing apikey + bearer (anon key)
+      const headers = {};
+      if (cfg.apikey) headers.apikey = String(cfg.apikey);
+      if (cfg.anon_key) headers.Authorization = 'Bearer ' + String(cfg.anon_key);
+
+      const payload = {
+        query: question,
+        message: question,
+        lang
+      };
+      const data = await postJSON(ep, payload, headers);
+      const reply = data.reply || data.text || data.answer || '';
+      return String(reply || '').trim();
     }
 
     form &&
       form.addEventListener('submit', async (ev) => {
         ev.preventDefault();
         const q = (input && input.value) || '';
-        const query = q.trim();
-        if (!query) return;
+        const question = q.trim();
+        if (!question) return;
         if (input) input.value = '';
-        renderChatMessage('user', query);
 
-        if (online) {
+        renderChatMessage('user', question);
+
+        if (isOnline) {
           try {
-            const res = await fetch(online.endpoint, {
-              method: 'POST',
-              headers: online.headers,
-              body: JSON.stringify({ query: query, message: query, source: 'aio-iptv', locale: getLang() })
-            });
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            const data = await res.json();
-            const reply = (data.reply || data.text || data.message || '').toString().trim();
-            renderChatMessage('bot', reply || (lang === 'pl' ? 'Brak odpowiedzi z endpointu.' : 'No response from endpoint.'));
-            return;
+            const reply = await askOnline(question);
+            if (reply) {
+              renderChatMessage('bot', reply);
+              return;
+            }
           } catch (e) {
+            // fall back to offline
             renderChatMessage(
               'bot',
               lang === 'pl'
                 ? 'Nie udało się połączyć z trybem ONLINE. Odpowiadam z bazy offline.'
-                : 'Failed to reach ONLINE mode. Falling back to offline KB.'
+                : 'Could not reach ONLINE mode. Falling back to offline KB.'
             );
           }
         }
 
-        const lines = buildOfflineReply(query, kb);
-        lines.forEach((l) => renderChatMessage('bot', l));
+        const lines = buildOfflineReply(question, kb);
+        renderChatMessage('bot', lines.join('\n'));
       });
   }
 
-  // -------------------------
-  // One-liner generator
-  // -------------------------
-  function initOneLinerGenerator() {
-    const output = qs('#generator-output');
-    if (!output) return;
-
-    const checks = qsa('input[type="checkbox"][data-target]');
-    if (!checks.length) return;
-
-    const update = () => {
-      const parts = [];
-      for (const cb of checks) {
-        if (!cb.checked) continue;
-        const tid = cb.getAttribute('data-target');
-        const src = tid ? document.getElementById(tid) : null;
-        const txt = src ? String(src.innerText || src.textContent || '').trim() : '';
-        if (txt) parts.push(txt);
-      }
-      output.textContent = parts.length ? parts.join(' && ') : t('generator_hint');
-    };
-
-    checks.forEach((cb) => cb.addEventListener('change', update));
-    update();
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
+  // -----------------------------
+  // Bootstrap
+  // -----------------------------
+  function boot() {
     applyI18n();
-    initAnalytics();
+    initMarquee();
     initDrawer();
     setActiveNav();
-    initUpdates();
     initPayPal();
-    initMarquee();
-    initAIChatDrawer();
+    initUpdatesCenter();
     initOneLinerGenerator();
-  });
+    initAccordions();
+    initBackToTop();
+    initAIChatDrawer();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
 })();
