@@ -210,7 +210,7 @@
   }
 
   // -------------------------
-  // Mobile drawer (improved UX + accessibility)
+  // Mobile drawer
   // -------------------------
   function initDrawer() {
     const btn = qs('#navToggle');
@@ -218,187 +218,129 @@
     const back = qs('#drawerBackdrop');
     if (!btn || !drawer || !back) return;
 
-    // Ensure IDs/ARIA are wired
-    try {
-      btn.setAttribute('aria-controls', 'mobileDrawer');
-      btn.setAttribute('aria-expanded', 'false');
-      drawer.setAttribute('aria-hidden', 'true');
-      back.setAttribute('aria-hidden', 'true');
-      if (!drawer.hasAttribute('tabindex')) drawer.setAttribute('tabindex', '-1');
-    } catch (_) {}
-
-    // Inject minimal CSS if theme doesn't provide it (prevents "menu opens but is invisible")
-    if (!document.getElementById('aioDrawerCss')) {
-      const style = document.createElement('style');
-      style.id = 'aioDrawerCss';
-      style.textContent = `
-        #drawerBackdrop{opacity:0;pointer-events:none;transition:opacity .18s ease;}
-        #drawerBackdrop.open{opacity:1;pointer-events:auto;}
-        #mobileDrawer{transform:translateX(110%);transition:transform .22s ease;will-change:transform;}
-        #mobileDrawer.open{transform:translateX(0);}
-        @media (prefers-reduced-motion: reduce){
-          #drawerBackdrop,#mobileDrawer{transition:none !important;}
-        }
-      `;
-      document.head.appendChild(style);
-    }
-
-    const focusableSel =
-      'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
-
-    const getFocusable = () =>
-      qsa(focusableSel, drawer).filter((el) => el && el.offsetParent !== null);
-
-    let lastFocus = null;
-    let scrollY = 0;
-
-    const lockScroll = () => {
-      scrollY = window.scrollY || window.pageYOffset || 0;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.left = '0';
-      document.body.style.right = '0';
-      document.body.style.width = '100%';
-    };
-
-    const unlockScroll = () => {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
-      document.body.style.width = '';
-      window.scrollTo(0, scrollY);
-    };
-
     const open = () => {
-      if (drawer.classList.contains('open')) return;
-      lastFocus = document.activeElement;
       drawer.classList.add('open');
       back.classList.add('open');
-      lockScroll();
-      try {
-        drawer.setAttribute('aria-hidden', 'false');
-        back.setAttribute('aria-hidden', 'false');
-        btn.setAttribute('aria-expanded', 'true');
-      } catch (_) {}
-
-      // Focus first focusable item (or drawer itself)
-      setTimeout(() => {
-        const f = getFocusable();
-        (f[0] || drawer).focus && (f[0] || drawer).focus();
-      }, 30);
+      document.body.style.overflow = 'hidden';
+      drawer.setAttribute('aria-hidden', 'false');
     };
-
     const close = () => {
-      if (!drawer.classList.contains('open')) return;
       drawer.classList.remove('open');
       back.classList.remove('open');
-      unlockScroll();
-      try {
-        drawer.setAttribute('aria-hidden', 'true');
-        back.setAttribute('aria-hidden', 'true');
-        btn.setAttribute('aria-expanded', 'false');
-      } catch (_) {}
-      if (lastFocus && lastFocus.focus) lastFocus.focus();
+      document.body.style.overflow = '';
+      drawer.setAttribute('aria-hidden', 'true');
     };
 
-    // Toggle
-    btn.addEventListener(
-      'click',
-      (e) => {
-        e.preventDefault();
-        drawer.classList.contains('open') ? close() : open();
-      },
-      { passive: false }
-    );
-
-    // Backdrop closes
+    btn.addEventListener('click', open);
     back.addEventListener('click', close);
-
-    // Explicit close buttons
-    qsa('[data-drawer-close]', drawer).forEach((x) => x.addEventListener('click', close));
-
-    // Clicking a link closes the drawer (except same-page anchors)
-    qsa('a', drawer).forEach((a) =>
-      a.addEventListener('click', () => {
-        const href = String(a.getAttribute('href') || '');
-        if (href.startsWith('#')) return;
-        close();
-      })
-    );
-
-    // Keyboard: ESC closes, TAB is trapped within drawer when open
+    qsa('[data-drawer-close]').forEach((x) => x.addEventListener('click', close));
+    qsa('a', drawer).forEach((a) => a.addEventListener('click', close));
     document.addEventListener('keydown', (e) => {
-      if (!drawer.classList.contains('open')) return;
-
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        close();
-        return;
-      }
-
-      if (e.key === 'Tab') {
-        const f = getFocusable();
-        if (!f.length) {
-          e.preventDefault();
-          return;
-        }
-        const firstEl = f[0];
-        const lastEl = f[f.length - 1];
-
-        if (e.shiftKey && document.activeElement === firstEl) {
-          e.preventDefault();
-          lastEl.focus();
-        } else if (!e.shiftKey && document.activeElement === lastEl) {
-          e.preventDefault();
-          firstEl.focus();
-        }
-      }
+      if (e.key === 'Escape') close();
     });
+  }
 
-    // Swipe-to-close (mobile)
-    let touch = null;
 
-    function drawerSide() {
-      const r = drawer.getBoundingClientRect();
-      // If it starts at/near left edge -> left drawer, otherwise right drawer
-      return r.left < 40 ? 'left' : 'right';
+  // -------------------------
+  // Mobile portrait: prevent horizontal nav from hiding items (wrap instead of swipe)
+  // -------------------------
+  function fixMobileNavOverflow() {
+    const mq = window.matchMedia('(max-width: 860px)');
+    const mqPortrait = window.matchMedia('(orientation: portrait)');
+
+    const isVisible = (el) => !!(el && (el.offsetWidth || el.offsetHeight || el.getClientRects().length));
+    const hasManyLinks = (el) => qsa('a', el).filter((a) => (a.textContent || '').trim().length > 0).length >= 6;
+
+    const targets = () => {
+      const list = [];
+      // Common containers
+      [
+        qs('#topNav'),
+        qs('#mainNav'),
+        qs('#navLinks'),
+        qs('.nav-links'),
+        qs('.navLinks'),
+        qs('.top-nav'),
+        qs('.topnav'),
+        qs('.header-nav'),
+        qs('header nav ul'),
+        qs('header nav .links'),
+        qs('header .nav ul'),
+      ].forEach((x) => x && list.push(x));
+
+      // Heuristic: any element in header that is scrollable-x and contains many links
+      qsa('header *').forEach((el) => {
+        if (!isVisible(el)) return;
+        const cs = getComputedStyle(el);
+        const ox = cs.overflowX;
+        if (ox === 'auto' || ox === 'scroll') {
+          if (hasManyLinks(el)) list.push(el);
+        }
+      });
+
+      // Unique
+      return Array.from(new Set(list));
+    };
+
+    function apply() {
+      const narrow = mq.matches && mqPortrait.matches;
+      targets().forEach((el) => {
+        if (!isVisible(el) || !hasManyLinks(el)) return;
+
+        // Remember we touched it, so we can revert on wide screens
+        el.dataset.aioMobileWrap = el.dataset.aioMobileWrap || '1';
+
+        if (narrow) {
+          // Force wrap, remove horizontal scrolling
+          el.style.overflowX = 'visible';
+          el.style.overflow = 'visible';
+          el.style.whiteSpace = 'normal';
+
+          // If it's a UL, make it flex
+          if (el.tagName === 'UL') {
+            el.style.display = 'flex';
+            el.style.flexWrap = 'wrap';
+            el.style.gap = '8px';
+            el.style.rowGap = '8px';
+            el.style.paddingRight = '12px';
+            qsa('li', el).forEach((li) => {
+              li.style.flex = '0 0 auto';
+              li.style.margin = '0';
+            });
+          } else {
+            // Generic flex-wrap if container is flex
+            const display = getComputedStyle(el).display;
+            if (display === 'flex' || display === 'inline-flex') {
+              el.style.flexWrap = 'wrap';
+              el.style.gap = '8px';
+              el.style.rowGap = '8px';
+              el.style.alignItems = 'center';
+              el.style.justifyContent = 'flex-start';
+              el.style.paddingRight = '12px';
+            }
+          }
+
+          // Slightly tighten link spacing on small screens
+          qsa('a', el).forEach((a) => {
+            a.style.fontSize = '14px';
+            a.style.padding = '10px 12px';
+            a.style.lineHeight = '1.1';
+          });
+        } else {
+          // Revert inline styles set by us (wide or landscape)
+          if (el.dataset.aioMobileWrap) {
+            ['overflowX','overflow','whiteSpace','display','flexWrap','gap','rowGap','alignItems','justifyContent','paddingRight']
+              .forEach((k) => { try { el.style[k] = ''; } catch (_) {} });
+            qsa('li', el).forEach((li) => { li.style.flex = ''; li.style.margin=''; });
+            qsa('a', el).forEach((a) => { a.style.fontSize=''; a.style.padding=''; a.style.lineHeight=''; });
+          }
+        }
+      });
     }
 
-    drawer.addEventListener(
-      'touchstart',
-      (e) => {
-        if (!drawer.classList.contains('open')) return;
-        const t = e.touches && e.touches[0];
-        if (!t) return;
-        touch = { x: t.clientX, y: t.clientY, side: drawerSide(), time: Date.now() };
-      },
-      { passive: true }
-    );
-
-    drawer.addEventListener(
-      'touchend',
-      (e) => {
-        if (!touch || !drawer.classList.contains('open')) return;
-        const t = e.changedTouches && e.changedTouches[0];
-        if (!t) return;
-        const dx = t.clientX - touch.x;
-        const dy = t.clientY - touch.y;
-        const absX = Math.abs(dx);
-        const absY = Math.abs(dy);
-
-        // Horizontal gesture threshold
-        if (absX > 70 && absX > absY * 1.2) {
-          if (touch.side === 'left' && dx < -70) close();
-          if (touch.side === 'right' && dx > 70) close();
-        }
-        touch = null;
-      },
-      { passive: true }
-    );
-
-    // Expose close/open for other UI if needed
-    window.__aioDrawer = { open, close };
+    apply();
+    window.addEventListener('resize', apply);
+    window.addEventListener('orientationchange', apply);
   }
 
   // -------------------------
@@ -813,6 +755,7 @@
     applyI18n();
     initAnalytics();
     initDrawer();
+    fixMobileNavOverflow();
     setActiveNav();
     initUpdates();
     initPayPal();
