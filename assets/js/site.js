@@ -127,16 +127,7 @@
     );
   }
 
-  
-  function injectStyleOnce(id, cssText) {
-    if (document.getElementById(id)) return;
-    const style = document.createElement('style');
-    style.id = id;
-    style.textContent = cssText;
-    document.head.appendChild(style);
-  }
-
-function relUrl(path) {
+  function relUrl(path) {
     // Works on GitHub Pages subpaths
     return new URL(path, document.baseURI).toString();
   }
@@ -409,242 +400,6 @@ function relUrl(path) {
   }
 
   // -----------------------------
-  
-
-  // -----------------------------
-  // Public comments (Supabase) — ONLY for Kontakt section
-  // -----------------------------
-  function initContactComments() {
-    // Only on pages that include Kontakt section
-    const kontakt = document.getElementById('kontakt') || document.querySelector('[data-section="kontakt"]');
-    if (!kontakt) return;
-
-    // Avoid double init
-    if (document.getElementById('contact-comments-root')) return;
-
-    // Minimal styling (kept in JS to avoid extra file edits)
-    injectStyleOnce('contact-comments-css', `
-      .contact-comments { margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.10); }
-      .contact-comments__head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
-      .contact-comments__title { font-size: 18px; margin: 0; }
-      .contact-comments__note { font-size: 12px; opacity: .8; margin: 0; }
-      .contact-comments__actions { display:flex; gap:8px; flex-wrap:wrap; }
-      .contact-comments__btn {
-        border: 1px solid rgba(255,255,255,.18);
-        background: rgba(255,255,255,.06);
-        color: inherit;
-        border-radius: 12px;
-        padding: 8px 10px;
-        cursor: pointer;
-        font-weight: 600;
-      }
-      .contact-comments__btn:hover { background: rgba(255,255,255,.10); }
-      .contact-comments__grid { display:grid; gap:10px; }
-      .contact-comments__row { display:grid; grid-template-columns: 180px 1fr; gap:10px; align-items:start; }
-      .contact-comments__row input, .contact-comments__row textarea {
-        width: 100%;
-        border: 1px solid rgba(255,255,255,.16);
-        background: rgba(0,0,0,.18);
-        color: inherit;
-        border-radius: 12px;
-        padding: 10px 12px;
-        outline: none;
-      }
-      .contact-comments__row textarea { min-height: 96px; resize: vertical; }
-      .contact-comments__status { font-size: 13px; opacity: .9; }
-      .comment-list { display:grid; gap:10px; margin-top: 12px; }
-      .comment-item {
-        border: 1px solid rgba(255,255,255,.12);
-        background: rgba(255,255,255,.04);
-        border-radius: 14px;
-        padding: 10px 12px;
-      }
-      .comment-header { display:flex; align-items:center; justify-content:space-between; gap:10px; font-size: 13px; opacity: .92; }
-      .comment-text { margin-top: 6px; white-space: pre-wrap; }
-      @media (max-width: 560px) {
-        .contact-comments__row { grid-template-columns: 1fr; }
-      }
-    `);
-
-    // Inject markup into Kontakt card
-    const wrap = document.createElement('div');
-    wrap.className = 'contact-comments';
-    wrap.id = 'contact-comments-root';
-    wrap.innerHTML = `
-      <div class="contact-comments__head">
-        <div>
-          <h3 class="contact-comments__title">Komentarze</h3>
-          <p class="contact-comments__note">Komentarze są publiczne. Proszę bez danych wrażliwych.</p>
-        </div>
-        <div class="contact-comments__actions">
-          <button class="contact-comments__btn" type="button" id="contactCommentRefresh">Odśwież</button>
-        </div>
-      </div>
-
-      <div class="contact-comments__grid">
-        <div class="contact-comments__row">
-          <input id="contactCommentName" type="text" placeholder="Twój nick (opcjonalnie)" autocomplete="nickname">
-          <div></div>
-        </div>
-        <div class="contact-comments__row">
-          <textarea id="contactCommentBody" placeholder="Treść komentarza..." autocomplete="off"></textarea>
-          <div>
-            <button class="contact-comments__btn" type="button" id="contactCommentSend">Dodaj komentarz</button>
-            <div class="contact-comments__status" id="contactCommentStatus" style="margin-top:8px;"></div>
-          </div>
-        </div>
-
-        <!-- honeypot (anti-spam) -->
-        <input type="text" id="contactCommentHp" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" tabindex="-1" autocomplete="off" aria-hidden="true">
-
-        <div class="comment-list" id="contactCommentsList"></div>
-      </div>
-    `;
-
-    kontakt.appendChild(wrap);
-
-    const statusEl = document.getElementById('contactCommentStatus');
-    const listEl = document.getElementById('contactCommentsList');
-    const btnSend = document.getElementById('contactCommentSend');
-    const btnRefresh = document.getElementById('contactCommentRefresh');
-
-    // Basic client-side throttle (reduces accidental double posts)
-    const throttleKey = 'aio_contact_comment_last_ts';
-    const canPostNow = () => {
-      const last = Number(localStorage.getItem(throttleKey) || '0');
-      return Date.now() - last > 15000; // 15s
-    };
-    const markPosted = () => localStorage.setItem(throttleKey, String(Date.now()));
-
-    const setStatus = (msg, kind='') => {
-      if (!statusEl) return;
-      statusEl.textContent = msg || '';
-      statusEl.style.opacity = msg ? '1' : '0';
-    };
-
-    const ensureSdk = () => new Promise((resolve) => {
-      if (window.supabase && typeof window.supabase.createClient === 'function') return resolve(true);
-      const s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-      s.async = true;
-      s.onload = () => resolve(true);
-      s.onerror = () => resolve(false);
-      document.head.appendChild(s);
-    });
-
-    const run = async () => {
-      // Config from window (if you keep it elsewhere), otherwise fallback to values from the old working site
-      window.AIO_SITE = window.AIO_SITE || {};
-      const sbUrl = window.AIO_SITE.supabaseUrl || 'https://pynjjeobqzxbrvmqofcw.supabase.co';
-      const sbKey = window.AIO_SITE.supabaseAnonKey || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5bmpqZW9icXp4YnJ2bXFvZmN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU3NDA5MDYsImV4cCI6MjA4MTMxNjkwNn0.XSBB0DJw27Wrn41nranqFyj8YI0-YjLzX52dkdrgkrg';
-
-      const ok = await ensureSdk();
-      if (!ok || !window.supabase) {
-        setStatus('Nie udało się załadować biblioteki komentarzy (Supabase).', 'err');
-        return;
-      }
-
-      const client = window.supabase.createClient(sbUrl, sbKey);
-      const pageKey = 'kontakt'; // canonical key for Kontakt section
-      const legacyKeys = Array.from(new Set([pageKey, (location.pathname || '/'), '/']));
-
-      const escape = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-
-      const render = (rows) => {
-        if (!listEl) return;
-        if (!rows || !rows.length) {
-          listEl.innerHTML = '<div class="comment-item"><div class="comment-text">Brak komentarzy. Bądź pierwszy.</div></div>';
-          return;
-        }
-        listEl.innerHTML = rows.map((c) => {
-          const name = escape(c.name || 'Anonim');
-          const msg = escape(c.message || '');
-          const dt = c.created_at ? new Date(c.created_at) : null;
-          const when = dt ? dt.toLocaleString() : '';
-          return `
-            <div class="comment-item">
-              <div class="comment-header">
-                <strong>${name}</strong>
-                <span>${escape(when)}</span>
-              </div>
-              <div class="comment-text">${msg}</div>
-            </div>
-          `;
-        }).join('');
-      };
-
-      const load = async () => {
-        setStatus('Ładuję komentarze…');
-        const { data, error } = await client
-          .from('comments')
-          .select('*')
-          .in('page', legacyKeys)
-          .order('created_at', { ascending: false })
-          .limit(50);
-
-        if (error) {
-          console.error(error);
-          setStatus('Błąd pobierania komentarzy: ' + (error.message || 'unknown'));
-          return;
-        }
-        setStatus('');
-        render(data || []);
-      };
-
-      const send = async () => {
-        const hp = document.getElementById('contactCommentHp');
-        if (hp && hp.value) return; // bot
-
-        if (!canPostNow()) {
-          setStatus('Odczekaj chwilę przed kolejnym komentarzem (anty-spam).');
-          return;
-        }
-
-        const nameEl = document.getElementById('contactCommentName');
-        const bodyEl = document.getElementById('contactCommentBody');
-        const name = (nameEl?.value || '').trim();
-        const message = (bodyEl?.value || '').trim();
-        if (!message) {
-          setStatus('Wpisz treść komentarza.');
-          return;
-        }
-
-        btnSend && (btnSend.disabled = true);
-        setStatus('Wysyłam…');
-
-        const { error } = await client.from('comments').insert({
-          page: pageKey,
-          name: name || 'Anonim',
-          message
-        });
-
-        btnSend && (btnSend.disabled = false);
-
-        if (error) {
-          console.error(error);
-          setStatus('Błąd wysyłania: ' + (error.message || 'unknown'));
-          return;
-        }
-
-        markPosted();
-        if (bodyEl) bodyEl.value = '';
-        setStatus('Dodano komentarz.');
-        await load();
-        setTimeout(() => setStatus(''), 1500);
-      };
-
-      btnRefresh && btnRefresh.addEventListener('click', load);
-      btnSend && btnSend.addEventListener('click', send);
-
-      await load();
-    };
-
-    run().catch((e) => {
-      console.error(e);
-      setStatus('Błąd modułu komentarzy.');
-    });
-  }
-
   // AI-Chat Enigma2 (drawer, offline KB + optional online endpoint / Supabase)
   // -----------------------------
   function injectAIChatMarkup() {
@@ -893,16 +648,302 @@ function relUrl(path) {
     update();
   }
 
+  
+  // -------------------------
+  // Mobile header layout (mobile portrait)
+  // Move: Bell + Menu + Coffee to the LEFT in one row; optionally hide horizontal nav bar.
+  // -------------------------
+  function findCoffeeBtn() {
+    const header = qs('.topbar') || qs('header') || document;
+    const candidates = qsa('a,button', header);
+    const score = (el) => {
+      const t = (el.getAttribute('aria-label') || '') + ' ' + (el.getAttribute('title') || '') + ' ' + (el.getAttribute('href') || '') + ' ' + (el.textContent || '');
+      const s = t.toLowerCase();
+      let p = 0;
+      if (s.includes('kawa') || s.includes('coffee')) p += 4;
+      if (s.includes('wspar') || s.includes('support')) p += 3;
+      if ((el.textContent || '').includes('☕')) p += 5;
+      if ((el.className || '').toLowerCase().includes('coffee')) p += 3;
+      return p;
+    };
+    let best = null, bestP = 0;
+    for (const el of candidates) {
+      const p = score(el);
+      if (p > bestP) { bestP = p; best = el; }
+    }
+    return bestP >= 3 ? best : null;
+  }
+
+  function initMobileHeaderIcons() {
+    const mq = window.matchMedia('(max-width: 820px)');
+    const isPortrait = () => window.innerHeight > window.innerWidth;
+
+    const moved = new Map(); // element -> {parent,next}
+    const store = (el) => {
+      if (!el || moved.has(el) || !el.parentNode) return;
+      moved.set(el, { parent: el.parentNode, next: el.nextSibling });
+    };
+
+    const nav = () => qs('.nav');
+    const hideNav = () => {
+      const n = nav();
+      if (!n) return;
+      if (!n.dataset.origDisplay) n.dataset.origDisplay = n.style.display || '';
+      n.style.display = 'none';
+    };
+    const restoreNav = () => {
+      const n = nav();
+      if (!n) return;
+      if (n.dataset.origDisplay !== undefined) n.style.display = n.dataset.origDisplay;
+      else n.style.display = '';
+    };
+
+    const restore = () => {
+      const row = qs('#mobileIconRow');
+      if (row) row.remove();
+      for (const [el, info] of moved.entries()) {
+        if (info.parent) info.parent.insertBefore(el, info.next || null);
+        // cleanup inline tweaks
+        if (el && el.id === 'navToggle') {
+          el.style.filter = '';
+          el.style.opacity = '';
+        }
+      }
+      moved.clear();
+      restoreNav();
+    };
+
+    const apply = () => {
+      if (!(mq.matches && isPortrait())) {
+        restore();
+        return;
+      }
+
+      const topInner = qs('.topbar-inner') || qs('.topbar') || qs('header');
+      if (!topInner) return;
+
+      const bell = qs('#bellBtn') || qs('#newsBellBtn') || qs('#notifBtn') || qs('.bell-btn');
+      const menu = qs('#navToggle') || qs('.nav-toggle') || qs('button[aria-label*="Menu"]');
+      const coffee = findCoffeeBtn();
+
+      if (!menu || !coffee) {
+        // still hide horizontal nav on tiny portrait to avoid "hidden" menu items
+        hideNav();
+        return;
+      }
+
+      store(bell);
+      store(menu);
+      store(coffee);
+
+      let row = qs('#mobileIconRow');
+      if (!row) {
+        row = document.createElement('div');
+        row.id = 'mobileIconRow';
+        row.style.display = 'flex';
+        row.style.alignItems = 'center';
+        row.style.gap = '10px';
+        row.style.marginRight = '10px';
+      }
+
+      // Put row on the LEFT
+      topInner.insertBefore(row, topInner.firstChild);
+
+      if (bell) row.appendChild(bell);
+      row.appendChild(menu);
+      row.appendChild(coffee);
+
+      // Brighten hamburger
+      menu.style.filter = 'brightness(1.9) contrast(1.15)';
+      menu.style.opacity = '1';
+
+      // Disable horizontal nav bar on mobile portrait (drawer is the navigation)
+      hideNav();
+    };
+
+    // Run now + on resize/orientation
+    apply();
+    window.addEventListener('resize', apply, { passive: true });
+    window.addEventListener('orientationchange', apply, { passive: true });
+  }
+
+  // -------------------------
+  // Contact: Supabase comments (only in #kontakt)
+  // Shows existing comments (any page) + allows adding new ones with page="kontakt"
+  // -------------------------
+  function ensureSupabaseV2() {
+    return new Promise((resolve) => {
+      if (window.supabase && typeof window.supabase.createClient === 'function') return resolve(true);
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+      s.async = true;
+      s.onload = () => resolve(true);
+      s.onerror = () => resolve(false);
+      document.head.appendChild(s);
+    });
+  }
+
+  function initContactComments() {
+    const contact = qs('#kontakt');
+    if (!contact) return;
+
+    const cfg = window.AIO_SITE || {};
+    const url = cfg.supabaseUrl;
+    const anon = cfg.supabaseAnonKey;
+    if (!url || !anon) return;
+
+    // Remove the "Technologie / Supabase" block if present (user requested)
+    removeContactTechBlock();
+
+    // Inject UI container if not present
+    let wrap = qs('#contactComments', contact);
+    if (!wrap) {
+      wrap = document.createElement('div');
+      wrap.id = 'contactComments';
+      wrap.className = 'card';
+      wrap.style.marginTop = '16px';
+      wrap.innerHTML = `
+        <h3 style="margin:0 0 10px 0;">Komentarze</h3>
+        <p style="margin:0 0 12px 0; opacity:.85;">Dodaj komentarz lub opinię. Komentarze pojawiają się publicznie.</p>
+        <div class="cc-form" style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-start;">
+          <input id="ccName" type="text" placeholder="Twój nick" style="flex:1; min-width:180px;">
+          <textarea id="ccMsg" rows="3" placeholder="Treść komentarza..." style="flex:2; min-width:240px;"></textarea>
+          <button id="ccSend" class="btn">Dodaj</button>
+        </div>
+        <div id="ccStatus" style="margin-top:8px; opacity:.85;"></div>
+        <div id="ccList" style="margin-top:14px; display:flex; flex-direction:column; gap:10px;"></div>
+      `;
+      contact.appendChild(wrap);
+    }
+
+    const elName = qs('#ccName', wrap);
+    const elMsg = qs('#ccMsg', wrap);
+    const elSend = qs('#ccSend', wrap);
+    const elStatus = qs('#ccStatus', wrap);
+    const elList = qs('#ccList', wrap);
+
+    // basic styling fallback (if not covered by CSS)
+    [elName, elMsg].forEach((el) => {
+      if (!el) return;
+      el.style.background = 'rgba(255,255,255,0.06)';
+      el.style.border = '1px solid rgba(255,255,255,0.12)';
+      el.style.borderRadius = '10px';
+      el.style.color = 'inherit';
+      el.style.padding = '10px 12px';
+      el.style.outline = 'none';
+    });
+
+    let client = null;
+
+    const render = (items) => {
+      elList.innerHTML = '';
+      if (!items || !items.length) {
+        elList.innerHTML = `<div style="opacity:.75;">Brak komentarzy. Bądź pierwszy.</div>`;
+        return;
+      }
+      for (const it of items) {
+        const name = escapeHtml(String(it.name || 'Anonim'));
+        const msg = escapeHtml(String(it.message || ''));
+        const d = it.created_at ? new Date(it.created_at) : null;
+        const when = d && !isNaN(d.getTime()) ? d.toLocaleString() : '';
+        const card = document.createElement('div');
+        card.className = 'cc-item';
+        card.style.padding = '10px 12px';
+        card.style.border = '1px solid rgba(255,255,255,0.10)';
+        card.style.borderRadius = '12px';
+        card.style.background = 'rgba(0,0,0,0.18)';
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; gap:10px;">
+            <strong>${name}</strong>
+            <span style="opacity:.7; font-size:12px;">${escapeHtml(when)}</span>
+          </div>
+          <div style="margin-top:6px; white-space:pre-wrap;">${msg}</div>
+        `;
+        elList.appendChild(card);
+      }
+    };
+
+    const setStatus = (t, ok = true) => {
+      elStatus.textContent = t || '';
+      elStatus.style.color = ok ? 'inherit' : '#ffb3b3';
+    };
+
+    const load = async () => {
+      try {
+        setStatus('Ładowanie komentarzy...');
+        const { data, error } = await client
+          .from('comments')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(200);
+
+        if (error) throw error;
+
+        // Show everything here to avoid losing older comments that used different "page" values.
+        render(Array.isArray(data) ? data : []);
+        setStatus('');
+      } catch (e) {
+        setStatus('Nie udało się wczytać komentarzy.', false);
+      }
+    };
+
+    const send = async () => {
+      const name = (elName.value || '').trim() || 'Anonim';
+      const message = (elMsg.value || '').trim();
+      if (!message) return setStatus('Wpisz treść komentarza.', false);
+
+      elSend.disabled = true;
+      try {
+        setStatus('Wysyłanie...');
+        const payload = { page: 'kontakt', name, message };
+        const { error } = await client.from('comments').insert(payload);
+        if (error) throw error;
+
+        elMsg.value = '';
+        localStorage.setItem('aio_cc_name', name);
+        setStatus('Dodano komentarz.');
+        await load();
+      } catch (e) {
+        setStatus('Nie udało się dodać komentarza (sprawdź polityki RLS).', false);
+      } finally {
+        elSend.disabled = false;
+      }
+    };
+
+    (async () => {
+      const ok = await ensureSupabaseV2();
+      if (!ok) return setStatus('Nie udało się załadować biblioteki komentarzy.', false);
+      client = window.supabase.createClient(url, anon);
+      elName.value = localStorage.getItem('aio_cc_name') || '';
+      elSend.addEventListener('click', send);
+      await load();
+    })();
+  }
+
+  function removeContactTechBlock() {
+    const contact = qs('#kontakt');
+    if (!contact) return;
+    // Find header containing "Technologie" and remove its parent card/section if it references Supabase
+    const heads = qsa('h2,h3,h4', contact);
+    const h = heads.find((x) => /technologie/i.test(x.textContent || ''));
+    if (!h) return;
+    const container = h.closest('.card, section, .panel, .box, div');
+    if (container && /supabase/i.test(container.textContent || '')) {
+      container.remove();
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     applyI18n();
     initAnalytics();
     initDrawer();
+    initMobileHeaderIcons();
     setActiveNav();
     initUpdates();
+    initContactComments();
     initPayPal();
     initMarquee();
     initAIChatDrawer();
     initOneLinerGenerator();
-    initContactComments();
   });
 })();
