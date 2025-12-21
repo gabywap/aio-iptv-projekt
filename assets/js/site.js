@@ -261,121 +261,7 @@
     return isNaN(d) ? 0 : d;
   }
 
-  
-  // Mobile portrait navigation UX:
-  // - ensures navigation links are fully visible (no confusing horizontal swipe),
-  // - optionally moves the hamburger (#navToggle) to the left side near the coffee/cup button.
-  function fixMobileNavPortrait() {
-    const mq = window.matchMedia ? window.matchMedia('(max-width: 768px)') : null;
-    const isPortraitSmall = mq ? mq.matches : (window.innerWidth <= 768);
-
-    const toggle = qs('#navToggle');
-    if (!toggle) return;
-
-    // Inject minimal CSS once (scoped by body class + data attribute).
-    let styleEl = qs('#aioMobileNavPortraitStyle');
-    if (!styleEl) {
-      styleEl = document.createElement('style');
-      styleEl.id = 'aioMobileNavPortraitStyle';
-      styleEl.textContent = `
-        @media (max-width: 768px) {
-          body.aio-mobile-nav-wrap [data-aio-nav-row="1"] {
-            display: flex !important;
-            flex-wrap: wrap !important;
-            overflow-x: visible !important;
-            white-space: normal !important;
-            gap: 6px !important;
-            row-gap: 6px !important;
-            align-items: center !important;
-            justify-content: center !important;
-            padding: 4px !important;
-          }
-          body.aio-mobile-nav-wrap [data-aio-nav-row="1"] a,
-          body.aio-mobile-nav-wrap [data-aio-nav-row="1"] button {
-            flex: 1 0 48% !important;
-            min-width: auto !important;
-            max-width: calc(50% - 3px) !important;
-            padding: 8px 6px !important;
-            font-size: clamp(11px, 2.8vw, 14px) !important;
-            line-height: 1.2 !important;
-            text-align: center !important;
-            word-break: break-word !important;
-            overflow-wrap: break-word !important;
-          }
-
-          /* Ensure content fits viewport */
-          body.aio-mobile-nav-wrap {
-            overflow-x: hidden !important;
-          }
-
-          /* Adjust marquee for mobile */
-          @media (max-width: 768px) {
-            .marquee-bar {
-              padding: 6px 0 !important;
-            }
-            .marquee-inner {
-              gap: 8px !important;
-              padding: 0 8px !important;
-            }
-            .marquee-track {
-              font-size: clamp(10px, 2.5vw, 12px) !important;
-            }
-            .marquee-cta {
-              padding: 4px 10px !important;
-              font-size: clamp(10px, 2.5vw, 12px) !important;
-            }
-          }
-        }
-      `;
-      document.head.appendChild(styleEl);
-    }
-
-    // Tag the best nav container within topbar
-    const topRoot = qs('.topbar') || qs('#topbar') || document.body;
-    const containers = qsa('nav, .nav, .nav-links, .topbar-nav, ul', topRoot);
-
-    let best = null;
-    let bestN = 0;
-    for (const el of containers) {
-      const n = el.querySelectorAll('a').length;
-      if (n > bestN) { best = el; bestN = n; }
-    }
-    if (best) best.setAttribute('data-aio-nav-row', '1');
-
-    document.body.classList.toggle('aio-mobile-nav-wrap', !!isPortraitSmall);
-
-    // Move hamburger near the coffee/cup link (if present) in portrait small.
-    if (isPortraitSmall) {
-      const coffee =
-        qs('a[aria-label*="kaw" i]') ||
-        qs('a[title*="kaw" i]') ||
-        qs('a[href*="kaw" i]') ||
-        qs('a[href*="coffee" i]') ||
-        qs('button[aria-label*="kaw" i]');
-
-      if (coffee && coffee.parentElement) {
-        const p = coffee.parentElement;
-        if (toggle.parentElement !== p) {
-          try { p.insertBefore(toggle, coffee); } catch (_) {}
-        } else {
-          // ensure ordering
-          try {
-            if (coffee.previousElementSibling !== toggle) p.insertBefore(toggle, coffee);
-          } catch (_) {}
-        }
-        toggle.style.marginRight = '10px';
-      }
-    } else {
-      const actions = qs('.topbar-actions') || qs('.header-actions') || qs('#headerActions') || qs('.actions');
-      if (actions && toggle.parentElement !== actions) {
-        try { actions.appendChild(toggle); } catch (_) {}
-      }
-      toggle.style.marginRight = '';
-    }
-  }
-
-
-function iconForType(type) {
+  function iconForType(type) {
     const t = String(type || '').toLowerCase();
     if (t === 'fix') return '🛠';
     if (t === 'feature') return '✨';
@@ -762,16 +648,156 @@ function iconForType(type) {
     update();
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  
+
+  // -------------------------
+  // Mobile header UX (icons order + hide horizontal nav on small screens)
+  // Desired on mobile: [Bell][Menu][Coffee] on the left, AI Chat FAB on the right/other side.
+  // -------------------------
+  function isMobilePortrait() {
+    try {
+      const w = window.innerWidth || 0;
+      const h = window.innerHeight || 0;
+      return w > 0 && w <= 620 && h >= w; // portrait-ish
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function findCoffeeElement() {
+    // Prefer explicit ids/classes if present
+    const direct =
+      qs('#coffeeBtn') ||
+      qs('#coffeeIcon') ||
+      qs('[data-coffee]') ||
+      qs('.coffee-icon') ||
+      qs('.coffeeBtn') ||
+      qs('.coffee');
+    if (direct) return direct;
+
+    // Heuristic: link/button containing ☕ or labeled kawa/coffee
+    const candidates = Array.from(document.querySelectorAll('a,button,div'));
+    const score = (el) => {
+      const txt = (el.textContent || '').trim();
+      const aria = (el.getAttribute('aria-label') || '').toLowerCase();
+      const title = (el.getAttribute('title') || '').toLowerCase();
+      const href = (el.getAttribute('href') || '').toLowerCase();
+      const cls = (el.className || '').toLowerCase();
+      let s = 0;
+      if (txt.includes('☕')) s += 5;
+      if (aria.includes('kaw') || aria.includes('coffee')) s += 4;
+      if (title.includes('kaw') || title.includes('coffee')) s += 3;
+      if (href.includes('kaw') || href.includes('coffee') || href.includes('wspar') || href.includes('support')) s += 3;
+      if (cls.includes('coffee') || cls.includes('kawa')) s += 2;
+      // avoid huge wrappers
+      if (txt.length > 50) s -= 2;
+      return s;
+    };
+    let best = null, bestScore = 0;
+    for (const el of candidates) {
+      const s = score(el);
+      if (s > bestScore) {
+        bestScore = s;
+        best = el;
+      }
+    }
+    return bestScore >= 4 ? best : null;
+  }
+
+  function setInlineIconStyle(el) {
+    if (!el) return;
+    el.style.display = 'inline-flex';
+    el.style.alignItems = 'center';
+    el.style.justifyContent = 'center';
+  }
+
+  function layoutMobileHeaderIcons() {
+    const mobile = isMobilePortrait();
+
+    const bell = qs('#bellBtn');
+    const menuBtn = qs('#navToggle');
+    const coffee = findCoffeeElement();
+
+    // Hide horizontal nav strip on mobile portrait (avoid "swipe to see more")
+    const navStrip =
+      qs('.nav') || qs('#topNav') || qs('#mainNav') || qs('.top-nav') || qs('.nav-links') || qs('.navBar');
+    if (navStrip) {
+      navStrip.style.display = mobile ? 'none' : '';
+    }
+
+    // Move AI Chat FAB to the opposite side on mobile (left side)
+    const fab = qs('#ai-chat-fab');
+    if (fab) {
+      if (mobile) {
+        fab.style.left = '18px';
+        fab.style.right = 'auto';
+      } else {
+        fab.style.right = '18px';
+        fab.style.left = 'auto';
+      }
+    }
+
+    if (!mobile) return; // only rearrange in mobile portrait
+
+    if (!coffee || !coffee.parentElement) return;
+    if (!bell || !menuBtn) return;
+
+    // Create/locate a small row container in the coffee's parent.
+    const parent = coffee.parentElement;
+    let row = qs('#mobile-left-icons', parent);
+    if (!row) {
+      row = document.createElement('div');
+      row.id = 'mobile-left-icons';
+      row.style.display = 'inline-flex';
+      row.style.alignItems = 'center';
+      row.style.gap = '10px';
+      row.style.marginRight = '10px';
+      row.style.verticalAlign = 'middle';
+      // Insert at the beginning of parent
+      parent.insertBefore(row, parent.firstChild);
+    }
+
+    // Make icons clearer on mobile
+    if (menuBtn) {
+      menuBtn.style.opacity = '1';
+      menuBtn.style.filter = 'brightness(1.35) contrast(1.1)';
+    }
+
+    // Move elements into desired order: bell, menu, coffee
+    try {
+      if (bell.parentElement !== row) row.appendChild(bell);
+      if (menuBtn.parentElement !== row) row.appendChild(menuBtn);
+      if (coffee.parentElement !== row) row.appendChild(coffee);
+
+      setInlineIconStyle(bell);
+      setInlineIconStyle(menuBtn);
+      setInlineIconStyle(coffee);
+    } catch (_) {
+      // no-op
+    }
+  }
+
+  function initMobileHeaderLayout() {
+    let t = null;
+    const run = () => {
+      try { layoutMobileHeaderIcons(); } catch (_) {}
+    };
+    run();
+    window.addEventListener('resize', () => {
+      clearTimeout(t);
+      t = setTimeout(run, 150);
+    }, { passive: true });
+    window.addEventListener('orientationchange', () => {
+      clearTimeout(t);
+      t = setTimeout(run, 150);
+    }, { passive: true });
+  }
+
+document.addEventListener('DOMContentLoaded', () => {
     applyI18n();
     initAnalytics();
     initDrawer();
-    fixMobileNavPortrait();
-    // keep it responsive to rotations/resizes
-    let __aioNavFixT = null;
-    const __aioNavFix = () => { clearTimeout(__aioNavFixT); __aioNavFixT = setTimeout(fixMobileNavPortrait, 80); };
-    window.addEventListener('resize', __aioNavFix, { passive: true });
-    window.addEventListener('orientationchange', __aioNavFix, { passive: true });
+    initMobileHeaderLayout();
     setActiveNav();
     initUpdates();
     initPayPal();
