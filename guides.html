@@ -47,7 +47,6 @@
 <a data-i18n="nav_downloads" href="downloads.html">Pobieranie</a>
 <a data-i18n="nav_systems" href="systems.html">Systemy</a>
 <a data-i18n="nav_contact" href="contact.html">Kontakt</a>
-<a data-i18n="nav_opinion" href="contact.html#opinia">Podziel się opinią</a>
 <a data-i18n="nav_support" href="support.html">Wsparcie</a>
 </div>
 </div>
@@ -68,16 +67,16 @@
 <a href="downloads.html">⬇️ <span data-i18n="nav_downloads">Pobieranie</span></a>
 <a href="systems.html">💿 <span data-i18n="nav_systems">Systemy</span></a>
 <a href="contact.html">✉️ <span data-i18n="nav_contact">Kontakt</span></a>
-<a href="contact.html#opinia">💬 <span data-i18n="nav_opinion">Podziel się opinią</span></a>
 <a href="stats.html">Statystyki</a><a href="support.html">☕ <span data-i18n="nav_support">Wsparcie</span></a>
 </aside>
 <main class="container">
 <section class="section"><div class="section-head"><div><h2 class="section-title">Poradniki i centrum wiedzy</h2><p class="section-sub">FAQ, mini-słownik i baza wiedzy Enigma2.</p></div></div></section>
 <div class="card" data-aos="fade-up" data-aos-delay="200" id="aktualnosci">
 <h2>Poradniki</h2>
-<div class="accordion-item">
-<button class="accordion-header">Jak wybrać właściwy plik systemowy (Recovery vs Multi)</button>
-<div class="accordion-content">
+<p class="guide-intro">Kliknij tytuł porady, aby rozwinąć szczegóły. Każda porada jest oddzielną sekcją (początek i koniec są wyraźne).</p>
+<details class="guide" open>
+<summary><span class="guide-title">Jak wybrać właściwy plik systemowy (Recovery vs Multi)</span></summary>
+<div class="guide-body">
 <p>Na stronach wydawców (np. OpenATV) znajdziesz różne wersje plików dla swojego tunera, np.: <span class="code-snippet">_recovery_emmc.zip</span> oraz <span class="code-snippet">_multi.zip</span>. Wybór odpowiedniego jest kluczowy.</p>
 <hr style="border-color: #30363d; margin: 15px 0;"/>
 <strong style="color: #d29922;">1. Plik recovery_emmc.zip (Pełna instalacja)</strong><br/>
@@ -92,10 +91,10 @@
 <span class="code-snippet">20251106</span> = 6 listopada 2025.<br/>
                     Wybieraj najnowsze daty (tzw. Nightly build), aby mieć ostatnie poprawki.</p>
 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header">Systemy Enigma2 (Image) — krótkie wprowadzenie dla użytkowników</button>
-<div class="accordion-content">
+</details>
+<details class="guide" open>
+<summary><span class="guide-title">Systemy Enigma2 (Image) — krótkie wprowadzenie dla użytkowników</span></summary>
+<div class="guide-body">
 <p><strong>Image</strong> to po prostu system (oprogramowanie) dla tunera z Enigma2 — coś jak „Android ROM” dla telefonu. Różne image mogą wyglądać inaczej, mieć inne dodatki i inną częstotliwość aktualizacji.</p>
 <hr style="border-color: #30363d; margin: 15px 0;"/>
 <strong style="color: #d29922;">Najczęściej spotykane image</strong>
@@ -112,10 +111,10 @@
 <li>Po świeżej instalacji: najpierw ustaw sieć i satelity, później listy kanałów i dopiero na końcu dodatki.</li>
 </ul>
 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header">Skins (Skórki) w Enigma2 — plusy i minusy oraz dobre praktyki</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">Skins (Skórki) w Enigma2 — plusy i minusy oraz dobre praktyki</span></summary>
+<div class="guide-body">
 <p><strong>Skin</strong> zmienia wygląd interfejsu (układ list, EPG, czcionki, paski informacji). To „warstwa wizualna” systemu, ale potrafi mieć wpływ na wygodę i wydajność.</p>
 <hr style="border-color: #30363d; margin: 15px 0;"/>
 <strong style="color: #2ea043;">Plusy</strong>
@@ -138,10 +137,10 @@
 <li>Po zmianie skina wykonaj <strong>restart GUI</strong>. Jeżeli wystąpi problem — wróć do domyślnego skina.</li>
 </ul>
 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header">Powiększenie pamięci w Zgemma H9S / H9.2S (OpenATV 7.6)</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">Powiększenie pamięci w Zgemma H9S / H9.2S (OpenATV 7.6)</span></summary>
+<div class="guide-body">
 <p style="color:#58a6ff;"><strong>Nowość!</strong> Skrypt pozwalający na powiększenie pamięci flash z 256 MB NAND do rozmiaru karty microSD (np. 30 GB).</p>
 <p>Dzięki temu zyskujesz dużo więcej miejsca na wtyczki, listy kanałów i dodatki. Dotyczy dekoderów Zgemma H9S oraz H9.2S z oprogramowaniem OpenATV 7.6.</p>
 <hr style="border-color: #30363d; margin: 15px 0;"/>
@@ -163,10 +162,10 @@
 <strong>5. Restart</strong><br/>
                     Zrestartuj dekoder (wyłącz z prądu). Po ponownym włączeniu system będzie korzystał z karty microSD.
                 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header">Poradnik Multimediów, Sieci i Smart Home z Enigma 2</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">Poradnik Multimediów, Sieci i Smart Home z Enigma 2</span></summary>
+<div class="guide-body">
 <p>Twój tuner z Enigma2 to znacznie więcej niż tylko dekoder. To potężne centrum multimedialne, serwer strumieniowy i inteligentne urządzenie, które możesz zintegrować z resztą swojego domu.</p>
 <hr style="border-color: #30363d; margin: 15px 0;"/>
 <strong style="color: #d29922;">CZĘŚĆ 1: Kompleksowy Backup i Przywracanie</strong><br/>
@@ -191,16 +190,16 @@
 <p>Przykłady: Automatyczne przyciemnianie świateł po włączeniu filmu, powiadomienia na ekranie TV.<br/>
 <strong>Konfiguracja:</strong> W Home Assistant: <em>Ustawienia → Urządzenia i usługi → Dodaj integrację → Enigma2</em>. Podaj IP i hasło.</p>
 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header">Aktualizacja repozytorium (Listy kanałów)</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">Aktualizacja repozytorium (Listy kanałów)</span></summary>
+<div class="guide-body">
 <p style="color:#58a6ff;">Dodano nowe listy kanałów Bzyk83 i JakiTaki.</p>
 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header">[Poradnik] Ustawienia DNS w Enigma 2</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">[Poradnik] Ustawienia DNS w Enigma 2</span></summary>
+<div class="guide-body">
 <strong>Co to jest DNS?</strong><br/>
                     To „książka telefoniczna internetu”. Zamienia adresy (np. google.pl) na numery IP.<br/><br/>
 <strong>Dlaczego warto zmienić DNS ręcznie?</strong><br/>
@@ -215,10 +214,10 @@
                     Wejdź w: <span class="code-snippet">Menu &gt; Ustawienia &gt; Sieć &gt; Ustawienia DNS</span>.<br/>
                     Zmień na wybrane adresy i zapisz. Działa od razu!
                 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header">[Mini-INFORMATOR] IPTV (Streamlink / DRM)</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">[Mini-INFORMATOR] IPTV (Streamlink / DRM)</span></summary>
+<div class="guide-body">
 <strong>Ważne:</strong> Przed wpisaniem komend wykonaj: <span class="code-snippet">opkg update</span><br/><br/>
 <strong>1. Streamlinkproxy:</strong> Przekierowuje streamy wideo do odtwarzacza.<br/>
                     Instalacja: <span class="code-snippet">opkg install streamlink</span><br/><br/>
@@ -231,11 +230,11 @@
 <div class="command-box" id="cmd-all">opkg update &amp;&amp; opkg install streamlinksrv enigma2-plugin-systemplugins-serviceapp exteplayer3 &amp;&amp; opkg upgrade</div>
 <button class="copy-btn" onclick="copyToClipboard('cmd-all')">📋 Kopiuj</button>
 </div>
+</details>
 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header">[Porada] Jak uruchomić kanały IPTV</button>
-<div class="accordion-content"><p><strong>NIEZBĘDNIK IPTV z list kanałów &amp; KAMERY</strong></p>
+<details class="guide">
+<summary><span class="guide-title">[Porada] Jak uruchomić kanały IPTV</span></summary>
+<div class="guide-body"><p><strong>NIEZBĘDNIK IPTV z list kanałów &amp; KAMERY</strong></p>
 <p>Poniżej gotowa instrukcja instalacji pakietów przez Terminal (Telnet/SSH). Po tej konfiguracji powinny działać: kanały IPTV z list (M3U), linki YouTube oraz strumienie z kamer (HTTP/RTSP – zależnie od źródła).</p>
 <p><strong>📥 KROK 1: Instalacja pakietów</strong><br/>
 Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Enterem).</p>
@@ -298,32 +297,32 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
 <li>System poprosi o restart GUI – zatwierdź.</li>
 </ul>
 <p style="margin-top: 10px;"><strong>✅ Gotowe!</strong> Teraz odtwarzanie strumieni IPTV z list kanałów, linków YouTube oraz kamer powinno działać poprawnie.</p></div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header">[Porada] Jak wgrać wtyczkę?</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">[Porada] Jak wgrać wtyczkę?</span></summary>
+<div class="guide-body">
                     1. Skopiuj plik <strong>.ipk</strong> do folderu <span class="code-snippet">/tmp</span> lub na pendrive.<br/>
                     2. Na dekoderze wejdź w:<br/>
 <strong>Menu → Ustawienia → Menedżer oprogramowania → Instalator lokalnych pakietów ipk</strong><br/>
                     3. Wybierz /tmp lub pendrive, zaznacz plik (OK) i wciśnij zielony przycisk (Instaluj).<br/>
                     4. Po zakończeniu instalacji zrestartuj GUI.
                 </div>
-</div>
+</details>
 </div>
 <div class="card faq-panel" data-aos="fade-up" id="faq">
 <h2>❓ FAQ / Pomoc</h2>
-<div class="accordion-item">
-<button class="accordion-header blue-header">Jak wkleić kod w Putty?</button>
-<div class="accordion-content">
+<details class="guide">
+<summary><span class="guide-title">Jak wkleić kod w Putty?</span></summary>
+<div class="guide-body">
 <p>
                         W oknie terminala Putty wystarczy kliknąć <strong>Prawym Przyciskiem Myszy</strong>,
                         aby wkleić skopiowaną komendę. Skróty <code>Ctrl+V</code> / <code>Shift+Insert</code> zwykle nie działają.
                     </p>
 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header blue-header">Gdzie jest lista kanałów i bukiety?</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">Gdzie jest lista kanałów i bukiety?</span></summary>
+<div class="guide-body">
 <p>
                         Pliki list kanałów i bukietów znajdują się w katalogu
                         <span class="code-snippet">/etc/enigma2/</span>.<br/>
@@ -333,10 +332,10 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
                         Po wgraniu nowej listy warto zrobić <strong>restart GUI</strong>.
                     </p>
 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header blue-header">Gdzie są picony?</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">Gdzie są picony?</span></summary>
+<div class="guide-body">
 <p>
                         Najczęściej picony są w katalogu
                         <span class="code-snippet">/usr/share/enigma2/picon/</span>.<br/>
@@ -346,10 +345,10 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
                         aby nie zapychać pamięci flash dekodera.
                     </p>
 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header blue-header">Gdzie jest plik satellites.xml?</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">Gdzie jest plik satellites.xml?</span></summary>
+<div class="guide-body">
 <p>
                         W zależności od image plik może znajdować się w:<br/>
                         • <span class="code-snippet">/etc/tuxbox/satellites.xml</span><br/>
@@ -357,10 +356,10 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
                         To właśnie ten plik definiuje listę satelit i transponderów dostępnych w tunerze.
                     </p>
 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header blue-header">Gdzie są ustawienia i logi OSCam?</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">Gdzie są ustawienia i logi OSCam?</span></summary>
+<div class="guide-body">
 <p>
                         Najczęstsza ścieżka konfiguracji to
                         <span class="code-snippet">/etc/tuxbox/config/oscam/</span>.<br/>
@@ -370,10 +369,10 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
                         <span class="code-snippet">/var/log/oscam.log</span> lub w katalogu wskazanym w konfiguracji.
                     </p>
 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header blue-header">Gdzie trafiają nagrania i timeshift?</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">Gdzie trafiają nagrania i timeshift?</span></summary>
+<div class="guide-body">
 <p>
                         Domyślnie nagrania są zapisywane do katalogu
                         <span class="code-snippet">/media/hdd/movie/</span>.<br/>
@@ -382,10 +381,10 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
                         Timeshift (pauza TV) najczęściej korzysta z tego samego katalogu.
                     </p>
 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header blue-header">Błąd: <code>No space left</code>?</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">Błąd: <code>No space left</code>?</span></summary>
+<div class="guide-body">
 <p>
                         Ten komunikat oznacza, że pamięć flash w dekoderze jest pełna.<br/>
                         • Usuń nieużywane wtyczki (Menu → Wtyczki).<br/>
@@ -397,10 +396,10 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
                         Po sprzątnięciu zrób <strong>restart GUI</strong>.
                     </p>
 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header blue-header">Czarny ekran po instalacji image</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">Czarny ekran po instalacji image</span></summary>
+<div class="guide-body">
 <p>
                         Najczęściej przyczyną jest błędna lista kanałów lub brak sygnału z anteny.<br/>
                         • Wejdź w: <span class="code-snippet">Menu → Informacje → Sygnał</span> i sprawdź poziom sygnału.<br/>
@@ -408,10 +407,10 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
                         • Upewnij się, że wybrany jest właściwy satelita (HotBird 13E, Astra itd.).
                     </p>
 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header blue-header">Brak dźwięku na kanałach IPTV</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">Brak dźwięku na kanałach IPTV</span></summary>
+<div class="guide-body">
 <p>
                         Część list IPTV korzysta z kodeków audio, których domyślny odtwarzacz nie obsługuje.<br/>
                         • Zainstaluj: <span class="code-snippet">ServiceApp</span> i
@@ -421,10 +420,10 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
                           a <strong>exteplayer3</strong>.
                     </p>
 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header blue-header">Dekoder nie łączy się z siecią / IPTV nie działa</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">Dekoder nie łączy się z siecią / IPTV nie działa</span></summary>
+<div class="guide-body">
 <p>
                         • Sprawdź, czy dekoder ma adres IP: <span class="code-snippet">Menu → Ustawienia → Sieć</span>.<br/>
                         • Ustaw ręcznie DNS, np. <span class="code-snippet">1.1.1.1</span> lub <span class="code-snippet">8.8.8.8</span>.<br/>
@@ -432,10 +431,10 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
                         • Jeżeli korzystasz z Wi-Fi, przetestuj połączenie na kablu Ethernet (stabilniejsze).
                     </p>
 </div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header blue-header">Login i hasło?</button>
-<div class="accordion-content">
+</details>
+<details class="guide">
+<summary><span class="guide-title">Login i hasło?</span></summary>
+<div class="guide-body">
 <p>
                         Standardowy login to <strong>root</strong>.<br/>
                         Hasło bywa puste lub ustawione fabrycznie (np. <code>root</code>, <code>dreambox</code>, <code>pkteam</code>).<br/>
@@ -443,7 +442,7 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
                         dla swojego modelu tunera.
                     </p>
 </div>
-</div>
+</details>
 </div>
 <div class="card" data-aos="fade-up" id="slownik">
 <h2>Mini-słownik pojęć (Enigma2 / IPTV)</h2>
@@ -558,16 +557,16 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
 <div class="kb-toolbar">
 <input autocomplete="off" class="kb-search" id="kbSearch" placeholder="Szukaj (np. oscam, picony, softcam, restart GUI)..." type="search"/>
 <div aria-label="Tagi" class="kb-tags" id="kbTags"></div>
-</div>
+</details>
 <div class="kb-layout">
 <div aria-label="Lista tematów" class="kb-list" id="kbList"></div>
 <div aria-live="polite" class="kb-view" id="kbView">
 <div class="kb-empty">
                         Wybierz temat z listy po lewej lub wpisz wyszukiwanie.
                     </div>
+</details>
 </div>
-</div>
-</div>
+</details>
 </main>
 <footer class="site-footer">
 <div class="footer-inner">
@@ -578,12 +577,12 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
 <div>
 <div class="footer-brand-name">AIO-IPTV.pl</div>
 <div class="footer-brand-tag">Enigma2 • IPTV • Tools • AI</div>
-</div>
+</details>
 </div>
 <div class="footer-note">
           Nowoczesne centrum Enigma2: wtyczki, listy, poradniki, narzędzia oraz AI‑Chat. Dostępne po polsku i po angielsku.
         </div>
-</div>
+</details>
 <div>
 <div class="footer-title">Nawigacja</div>
 <a class="footer-link" href="index.html">Start</a>
@@ -619,18 +618,17 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
 <span class="support-text"><span class="support-name">PayPal</span><span class="support-sub">Dzięki!</span></span>
 </a>
 </div>
-</div>
+</details>
 <div class="footer-kpi" style="margin-top:12px; font-size:.88rem; opacity:.85"><span>🐛</span><span>Błąd? <a class="footer-link inline" href="https://github.com/OliOli2013/aio-iptv-projekt/issues" rel="noopener" target="_blank">Zgłoś na GitHub</a></span></div>
-</div>
+</details>
 </div>
 <div class="footer-bottom">
 <div>© <span id="year"></span> AIO‑IPTV.pl • Paweł Pawełek</div>
 <div class="footer-legal">
 <a href="support.html">Wsparcie</a>
 <a href="contact.html">Kontakt</a>
-<a href="contact.html#opinia">Podziel się opinią</a>
 </div>
-</div>
+</details>
 </div>
 </footer>
 <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
