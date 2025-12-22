@@ -429,24 +429,167 @@
   // PayPal obfuscation
   // -------------------------
   function initPayPal() {
-    const btns = qsa('[data-paypal]');
-    if (!btns || !btns.length) return;
-    const fallback = "https://www.paypal.com/send?recipient=pawelzarzycki61@gmail.com&currencyCode=PLN";
+    const url = 'https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=pawelzarzycki61@gmail.com&currency_code=PLN';
+    // Support both footer and page buttons; keep data-paypal if present, but enforce target email.
+    const btns = qsa('#paypalSupportBtn, a[data-paypal].support-paypal, a[data-paypal][id="paypalSupportBtn"]');
+    if (!btns.length) return;
     btns.forEach((btn) => {
       try {
         const b64 = btn.getAttribute('data-paypal');
-        let href = fallback;
         if (b64) {
-          try {
-            href = atob(b64);
-          } catch (_) {}
+          const decoded = atob(b64);
+          // If decoded already targets the correct address, keep it; otherwise override.
+          if (decoded && decoded.includes('pawelzarzycki61@gmail.com')) {
+            btn.setAttribute('href', decoded);
+            return;
+          }
+
+  // -------------------------
+  // Guides: Knowledge Center
+  // -------------------------
+  function initKnowledgeCenter() {
+    const searchEl = document.getElementById('kbSearch');
+    const tagsEl = document.getElementById('kbTags');
+    const listEl = document.getElementById('kbList');
+    const viewEl = document.getElementById('kbView');
+    if (!searchEl || !tagsEl || !listEl || !viewEl) return;
+
+    let kb = [];
+    let activeTag = '';
+    let activeId = '';
+
+    function uniq(arr) {
+      return Array.from(new Set(arr)).sort((a,b)=>a.localeCompare(b));
+    }
+    function normalize(s){ return (s||'').toString().toLowerCase(); }
+
+    function matches(item, q) {
+      if (!q) return true;
+      const hay = normalize(item.title) + ' ' + normalize(item.summary) + ' ' + normalize((item.tags||[]).join(' ')) + ' ' + normalize((item.content||[]).join(' '));
+      return hay.includes(normalize(q));
+    }
+
+    function renderTags() {
+      const tags = uniq(kb.flatMap(it => it.tags || []));
+      const btnAll = `<button type="button" class="kb-tag ${activeTag===''?'active':''}" data-tag="">Wszystko</button>`;
+      tagsEl.innerHTML = btnAll + tags.map(tg => `<button type="button" class="kb-tag ${activeTag===tg?'active':''}" data-tag="${escapeHtml(tg)}">${escapeHtml(tg)}</button>`).join('');
+      qsa('.kb-tag', tagsEl).forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeTag = btn.getAttribute('data-tag') || '';
+          renderTags();
+          renderList();
+        });
+      });
+    }
+
+    function filtered() {
+      const q = (searchEl.value || '').trim();
+      return (kb || []).filter(it => matches(it, q)).filter(it => !activeTag || (it.tags||[]).includes(activeTag));
+    }
+
+    function renderList() {
+      const items = filtered();
+      if (!items.length) {
+        listEl.innerHTML = `<div class="kb-empty">Brak wyników. Zmień frazę lub tag.</div>`;
+        viewEl.innerHTML = `<div class="kb-empty">Wybierz temat z listy po lewej lub wpisz wyszukiwanie.</div>`;
+        return;
+      }
+
+      if (!activeId || !items.some(it => it.id === activeId)) {
+        activeId = items[0].id;
+      }
+
+      listEl.innerHTML = items.map(it => {
+        const a = it.id === activeId ? 'active' : '';
+        return `<div class="kb-item ${a}" data-id="${escapeHtml(it.id)}">
+          <div class="t">${escapeHtml(it.title || '')}</div>
+          <div class="s">${escapeHtml(it.summary || '')}</div>
+        </div>`;
+      }).join('');
+
+      qsa('.kb-item', listEl).forEach(el => {
+        el.addEventListener('click', () => {
+          activeId = el.getAttribute('data-id') || '';
+          renderList();
+        });
+      });
+
+      renderView();
+    }
+
+    function copyText(text) {
+      const val = (text || '').toString();
+      if (!val) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(val).catch(()=>{});
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = val;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch(_) {}
+        document.body.removeChild(ta);
+      }
+    }
+
+    function renderView() {
+      const it = (kb || []).find(x => x.id === activeId) || filtered()[0];
+      if (!it) return;
+
+      const tags = (it.tags || []).map(tg => `<span class="pill">${escapeHtml(tg)}</span>`).join('');
+      const content = (it.content || []).map(p => `<p>${escapeHtml(p)}</p>`).join('');
+      const notes = (it.notes || []).length ? `<div class="msg"><div class="meta">Uwagi</div>${(it.notes||[]).map(n=>`<div>• ${escapeHtml(n)}</div>`).join('')}</div>` : '';
+      const cmds = (it.commands || []).map(c => {
+        const label = escapeHtml(c.label || 'Komenda');
+        const cmd = escapeHtml(c.cmd || '');
+        return `<div class="kb-cmd">
+          <div style="flex:1; min-width:220px;">
+            <div class="muted" style="font-weight:900; margin:0 0 6px 0;">${label}</div>
+            <code>${cmd}</code>
+          </div>
+          <button type="button" class="copy-btn" data-cmd="${escapeHtml(c.cmd || '')}">Kopiuj</button>
+        </div>`;
+      }).join('');
+
+      viewEl.innerHTML = `
+        <h3>${escapeHtml(it.title || '')}</h3>
+        <div class="kb-meta">${tags}</div>
+        ${it.summary ? `<p class="muted">${escapeHtml(it.summary)}</p>` : ''}
+        ${content}
+        ${cmds}
+        ${notes}
+      `;
+
+      qsa('.copy-btn', viewEl).forEach(btn => {
+        btn.addEventListener('click', () => {
+          copyText(btn.getAttribute('data-cmd') || '');
+          btn.textContent = 'Skopiowano';
+          setTimeout(()=>{ btn.textContent = 'Kopiuj'; }, 900);
+        });
+      });
+    }
+
+    async function load() {
+      try {
+        kb = await safeFetchJSON(relUrl('data/knowledge.json'));
+        if (!Array.isArray(kb)) kb = [];
+      } catch(_) { kb = []; }
+      renderTags();
+      renderList();
+    }
+
+    searchEl.addEventListener('input', () => {
+      renderList();
+    });
+
+    load().catch(()=>{});
+  }
+
         }
-        // Normalizacja: upewnij się, że PayPal kieruje na właściwy adres e-mail
-        if (!href || href.indexOf("pawelzarzycki61@gmail.com") === -1) {
-          href = fallback;
-        }
-        btn.setAttribute('href', href);
       } catch (_) {}
+      btn.setAttribute('href', url);
     });
   }
 
@@ -968,44 +1111,7 @@
   }
 
   // -------------------------
-  
-  // -------------------------
-  // Topbar promos (AIO Panel / IPTV Dream)
-  // -------------------------
-  function initTopPromos() {
-    const bar = document.querySelector('.topbar-inner');
-    if (!bar) return;
-
-    const pills = bar.querySelectorAll('a.pill');
-    const firstPill = bar.querySelector('a.pill-accent') || (pills.length ? pills[0] : null);
-
-    // Emphasize existing pill
-    if (firstPill) firstPill.classList.add('pill-prominent');
-
-    // Avoid duplicates
-    if (bar.querySelector('a.pill-iptvdream')) return;
-
-    const lang = (typeof getLang === 'function') ? getLang() : 'pl';
-    const label = (lang === 'en') ? 'Update: IPTV Dream v6.2' : 'Aktualizacja: IPTV Dream v6.2';
-    const cta = (lang === 'en') ? 'Download now' : 'Pobierz teraz';
-
-    const a = document.createElement('a');
-    a.className = 'pill pill-accent pill-prominent pill-iptvdream';
-    a.setAttribute('href', 'pliki/enigma2-plugin-extensions-iptvdream_6.2_all.ipk');
-    a.setAttribute('download', '');
-    a.innerHTML = `<span>${label}</span> <strong>${cta}</strong>`;
-
-    if (firstPill && firstPill.nextSibling) {
-      firstPill.insertAdjacentElement('afterend', a);
-    } else {
-      // Put after brand link if no pill exists
-      const brand = bar.querySelector('.brand');
-      if (brand) brand.insertAdjacentElement('afterend', a);
-      else bar.appendChild(a);
-    }
-  }
-
-// START
+  // START
   // -------------------------
   document.addEventListener('DOMContentLoaded', () => {
     applyI18n();
@@ -1013,10 +1119,10 @@
     initDrawer();
     setupMobileTopIcons();
     setActiveNav();
-    initTopPromos();
     initUpdates();
     initPayPal();
     initMarquee();
+    initKnowledgeCenter();
     initAIChatDrawer();
     initOneLinerGenerator();
     
