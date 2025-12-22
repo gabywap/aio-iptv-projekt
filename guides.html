@@ -11,6 +11,36 @@
 <title>Poradniki — AIO-IPTV.pl</title>
 <link href="pliki/logo.png" rel="icon"/>
 <link href="assets/css/site.css?v=next1" rel="stylesheet"/>
+
+<!-- Lokalna poprawka czytelności zakładki "Poradniki" (bez wpływu na inne podstrony) -->
+<style>
+  /* Ułatwia nawigację do sekcji przy sticky topbar */
+  #aktualnosci,
+  #poradniki-start,
+  #poradniki-siec,
+  #poradniki-pamiec,
+  #poradniki-wtyczki,
+  #faq,
+  #slownik,
+  #wiedza { scroll-margin-top: 110px; }
+
+  /* Chips jako linki */
+  a.chip{ display:inline-flex; align-items:center; text-decoration:none }
+
+  /* Accordion: domyślnie zwinięty (na tej stronie) */
+  .accordion-item{ margin:10px 0; border:1px solid var(--stroke); border-radius:16px; background:rgba(0,0,0,.10); overflow:hidden }
+  .accordion-header{ width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; text-align:left; border:0; padding:12px 14px; background:transparent; color:var(--text); font-weight:900; cursor:pointer }
+  .accordion-header:focus{ outline:2px solid rgba(59,167,255,.55); outline-offset:2px }
+  .accordion-header::after{ content:"▸"; opacity:.9; transform:rotate(0deg); transition:transform 180ms ease }
+  .accordion-item.is-open .accordion-header::after{ transform:rotate(90deg) }
+  .accordion-content{ max-height:0; overflow:hidden; opacity:0; transition:max-height 240ms ease, opacity 200ms ease; padding:0 14px }
+  .accordion-item.is-open .accordion-content{ opacity:1; }
+  .accordion-content > :first-child{ margin-top:12px }
+  .accordion-content > :last-child{ margin-bottom:12px }
+
+  /* Delikatna separacja sekcji poradników */
+  .guide-section-note{ color:var(--muted); margin-top:8px; line-height:1.55 }
+</style>
 </head>
 <body data-page="next">
 <div class="topbar">
@@ -75,6 +105,20 @@
 <section class="section"><div class="section-head"><div><h2 class="section-title">Poradniki i centrum wiedzy</h2><p class="section-sub">FAQ, mini-słownik i baza wiedzy Enigma2.</p></div></div></section>
 <div class="card" data-aos="fade-up" data-aos-delay="200" id="aktualnosci">
 <h2>Poradniki</h2>
+<p class="guide-section-note">Aby łatwiej było znaleźć informacje, poradniki są pogrupowane w sekcje. Kliknij temat, aby rozwinąć treść.</p>
+<div class="chips" style="margin-top:10px">
+<a class="chip" href="#poradniki-start">Start i system</a>
+<a class="chip" href="#poradniki-siec">Sieć i IPTV</a>
+<a class="chip" href="#poradniki-pamiec">Pamięć, backup, Smart Home</a>
+<a class="chip" href="#poradniki-wtyczki">Wtyczki i aktualizacje</a>
+<a class="chip" href="#faq">FAQ</a>
+<a class="chip" href="#slownik">Mini-słownik</a>
+<a class="chip" href="#wiedza">Centrum wiedzy</a>
+</div>
+</div>
+<div class="card" data-aos="fade-up" id="poradniki-start">
+<h2>Start i system</h2>
+<p class="guide-section-note">Instalacja image, wybór plików, podstawy i dobre praktyki.</p>
 <div class="accordion-item">
 <button class="accordion-header">Jak wybrać właściwy plik systemowy (Recovery vs Multi)</button>
 <div class="accordion-content">
@@ -139,65 +183,10 @@
 </ul>
 </div>
 </div>
-<div class="accordion-item">
-<button class="accordion-header">Powiększenie pamięci w Zgemma H9S / H9.2S (OpenATV 7.6)</button>
-<div class="accordion-content">
-<p style="color:#58a6ff;"><strong>Nowość!</strong> Skrypt pozwalający na powiększenie pamięci flash z 256 MB NAND do rozmiaru karty microSD (np. 30 GB).</p>
-<p>Dzięki temu zyskujesz dużo więcej miejsca na wtyczki, listy kanałów i dodatki. Dotyczy dekoderów Zgemma H9S oraz H9.2S z oprogramowaniem OpenATV 7.6.</p>
-<hr style="border-color: #30363d; margin: 15px 0;"/>
-<strong>1. Przygotowanie karty pamięci</strong><br/>
-                    Wyłącz dekoder pilotem, a następnie wyłącz go całkowicie z prądu. Włóż kartę microSD i włącz dekoder ponownie.<br/><br/>
-<strong>2. Formatowanie karty w OpenATV (na ext4)</strong><br/>
-                    • Na pilocie naciśnij <strong>Niebieski przycisk</strong> (Dysk twardy) → <strong>Menedżer urządzeń</strong>.<br/>
-                    • Naciśnij <strong>Zielony</strong> (Zarządzaj) → Wybierz: <strong>„Wyczyść urządzenie pamięci masowej”</strong> (inicjalizacja).<br/>
-                    • Wróć do Menedżera, znów <strong>Zielony</strong> (Zarządzaj) → <strong>„Formatuj urządzenie”</strong>.<br/>
-                    • W polu system plików wybierz <strong>ext4</strong> i zatwierdź.<br/><br/>
-<strong>3. Skopiowanie skryptu na dekoder (FTP)</strong><br/>
-                    • Pobierz plik ZIP z sekcji "Pliki (pozostałe)" i rozpakuj go.<br/>
-                    • Połącz się przez FTP i skopiuj katalog ze skryptem (ten z plikiem <span class="code-snippet">H9_boot_mSD.sh</span>) do katalogu <span class="code-snippet">/usr/script/</span> w dekoderze.<br/><br/>
-<strong>4. Nadanie uprawnień i uruchomienie</strong><br/>
-                    • W FTP nadaj plikowi <span class="code-snippet">H9_boot_mSD.sh</span> atrybut <strong>755</strong>.<br/>
-                    • Na dekoderze: <strong>Menu → Wtyczki → Menedżer plików</strong>.<br/>
-                    • Przejdź do <span class="code-snippet">/usr/script/</span>, zaznacz skrypt i naciśnij OK.<br/>
-                    • Wybierz <strong>polecenie numer 3</strong>. Poczekaj ok. 5 minut na komunikat „Execution finished”.<br/><br/>
-<strong>5. Restart</strong><br/>
-                    Zrestartuj dekoder (wyłącz z prądu). Po ponownym włączeniu system będzie korzystał z karty microSD.
-                </div>
 </div>
-<div class="accordion-item">
-<button class="accordion-header">Poradnik Multimediów, Sieci i Smart Home z Enigma 2</button>
-<div class="accordion-content">
-<p>Twój tuner z Enigma2 to znacznie więcej niż tylko dekoder. To potężne centrum multimedialne, serwer strumieniowy i inteligentne urządzenie, które możesz zintegrować z resztą swojego domu.</p>
-<hr style="border-color: #30363d; margin: 15px 0;"/>
-<strong style="color: #d29922;">CZĘŚĆ 1: Kompleksowy Backup i Przywracanie</strong><br/>
-<p><strong>A) Metoda 1: Kopia zapasowa ustawień (Szybka)</strong><br/>
-                    Zapisuje ustawienia, listy kanałów, timery. Nie zapisuje systemu.<br/>
-<em>Menu → Ustawienia → Zarządzanie oprogramowaniem → Kopia zapasowa ustawień.</em></p>
-<p><strong>B) Metoda 2: Pełna kopia obrazu (Disaster Recovery)</strong><br/>
-                    Klonuje system 1:1. Najlepsze zabezpieczenie przed awarią.<br/>
-                    Szukaj opcji: <em>ImageManager, BackupSuite</em> lub <em>Pełna kopia zapasowa</em>. Przywracanie: wgraj plik zip na pendrive i sflashuj tuner.</p>
-<hr style="border-color: #30363d; margin: 15px 0;"/>
-<strong style="color: #d29922;">CZĘŚĆ 2: Zaawansowany Streaming i Multiroom</strong><br/>
-<p><strong>A) Streaming w sieci lokalnej (PC)</strong><br/>
-                    Wpisz IP tunera w przeglądarce (OpenWebif). Kliknij ikonę ekranu przy kanale, pobierz plik .m3u i otwórz w VLC.</p>
-<p><strong>B) Streaming na urządzeniach mobilnych</strong><br/>
-                    Android: <strong>dream Player</strong> | iOS: <strong>vu+ Player HD</strong>.<br/>
-                    Wpisz w aplikacji IP tunera, login (root) i hasło.</p>
-<p><strong>C) Transkodowanie (Poza domem)</strong><br/>
-                    Kompresja obrazu dla słabszego łącza (wymaga wsparcia sprzętowego tunera).<br/>
-                    Konfiguracja: <em>Menu → Wtyczki → Transcoding Setup</em>.</p>
-<hr style="border-color: #30363d; margin: 15px 0;"/>
-<strong style="color: #d29922;">CZĘŚĆ 3: Integracja ze Smart Home (Home Assistant)</strong><br/>
-<p>Przykłady: Automatyczne przyciemnianie świateł po włączeniu filmu, powiadomienia na ekranie TV.<br/>
-<strong>Konfiguracja:</strong> W Home Assistant: <em>Ustawienia → Urządzenia i usługi → Dodaj integrację → Enigma2</em>. Podaj IP i hasło.</p>
-</div>
-</div>
-<div class="accordion-item">
-<button class="accordion-header">Aktualizacja repozytorium (Listy kanałów)</button>
-<div class="accordion-content">
-<p style="color:#58a6ff;">Dodano nowe listy kanałów Bzyk83 i JakiTaki.</p>
-</div>
-</div>
+<div class="card" data-aos="fade-up" id="poradniki-siec">
+<h2>Sieć i IPTV</h2>
+<p class="guide-section-note">DNS, wymagane komponenty, Streamlink/ServiceApp i uruchamianie streamów.</p>
 <div class="accordion-item">
 <button class="accordion-header">[Poradnik] Ustawienia DNS w Enigma 2</button>
 <div class="accordion-content">
@@ -299,6 +288,67 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
 </ul>
 <p style="margin-top: 10px;"><strong>✅ Gotowe!</strong> Teraz odtwarzanie strumieni IPTV z list kanałów, linków YouTube oraz kamer powinno działać poprawnie.</p></div>
 </div>
+</div>
+<div class="card" data-aos="fade-up" id="poradniki-pamiec">
+<h2>Pamięć, backup i Smart Home</h2>
+<p class="guide-section-note">Więcej miejsca na wtyczki oraz praktyczny poradnik backupu i integracji.</p>
+<div class="accordion-item">
+<button class="accordion-header">Powiększenie pamięci w Zgemma H9S / H9.2S (OpenATV 7.6)</button>
+<div class="accordion-content">
+<p style="color:#58a6ff;"><strong>Nowość!</strong> Skrypt pozwalający na powiększenie pamięci flash z 256 MB NAND do rozmiaru karty microSD (np. 30 GB).</p>
+<p>Dzięki temu zyskujesz dużo więcej miejsca na wtyczki, listy kanałów i dodatki. Dotyczy dekoderów Zgemma H9S oraz H9.2S z oprogramowaniem OpenATV 7.6.</p>
+<hr style="border-color: #30363d; margin: 15px 0;"/>
+<strong>1. Przygotowanie karty pamięci</strong><br/>
+                    Wyłącz dekoder pilotem, a następnie wyłącz go całkowicie z prądu. Włóż kartę microSD i włącz dekoder ponownie.<br/><br/>
+<strong>2. Formatowanie karty w OpenATV (na ext4)</strong><br/>
+                    • Na pilocie naciśnij <strong>Niebieski przycisk</strong> (Dysk twardy) → <strong>Menedżer urządzeń</strong>.<br/>
+                    • Naciśnij <strong>Zielony</strong> (Zarządzaj) → Wybierz: <strong>„Wyczyść urządzenie pamięci masowej”</strong> (inicjalizacja).<br/>
+                    • Wróć do Menedżera, znów <strong>Zielony</strong> (Zarządzaj) → <strong>„Formatuj urządzenie”</strong>.<br/>
+                    • W polu system plików wybierz <strong>ext4</strong> i zatwierdź.<br/><br/>
+<strong>3. Skopiowanie skryptu na dekoder (FTP)</strong><br/>
+                    • Pobierz plik ZIP z sekcji "Pliki (pozostałe)" i rozpakuj go.<br/>
+                    • Połącz się przez FTP i skopiuj katalog ze skryptem (ten z plikiem <span class="code-snippet">H9_boot_mSD.sh</span>) do katalogu <span class="code-snippet">/usr/script/</span> w dekoderze.<br/><br/>
+<strong>4. Nadanie uprawnień i uruchomienie</strong><br/>
+                    • W FTP nadaj plikowi <span class="code-snippet">H9_boot_mSD.sh</span> atrybut <strong>755</strong>.<br/>
+                    • Na dekoderze: <strong>Menu → Wtyczki → Menedżer plików</strong>.<br/>
+                    • Przejdź do <span class="code-snippet">/usr/script/</span>, zaznacz skrypt i naciśnij OK.<br/>
+                    • Wybierz <strong>polecenie numer 3</strong>. Poczekaj ok. 5 minut na komunikat „Execution finished”.<br/><br/>
+<strong>5. Restart</strong><br/>
+                    Zrestartuj dekoder (wyłącz z prądu). Po ponownym włączeniu system będzie korzystał z karty microSD.
+                </div>
+</div>
+<div class="accordion-item">
+<button class="accordion-header">Poradnik Multimediów, Sieci i Smart Home z Enigma 2</button>
+<div class="accordion-content">
+<p>Twój tuner z Enigma2 to znacznie więcej niż tylko dekoder. To potężne centrum multimedialne, serwer strumieniowy i inteligentne urządzenie, które możesz zintegrować z resztą swojego domu.</p>
+<hr style="border-color: #30363d; margin: 15px 0;"/>
+<strong style="color: #d29922;">CZĘŚĆ 1: Kompleksowy Backup i Przywracanie</strong><br/>
+<p><strong>A) Metoda 1: Kopia zapasowa ustawień (Szybka)</strong><br/>
+                    Zapisuje ustawienia, listy kanałów, timery. Nie zapisuje systemu.<br/>
+<em>Menu → Ustawienia → Zarządzanie oprogramowaniem → Kopia zapasowa ustawień.</em></p>
+<p><strong>B) Metoda 2: Pełna kopia obrazu (Disaster Recovery)</strong><br/>
+                    Klonuje system 1:1. Najlepsze zabezpieczenie przed awarią.<br/>
+                    Szukaj opcji: <em>ImageManager, BackupSuite</em> lub <em>Pełna kopia zapasowa</em>. Przywracanie: wgraj plik zip na pendrive i sflashuj tuner.</p>
+<hr style="border-color: #30363d; margin: 15px 0;"/>
+<strong style="color: #d29922;">CZĘŚĆ 2: Zaawansowany Streaming i Multiroom</strong><br/>
+<p><strong>A) Streaming w sieci lokalnej (PC)</strong><br/>
+                    Wpisz IP tunera w przeglądarce (OpenWebif). Kliknij ikonę ekranu przy kanale, pobierz plik .m3u i otwórz w VLC.</p>
+<p><strong>B) Streaming na urządzeniach mobilnych</strong><br/>
+                    Android: <strong>dream Player</strong> | iOS: <strong>vu+ Player HD</strong>.<br/>
+                    Wpisz w aplikacji IP tunera, login (root) i hasło.</p>
+<p><strong>C) Transkodowanie (Poza domem)</strong><br/>
+                    Kompresja obrazu dla słabszego łącza (wymaga wsparcia sprzętowego tunera).<br/>
+                    Konfiguracja: <em>Menu → Wtyczki → Transcoding Setup</em>.</p>
+<hr style="border-color: #30363d; margin: 15px 0;"/>
+<strong style="color: #d29922;">CZĘŚĆ 3: Integracja ze Smart Home (Home Assistant)</strong><br/>
+<p>Przykłady: Automatyczne przyciemnianie świateł po włączeniu filmu, powiadomienia na ekranie TV.<br/>
+<strong>Konfiguracja:</strong> W Home Assistant: <em>Ustawienia → Urządzenia i usługi → Dodaj integrację → Enigma2</em>. Podaj IP i hasło.</p>
+</div>
+</div>
+</div>
+<div class="card" data-aos="fade-up" id="poradniki-wtyczki">
+<h2>Wtyczki i aktualizacje</h2>
+<p class="guide-section-note">Szybkie instrukcje instalacji oraz krótkie komunikaty o zmianach.</p>
 <div class="accordion-item">
 <button class="accordion-header">[Porada] Jak wgrać wtyczkę?</button>
 <div class="accordion-content">
@@ -308,6 +358,12 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
                     3. Wybierz /tmp lub pendrive, zaznacz plik (OK) i wciśnij zielony przycisk (Instaluj).<br/>
                     4. Po zakończeniu instalacji zrestartuj GUI.
                 </div>
+</div>
+<div class="accordion-item">
+<button class="accordion-header">Aktualizacja repozytorium (Listy kanałów)</button>
+<div class="accordion-content">
+<p style="color:#58a6ff;">Dodano nowe listy kanałów Bzyk83 i JakiTaki.</p>
+</div>
 </div>
 </div>
 <div class="card faq-panel" data-aos="fade-up" id="faq">
@@ -635,6 +691,48 @@ Zaloguj się do terminala i wpisuj komendy każdą po kolei (zatwierdzając Ente
 </footer>
 <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
 <script src="assets/js/site.js?v=next1"></script>
+
+<script>
+  // Accordion (tylko dla tej strony) — naprawia "zlaną" treść poradników.
+  (function () {
+    function initAccordion(root) {
+      const items = (root || document).querySelectorAll('.accordion-item');
+      items.forEach((item) => {
+        const header = item.querySelector('.accordion-header');
+        const content = item.querySelector('.accordion-content');
+        if (!header || !content) return;
+
+        // Domyślnie zwinięte
+        item.classList.remove('is-open');
+        header.setAttribute('aria-expanded', 'false');
+        content.style.maxHeight = '0px';
+
+        header.addEventListener('click', () => {
+          const isOpen = item.classList.toggle('is-open');
+          header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          if (isOpen) {
+            content.style.maxHeight = content.scrollHeight + 'px';
+          } else {
+            content.style.maxHeight = '0px';
+          }
+        });
+      });
+
+      // Utrzymuj prawidłową wysokość po zmianie rozmiaru okna
+      window.addEventListener('resize', () => {
+        document.querySelectorAll('.accordion-item.is-open .accordion-content').forEach((c) => {
+          c.style.maxHeight = c.scrollHeight + 'px';
+        });
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => initAccordion(document));
+    } else {
+      initAccordion(document);
+    }
+  })();
+</script>
 
 <script src="assets/js/stats-nav.js" defer></script>
 </body>
