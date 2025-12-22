@@ -3,8 +3,8 @@
     "date": "2025-12-22",
     "ts": 1766361600000,
     "type": "release",
-    "title": "IPTV Dream 6.1 — pełne PL/EN + auto język systemu",
-    "details": "Zastąpiono wersję 6.0 pakietem 6.1 (enigma2-plugin-extensions-iptvdream_6.1_all.ipk). Dodano kompletne tłumaczenie EN, przetłumaczone komunikaty/okna oraz automatyczne dopasowanie języka do ustawień systemu."
+    "title": "IPTV Dream 6.2 — PL/EN + WebIF + stabilniejsza sieć + log",
+    "details": "Zastąpiono wersję 6.1 pakietem 6.2 (enigma2-plugin-extensions-iptvdream_6.2_all.ipk). Dodano kompletne PL/EN (w tym brakujące tłumaczenia w MAC Portal i Statystykach), poprawiono WebIF (wersja v6.2 + PL/EN), ulepszono warstwę sieci (timeouty, retry, backoff), cache i inteligentne odświeżanie list (ETag/Last-Modified), dodano diagnostykę (/tmp/iptvdream.log, DEBUG, maskowanie danych), poprawiono płynność oraz usunięto artefakty __pycache__."
   },
   {
     "date": "2025-12-21",

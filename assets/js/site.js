@@ -431,11 +431,21 @@
   function initPayPal() {
     const btns = qsa('[data-paypal]');
     if (!btns || !btns.length) return;
+    const fallback = "https://www.paypal.com/send?recipient=pawelzarzycki61@gmail.com&currencyCode=PLN";
     btns.forEach((btn) => {
       try {
         const b64 = btn.getAttribute('data-paypal');
-        if (!b64) return;
-        btn.setAttribute('href', atob(b64));
+        let href = fallback;
+        if (b64) {
+          try {
+            href = atob(b64);
+          } catch (_) {}
+        }
+        // Normalizacja: upewnij się, że PayPal kieruje na właściwy adres e-mail
+        if (!href || href.indexOf("pawelzarzycki61@gmail.com") === -1) {
+          href = fallback;
+        }
+        btn.setAttribute('href', href);
       } catch (_) {}
     });
   }
@@ -976,12 +986,12 @@
     if (bar.querySelector('a.pill-iptvdream')) return;
 
     const lang = (typeof getLang === 'function') ? getLang() : 'pl';
-    const label = (lang === 'en') ? 'Update: IPTV Dream v6.1' : 'Aktualizacja: IPTV Dream v6.1';
+    const label = (lang === 'en') ? 'Update: IPTV Dream v6.2' : 'Aktualizacja: IPTV Dream v6.2';
     const cta = (lang === 'en') ? 'Download now' : 'Pobierz teraz';
 
     const a = document.createElement('a');
     a.className = 'pill pill-accent pill-prominent pill-iptvdream';
-    a.setAttribute('href', 'pliki/enigma2-plugin-extensions-iptvdream_6.1_all.ipk');
+    a.setAttribute('href', 'pliki/enigma2-plugin-extensions-iptvdream_6.2_all.ipk');
     a.setAttribute('download', '');
     a.innerHTML = `<span>${label}</span> <strong>${cta}</strong>`;
 
