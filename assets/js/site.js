@@ -320,6 +320,49 @@
     });
   }
 
+// -------------------------
+// Inject nav: Instalacja Image
+// -------------------------
+function injectImageInstallNav() {
+  const href = 'image-installation.html';
+  const label = 'Instalacja Image';
+
+  // Top nav
+  const navInner =
+    qs('.nav .nav-inner') ||
+    qs('.nav-inner.nav') ||
+    qs('.nav-inner') ||
+    qs('.nav');
+
+  if (navInner && !navInner.querySelector(`a[href="${href}"]`)) {
+    const a = document.createElement('a');
+    a.href = href;
+    a.textContent = label;
+
+    // Insert near "Systemy" if present, otherwise before "Kontakt", otherwise append
+    const afterSystems = navInner.querySelector('a[href="systems.html"]');
+    const beforeContact = navInner.querySelector('a[href="contact.html"]');
+    if (afterSystems && afterSystems.nextElementSibling) navInner.insertBefore(a, afterSystems.nextElementSibling);
+    else if (beforeContact) navInner.insertBefore(a, beforeContact);
+    else navInner.appendChild(a);
+  }
+
+  // Drawer
+  const drawer = qs('#mobileDrawer');
+  if (drawer && !drawer.querySelector(`a[href="${href}"]`)) {
+    const da = document.createElement('a');
+    da.href = href;
+    da.innerHTML = '💾 <span>' + escapeHtml(label) + '</span>';
+
+    const sys = drawer.querySelector('a[href="systems.html"]');
+    const contact = drawer.querySelector('a[href="contact.html"]');
+    if (sys && sys.nextSibling) drawer.insertBefore(da, sys.nextSibling);
+    else if (contact) drawer.insertBefore(da, contact);
+    else drawer.appendChild(da);
+  }
+}
+
+
   // -------------------------
   // Notifications bell
   // -------------------------
@@ -1007,51 +1050,12 @@
 
 // START
   // -------------------------
-    // -------------------------
-  // Inject "Knowledge base" link into menus (so we do not have to edit every HTML file)
-  // -------------------------
-  function injectKnowledgeLinks() {
-    const href = 'knowledge.html';
-
-    // Top navigation (desktop)
-    const top = document.querySelector('.nav .nav-inner');
-    if (top && !top.querySelector(`a[href="${href}"]`)) {
-      const a = document.createElement('a');
-      a.href = href;
-      a.setAttribute('data-i18n', 'nav_knowledge');
-      a.textContent = 'Baza wiedzy';
-
-      // Place after "Poradniki" if present, otherwise append
-      const guides = top.querySelector('a[data-i18n="nav_guides"], a[href="guides.html"]');
-      if (guides && guides.parentNode) {
-        guides.parentNode.insertBefore(a, guides.nextSibling);
-      } else {
-        top.appendChild(a);
-      }
-    }
-
-    // Mobile drawer
-    const drawer = document.querySelector('#mobileDrawer');
-    if (drawer && !drawer.querySelector(`a[href="${href}"]`)) {
-      const d = document.createElement('a');
-      d.href = href;
-      d.innerHTML = '📚 <span data-i18n="nav_knowledge">Baza wiedzy</span>';
-
-      const guidesM = drawer.querySelector('a[href="guides.html"]');
-      if (guidesM && guidesM.parentNode) {
-        guidesM.parentNode.insertBefore(d, guidesM.nextSibling);
-      } else {
-        drawer.appendChild(d);
-      }
-    }
-  }
-
   document.addEventListener('DOMContentLoaded', () => {
-    injectKnowledgeLinks();
     applyI18n();
     initAnalytics();
     initDrawer();
     setupMobileTopIcons();
+    injectImageInstallNav();
     setActiveNav();
     initTopPromos();
     initUpdates();

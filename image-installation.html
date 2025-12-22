@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<title>Instalacja Image — AIO-IPTV.pl</title>
+<link href="pliki/logo.png" rel="icon"/>
+<link href="assets/css/site.css?v=next1" rel="stylesheet"/>
+</head>
+<body data-page="next">
+<div class="topbar">
+<div class="container">
+<div class="topbar-inner">
+<a aria-label="AIO-IPTV.pl" class="brand" href="index.html">
+<img alt="AIO-IPTV.pl" src="pliki/logo.png"/>
+<div>
+<div class="name">AIO‑IPTV.pl</div>
+<span class="tag">Enigma2 • IPTV • Tools • AI</span>
+</div>
+</a>
+<a class="pill pill-accent" download="" href="pliki/enigma2-plugin-extensions-panelaio_5.0_all.ipk">
+<span data-i18n="cta_update">Aktualizacja: AIO Panel v5.0</span>
+<strong data-i18n="cta_download">Pobierz teraz</strong>
+</a>
+<div class="spacer"></div>
+<div class="notif">
+<button aria-label="Updates" class="icon-btn" id="bellBtn">🔔</button>
+<div aria-live="polite" class="notif-panel" id="notifPanel"></div>
+</div>
+<button aria-label="Menu" class="icon-btn" id="navToggle">☰</button>
+</div>
+</div>
+<div class="nav">
+<div class="container">
+<div class="nav-inner nav">
+<a data-i18n="nav_home" href="index.html">Start</a>
+<a data-i18n="nav_ai" href="ai-chat.html">AI-Chat Enigma2</a>
+<a data-i18n="nav_plugins" href="plugins.html">Wtyczki</a>
+<a data-i18n="nav_lists" href="channel-lists.html">Listy kanałów</a>
+<a data-i18n="nav_guides" href="guides.html">Poradniki</a>
+<a data-i18n="nav_tools" href="tools.html">Narzędzia</a>
+<a data-i18n="nav_downloads" href="downloads.html">Pobieranie</a>
+<a data-i18n="nav_systems" href="systems.html">Systemy</a>
+<a data-i18n="nav_contact" href="contact.html">Kontakt</a>
+<a data-i18n="nav_opinion" href="contact.html#opinia">Podziel się opinią</a>
+<a data-i18n="nav_support" href="support.html">Wsparcie</a>
+</div>
+</div>
+</div>
+</div>
+<div class="drawer-backdrop" data-drawer-close="" id="drawerBackdrop"></div>
+<aside aria-hidden="true" class="drawer" id="mobileDrawer">
+<div class="drawer-head">
+<div class="drawer-title">Menu</div>
+<button aria-label="Close" class="icon-btn" data-drawer-close="">✕</button>
+</div>
+<a href="index.html">🏠 <span data-i18n="nav_home">Start</span></a>
+<a href="ai-chat.html">🤖 <span data-i18n="nav_ai">AI-Chat Enigma2</span></a>
+<a href="plugins.html">🧩 <span data-i18n="nav_plugins">Wtyczki</span></a>
+<a href="channel-lists.html">📺 <span data-i18n="nav_lists">Listy kanałów</span></a>
+<a href="guides.html">📘 <span data-i18n="nav_guides">Poradniki</span></a>
+<a href="tools.html">🛠 <span data-i18n="nav_tools">Narzędzia</span></a>
+<a href="downloads.html">⬇️ <span data-i18n="nav_downloads">Pobieranie</span></a>
+<a href="systems.html">💿 <span data-i18n="nav_systems">Systemy</span></a>
+<a href="contact.html">✉️ <span data-i18n="nav_contact">Kontakt</span></a>
+<a href="contact.html#opinia">💬 <span data-i18n="nav_opinion">Podziel się opinią</span></a>
+<a href="stats.html">Statystyki</a><a href="support.html">☕ <span data-i18n="nav_support">Wsparcie</span></a>
+</aside>
+<main class="container">
+<section class="section">
+  <div class="section-head">
+    <div>
+      <h2 class="section-title">Instalacja Image</h2>
+      <p class="section-sub">Instrukcje dla początkujących: wgrywanie czystego systemu (image) oraz instalacja gotowego backupu (np. OpenATV). Każdy tuner jest opisany osobno — wybierz markę i model.</p>
+    </div>
+  </div>
+</section>
+
+<div class="card" id="start">
+  <h2>Zanim zaczniesz (ważne)</h2>
+  <ul class="file-list">
+    <li><span class="file-desc"><strong>Dobierz plik dokładnie pod model tunera.</strong> Zły image może spowodować brak startu urządzenia.</span></li>
+    <li><span class="file-desc"><strong>Użyj pendrive FAT32</strong> (najczęściej 4–8 GB; czasem działa 16 GB). Najpewniejsze są proste pendrive USB 2.0.</span></li>
+    <li><span class="file-desc"><strong>Nie odłączaj zasilania</strong> w trakcie flashowania. Proces może trwać kilkanaście minut.</span></li>
+    <li><span class="file-desc">Po wgraniu systemu zwykle potrzebny jest <strong>Restart GUI</strong> lub pełny restart tunera (zależnie od modelu).</span></li>
+  </ul>
+  <p style="margin-top:12px; opacity:.9;">
+    Wskazówka: możesz linkować do konkretnego modelu, np. <span class="code-snippet">image-installation.html#octagon-sf8008-combo</span> — strona otworzy właściwą instrukcję.
+  </p>
+</div>
+
+<div class="card" id="wybor">
+  <h2>Wybierz markę</h2>
+  <p>Skocz do odpowiedniej sekcji lub wyszukaj model.</p>
+  <div style="display:flex; flex-wrap:wrap; gap:10px; margin:12px 0 18px;">
+    <a class="file-link" href="#ustym"><span class="icon">📦</span> Ustym</a>
+    <a class="file-link" href="#octagon"><span class="icon">📦</span> Octagon</a>
+    <a class="file-link" href="#vuplus"><span class="icon">📦</span> Vu+</a>
+    <a class="file-link" href="#zgemma"><span class="icon">📦</span> Zgemma</a>
+  </div>
+
+  <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+    <input id="modelSearch" type="text" placeholder="Szukaj modelu (np. H9, Solo2, SF8008, Ustym)..." style="flex:1; min-width:260px; padding:12px 14px; border-radius:14px; border:1px solid rgba(148,163,184,.2); background:rgba(15,23,42,.55); color:#e2e8f0;">
+    <button id="clearSearch" class="pill" type="button" style="border:none; cursor:pointer;">Wyczyść</button>
+  </div>
+  <p id="searchHint" style="margin-top:10px; color:rgba(226,232,240,.8); font-size:.92rem;"></p>
+</div>
+
+<!-- ========================= -->
+<!-- USTYM -->
+<!-- ========================= -->
+<div class="card" id="ustym">
+  <h2>Ustym</h2>
+  <p>Instrukcja instalacji gotowego backupu OpenATV z poziomu menu.</p>
+
+  <details class="details-note" id="ustym-combo" data-model="ustym combo">
+    <summary><strong>Ustym COMBO</strong> — instalacja backupu OpenATV (z poziomu menu)</summary>
+    <p style="margin-top:10px;"><strong>Przygotowanie:</strong> włóż pendrive do portu USB w dekoderze (plik backupu pozostaje spakowany).</p>
+    <h3 style="margin-top:12px;">Wgrywanie softu (backup OpenATV)</h3>
+    <ol>
+      <li>Naciśnij <strong>NIEBIESKI</strong> przycisk na pilocie.</li>
+      <li>Wejdź w <strong>Menedżer oprogramowania</strong>.</li>
+      <li>Wybierz <strong>Instalacja systemu online</strong>.</li>
+      <li>Wybierz <strong>Kopia zapasowa systemu</strong>.</li>
+      <li>Wybierz plik backupu <strong>openatv-…</strong></li>
+      <li>Wybierz <strong>Slot 1</strong>.</li>
+      <li>Na pytanie: <em>„Czy chcesz wykonać kopię zapasową?”</em> wybierz <strong>NIE</strong>.</li>
+      <li>Wybierz: <strong>Zainstaluj – tylko obraz kopii zapasowej</strong>.</li>
+      <li>Poczekaj: <em>Rozpakowywanie systemu…</em> → <em>Wgrywanie oprogramowania…</em></li>
+      <li>Proces trwa zwykle <strong>kilkanaście minut</strong>.</li>
+      <li>Po zakończeniu tuner uruchomi się ponownie z nowym softem.</li>
+    </ol>
+  </details>
+
+  <details class="details-note" id="ustym-twin" data-model="ustym twin">
+    <summary><strong>Ustym TWIN</strong> — instalacja backupu OpenATV (z poziomu menu)</summary>
+    <p style="margin-top:10px;"><strong>Przygotowanie:</strong> włóż pendrive do portu USB w dekoderze (plik backupu pozostaje spakowany).</p>
+    <h3 style="margin-top:12px;">Wgrywanie softu (backup OpenATV)</h3>
+    <ol>
+      <li>Naciśnij <strong>NIEBIESKI</strong> przycisk na pilocie.</li>
+      <li><strong>Menedżer oprogramowania</strong> → <strong>Instalacja systemu online</strong>.</li>
+      <li><strong>Kopia zapasowa systemu</strong> → wybierz plik <strong>openatv-…</strong></li>
+      <li>Wybierz <strong>Slot 1</strong>.</li>
+      <li>Na pytanie o kopię zapasową wybierz <strong>NIE</strong>.</li>
+      <li>Wybierz: <strong>Zainstaluj – tylko obraz kopii zapasowej</strong>.</li>
+      <li>Poczekaj na rozpakowanie i wgrywanie (kilkanaście minut).</li>
+      <li>Tuner uruchomi się ponownie z nowym softem.</li>
+    </ol>
+  </details>
+</div>
+
+<!-- ========================= -->
+<!-- OCTAGON -->
+<!-- ========================= -->
+<div class="card" id="octagon">
+  <h2>Octagon</h2>
+  <p>Instrukcje wgrywania czystego image z pendrive.</p>
+
+  <details class="details-note" id="octagon-sf8008-combo" data-model="octagon sf8008 combo">
+    <summary><strong>Octagon SF8008 COMBO</strong> — wgranie czystego image (USB)</summary>
+
+    <h3 style="margin-top:12px;">Wymagania pendrive</h3>
+    <ul>
+      <li>Pendrive najlepiej <strong>do 8 GB</strong> (czasem działa 16 GB).</li>
+      <li>Format: <strong>FAT32</strong>.</li>
+    </ul>
+
+    <h3>Przygotowanie plików</h3>
+    <ol>
+      <li>Pobrany soft wypakuj z pliku ZIP na pendrive sformatowany w FAT32.</li>
+      <li>Na pendrive mają znajdować się: katalog <strong>octagon</strong> oraz pliki: <strong>apploader.bin</strong>, <strong>bootargs.bin</strong>, <strong>fastboot.bin</strong>, <strong>usb_update.bin</strong>.</li>
+    </ol>
+
+    <h3>Wgrywanie (flash)</h3>
+    <ol>
+      <li>Wyłącz tuner przełącznikiem na tylnym panelu.</li>
+      <li>Wciśnij i trzymaj <strong>POWER</strong> na przednim panelu, następnie włącz tuner przełącznikiem z tyłu.</li>
+      <li>Trzymaj POWER aż na wyświetlaczu pojawi się <strong>UPdt</strong>.</li>
+      <li>W menu wybierz opcję <strong>4 Recovery From USB</strong> / <strong>Flash Recovery Image</strong>.</li>
+      <li>Zatwierdź komunikat aktualizacji przyciskiem <strong>OK</strong>.</li>
+      <li>Tuner rozpocznie aktualizację. Postęp będzie widoczny na ekranie TV.</li>
+      <li>Po zakończeniu tuner zrestartuje się i uruchomi z nowym oprogramowaniem.</li>
+    </ol>
+  </details>
+</div>
+
+<!-- ========================= -->
+<!-- VU+ -->
+<!-- ========================= -->
+<div class="card" id="vuplus">
+  <h2>Vu+</h2>
+  <p>Wgrywanie czystego image z pendrive (USB). Instrukcje różnią się zależnie od modelu.</p>
+
+  <details class="details-note" id="vuplus-przygotowanie" data-model="vuplus vu+ przygotowanie">
+    <summary><strong>Vu+ — przygotowanie pendrive (wspólne dla modeli)</strong></summary>
+    <ol style="margin-top:10px;">
+      <li>Plik ZIP rozpakuj.</li>
+      <li>Na czysty pendrive (FAT32) wgraj katalog <strong>vuplus</strong> z podkatalogiem i plikami.</li>
+      <li>Włóż pendrive do <strong>wyłączonego</strong> tunera.</li>
+    </ol>
+  </details>
+
+  <details class="details-note" id="vuplus-zero-solo" data-model="vuplus zero zero4k solo solose">
+    <summary><strong>Vu+ Zero / Zero 4K / Solo / Solo SE</strong> — wgranie czystego image</summary>
+    <ol style="margin-top:10px;">
+      <li>Włącz tuner. Aktualizacja rozpocznie się automatycznie.</li>
+      <li>O aktualizacji informuje dioda, która narastająco zmienia jasność świecenia.</li>
+      <li>Po zakończeniu dioda zacznie pulsować — wtedy wyłącz tuner, wyjmij pendrive i włącz ponownie.</li>
+      <li>Urządzenie uruchomi się z nowym oprogramowaniem.</li>
+    </ol>
+  </details>
+
+  <details class="details-note" id="vuplus-solo2" data-model="vuplus solo2">
+    <summary><strong>Vu+ Solo2</strong> — wgranie czystego image</summary>
+    <ol style="margin-top:10px;">
+      <li>Włącz tuner.</li>
+      <li>Gdy na wyświetlaczu pojawi się komunikat <em>„Update, press power”</em> — dotknij/naciśnij <strong>POWER</strong> na panelu przednim.</li>
+      <li>Po komunikacie <em>„Update complete”</em> wyłącz tuner, wyjmij pendrive i włącz ponownie.</li>
+    </ol>
+  </details>
+
+  <details class="details-note" id="vuplus-4k-series" data-model="vuplus duo4k solo4k ultimo4k uno4k uno4kse">
+    <summary><strong>Vu+ Duo 4K / Solo 4K / Ultimo 4K / Uno 4K SE</strong> — wgranie czystego image</summary>
+    <ol style="margin-top:10px;">
+      <li>Włącz tuner.</li>
+      <li>Po pojawieniu się komunikatu na ekranie wciśnij/dotknij <strong>POWER</strong> — rozpocznie się aktualizacja.</li>
+      <li>Po zakończeniu tuner zrestartuje się i uruchomi z wgranym oprogramowaniem.</li>
+    </ol>
+  </details>
+</div>
+
+<!-- ========================= -->
+<!-- ZGEMMA -->
+<!-- ========================= -->
+<div class="card" id="zgemma">
+  <h2>Zgemma</h2>
+  <p>Najczęściej spotykane modele — instrukcje czystego image lub gotowego systemu (bez backupu), zgodnie z opisem.</p>
+
+  <details class="details-note" id="zgemma-h11s" data-model="zgemma h11s">
+    <summary><strong>Zgemma H11s</strong> — instalacja czystego i gotowego softu (bez backupu)</summary>
+    <ol style="margin-top:10px;">
+      <li>Pobierz plik i <strong>skopiuj na pendrive (nie wypakowywać)</strong>.</li>
+      <li>Włóż pendrive do dekodera.</li>
+      <li>Podłącz tuner do prądu, jednocześnie trzymając <strong>dowolny przycisk na pilocie</strong> skierowanym w stronę dekodera.</li>
+      <li>Wybierz <strong>boot menu</strong> → <strong>flash local image</strong>.</li>
+      <li>Wybierz plik i zatwierdź.</li>
+    </ol>
+  </details>
+
+  <details class="details-note" id="zgemma-h5" data-model="zgemma h5">
+    <summary><strong>Zgemma H5</strong> — wgranie softu (USB)</summary>
+    <ol style="margin-top:10px;">
+      <li>Sformatuj pamięć USB w systemie plików <strong>FAT32</strong>.</li>
+      <li>Rozpakuj plik ZIP i umieść zawartość na USB.</li>
+      <li>Podłącz pamięć USB do portu USB na tylnym panelu.</li>
+      <li>Włącz zasilanie.</li>
+      <li>Naciśnij przycisk zasilania na panelu przednim, gdy na wyświetlaczu pojawi się <strong>„USB”</strong>.</li>
+      <li>Na wyświetlaczu pojawi się <strong>„Flash”</strong> — poczekaj na zakończenie.</li>
+      <li>Po zakończeniu tuner uruchomi się samoczynnie; po starcie wyjmij USB.</li>
+    </ol>
+  </details>
+
+  <details class="details-note" id="zgemma-h7s" data-model="zgemma h7s">
+    <summary><strong>Zgemma H7s</strong> — wgranie czystego image</summary>
+    <ol style="margin-top:10px;">
+      <li>Wypakuj plik na pendrive tak, aby znajdował się tam katalog <strong>zgemma</strong>, a w nim <strong>h7s</strong>.</li>
+      <li>Podłącz pendrive do dekodera.</li>
+      <li>Wciśnij przycisk odpowiedzialny za wgrywanie oprogramowania (z przodu pod klapką karty) i podłącz dekoder do prądu.</li>
+      <li>Gdy pojawi się <strong>USB</strong> / <strong>FLSH</strong> — czekaj kilka minut.</li>
+      <li>Dekoder uruchomi się ponownie z nowym softem.</li>
+    </ol>
+  </details>
+
+  <details class="details-note" id="zgemma-h82h" data-model="zgemma h8.2h h82h">
+    <summary><strong>Zgemma H8.2H</strong> — instalacja czystego i gotowego softu (bez backupu)</summary>
+    <ol style="margin-top:10px;">
+      <li>Pobierz i wypakuj na pendrive plik tak, aby był tam katalog <strong>h8</strong> oraz dodatkowy plik (zgodnie z paczką).</li>
+      <li>Włóż pendrive do dekodera.</li>
+      <li>Podłącz tuner do prądu, jednocześnie trzymając <strong>dowolny przycisk na pilocie</strong> skierowanym w stronę dekodera.</li>
+      <li>Trzymaj przycisk do momentu, aż dioda zacznie mrugać.</li>
+      <li>Po wgraniu oprogramowania dekoder uruchomi się ponownie.</li>
+    </ol>
+  </details>
+
+  <details class="details-note" id="zgemma-h9-twin" data-model="zgemma h9 twin">
+    <summary><strong>Zgemma H9 Twin</strong> — instalacja czystego i gotowego softu (bez backupu)</summary>
+    <ol style="margin-top:10px;">
+      <li>Pobierz plik i <strong>skopiuj na pendrive (nie wypakowywać)</strong>.</li>
+      <li>Włóż pendrive do dekodera.</li>
+      <li>Podłącz tuner do prądu, trzymając <strong>dowolny przycisk na pilocie</strong> skierowanym w stronę dekodera.</li>
+      <li>W boot menu wybierz <strong>flash local image</strong> → wybierz plik → <strong>OK</strong>.</li>
+      <li>Domyślnie wybierz <strong>Linux_1</strong> i potwierdź.</li>
+      <li>Poczekaj na komunikat <em>„flashing complete”</em>, a następnie poczekaj aż tuner wróci do bootmenu.</li>
+      <li>Wybierz zainstalowany soft (2 pozycja od góry) i <strong>OK</strong>.</li>
+    </ol>
+  </details>
+
+  <details class="details-note" id="zgemma-h9-twin-se" data-model="zgemma h9 twin se">
+    <summary><strong>Zgemma H9 Twin SE</strong> — instalacja czystego i gotowego softu (bez backupu)</summary>
+    <ol style="margin-top:10px;">
+      <li>Pobierz plik i <strong>skopiuj na pendrive (nie wypakowywać)</strong>.</li>
+      <li>Włóż pendrive do dekodera.</li>
+      <li>Podłącz tuner do prądu, trzymając <strong>dowolny przycisk na pilocie</strong> skierowanym w stronę dekodera.</li>
+      <li>W boot menu wybierz <strong>flash local image</strong> → wybierz plik → <strong>OK</strong>.</li>
+      <li>Domyślnie wybierz <strong>Linux_1</strong> i potwierdź.</li>
+      <li>Po <em>„flashing complete”</em> poczekaj na powrót do bootmenu i wybierz zainstalowany soft.</li>
+    </ol>
+  </details>
+
+  <details class="details-note" id="zgemma-h9-2s" data-model="zgemma h9.2s h9 2s">
+    <summary><strong>Zgemma H9.2s</strong> — instalacja czystego i gotowego softu (bez backupu)</summary>
+    <ol style="margin-top:10px;">
+      <li>Rozpakuj soft.</li>
+      <li>Na pendrive skopiuj cały katalog <strong>h9</strong> oraz pliki <strong>bootargs</strong>, <strong>fastboot</strong> (zgodnie z paczką).</li>
+      <li>Wyłącz dekoder z prądu, podłącz pendrive.</li>
+      <li>Z tyłu znajduje się czarny przycisk <strong>RESET</strong> — wciśnij go, podłącz tuner do prądu i trzymaj do momentu, aż logo <strong>A</strong> zacznie mrugać na czerwono.</li>
+      <li>Puszczasz przycisk i czekasz na uruchomienie dekodera z nowym softem.</li>
+    </ol>
+  </details>
+
+  <details class="details-note" id="zgemma-h9s" data-model="zgemma h9s">
+    <summary><strong>Zgemma H9s</strong> — instalacja czystego lub gotowego softu (bez backupu)</summary>
+    <ol style="margin-top:10px;">
+      <li>Rozpakuj soft.</li>
+      <li>Na pendrive skopiuj katalog <strong>h9</strong> oraz pliki <strong>bootargs</strong>, <strong>fastboot</strong> (zgodnie z paczką).</li>
+      <li>Wyłącz dekoder z prądu, podłącz pendrive.</li>
+      <li>Wciśnij tylny przycisk <strong>RESET</strong>, podłącz zasilanie i trzymaj do momentu mrugania logo <strong>A</strong> na czerwono.</li>
+      <li>Puszczasz RESET i czekasz na uruchomienie dekodera.</li>
+    </ol>
+  </details>
+
+  <details class="details-note" id="zgemma-h9s-se" data-model="zgemma h9s se">
+    <summary><strong>Zgemma H9s SE</strong> — instalacja czystego/gotowego softu (bez backupu)</summary>
+    <ol style="margin-top:10px;">
+      <li>Pobierz plik i <strong>skopiuj na pendrive (nie wypakowywać)</strong>.</li>
+      <li>Włóż pendrive do dekodera.</li>
+      <li>Podłącz tuner do prądu, trzymając <strong>dowolny przycisk na pilocie</strong>.</li>
+      <li>W boot menu wybierz <strong>flash local image</strong> i wskaż plik.</li>
+      <li>Domyślnie instaluj na partycji <strong>Linux_1</strong>.</li>
+      <li>Po zakończeniu wybierz zainstalowany soft i zatwierdź <strong>OK</strong>.</li>
+    </ol>
+  </details>
+
+  <details class="details-note" id="zgemma-stra-2s" data-model="zgemma stra 2s">
+    <summary><strong>Zgemma Stra 2s</strong> — wgranie softu (USB)</summary>
+    <ol style="margin-top:10px;">
+      <li>Rozpakuj soft. Na pendrive ma trafić katalog <strong>zgemma</strong>.</li>
+      <li>Wyłącz tuner z prądu.</li>
+      <li>Włóż pendrive do USB i podłącz tuner do prądu.</li>
+      <li>Gdy pojawi się <strong>USB</strong>, naciśnij przycisk zasilania z przodu (<strong>POWER</strong>) i trzymaj do napisu <strong>flash</strong>, potem puść.</li>
+      <li>Poczekaj do uruchomienia dekodera.</li>
+    </ol>
+  </details>
+</div>
+
+<div class="card" id="faq">
+  <h2>Najczęstsze problemy (szybka pomoc)</h2>
+  <details class="details-note" id="faq-usb" data-model="problem usb">
+    <summary><strong>Tuner nie widzi pendrive / nie startuje flash</strong></summary>
+    <ul style="margin-top:10px;">
+      <li>Spróbuj innego pendrive (prosty USB 2.0) i ponownie sformatuj <strong>FAT32</strong>.</li>
+      <li>Upewnij się, że pliki/katalogi są <strong>w głównym katalogu pendrive</strong> (nie w dodatkowym folderze po rozpakowaniu ZIP).</li>
+      <li>Spróbuj innego portu USB (często lepiej działa tylny).</li>
+    </ul>
+  </details>
+  <details class="details-note" id="faq-czas" data-model="problem czas">
+    <summary><strong>Po wgraniu softu coś „dziwnie działa”</strong></summary>
+    <ul style="margin-top:10px;">
+      <li>Po pierwszym uruchomieniu ustaw <strong>czas</strong> i <strong>sieć</strong>.</li>
+      <li>Wykonaj <strong>Restart GUI</strong> po instalacji większych dodatków.</li>
+      <li>Jeśli tuner wchodzi w bootmenu — wybierz zainstalowany system (np. Linux_1).</li>
+    </ul>
+  </details>
+</div>
+</main>
+<footer class="site-footer">
+<div class="footer-inner">
+<div class="footer-grid">
+<div>
+<div class="footer-brand-row">
+<img alt="AIO-IPTV.pl" class="footer-logo" src="pliki/logo.png"/>
+<div>
+<div class="footer-brand-name">AIO-IPTV.pl</div>
+<div class="footer-brand-tag">Enigma2 • IPTV • Tools • AI</div>
+</div>
+</div>
+<div class="footer-note">
+          Nowoczesne centrum Enigma2: wtyczki, listy, poradniki, narzędzia oraz AI‑Chat. Dostępne po polsku i po angielsku.
+        </div>
+</div>
+<div>
+<div class="footer-title">Nawigacja</div>
+<a class="footer-link" href="index.html">Start</a>
+<a class="footer-link" href="ai-chat.html">AI‑Chat</a>
+<a class="footer-link" href="downloads.html">Pobieranie</a>
+<a class="footer-link" href="guides.html">Poradniki</a>
+</div>
+<div>
+<div class="footer-title">Sekcje</div>
+<a class="footer-link" href="plugins.html">Wtyczki</a>
+<a class="footer-link" href="channel-lists.html">Listy kanałów</a>
+<a class="footer-link" href="tools.html">Narzędzia</a>
+<a class="footer-link" href="systems.html">Systemy</a>
+</div>
+<div>
+<div class="footer-title">Kontakt i wsparcie</div>
+<div class="footer-kpi"><span>📧</span><span>Email: <a class="footer-link inline" href="mailto:msisystem@t.pl">msisystem@t.pl</a></span></div>
+<div class="footer-kpi"><span>✈️</span><span>Telegram: <a class="footer-link inline" href="https://t.me/PawelPawelek" rel="noopener" target="_blank">t.me/PawelPawelek</a></span></div>
+<div class="footer-kpi"><span>💬</span><span>Messenger: <a class="footer-link inline" href="https://m.me/100064704540847" rel="noopener" target="_blank">Napisz wiadomość</a></span></div>
+<div class="footer-support">
+<div class="footer-title" data-i18n="support" style="margin-bottom:10px">Wesprzyj projekt</div>
+<div class="footer-support-row">
+<a aria-label="Revolut" class="support-btn support-revolut" href="https://revolut.me/pawelz75" rel="noopener" target="_blank">
+<span class="support-logo">
+<svg aria-hidden="true" focusable="false" role="img" viewbox="0 0 64 64"><defs><lineargradient id="revG" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#3b82f6"></stop><stop offset="1" stop-color="#22d3ee"></stop></lineargradient></defs><circle cx="32" cy="32" fill="url(#revG)" r="28"></circle><path d="M22 46V18h13.6c7 0 11.4 3.5 11.4 9.5 0 4.8-3 8-8.2 8.8L46 46h-7.6l-6.2-9.2h-3.8V46H22zm6.4-14.6h6.4c3.4 0 5.3-1.4 5.3-4s-1.9-4-5.3-4h-6.4v8z" fill="#0b1220"></path></svg>
+</span>
+<span class="support-text"><span class="support-name">Revolut</span><span class="support-sub">Dzięki!</span></span>
+</a>
+<a aria-label="PayPal" class="support-btn support-paypal" data-paypal="aHR0cHM6Ly93d3cucGF5cGFsLmNvbS9zZW5kP3JlY2lwaWVudD1wYXdlbHphcnp5Y2tpNjFAZ21haWwuY29tJmN1cnJlbmN5Q29kZT1QTE4=" href="#" id="paypalSupportBtn" rel="noopener" target="_blank">
+<span class="support-logo">
+<svg aria-hidden="true" focusable="false" role="img" viewbox="0 0 64 64"><defs><lineargradient id="ppG" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#60a5fa"></stop><stop offset="1" stop-color="#a78bfa"></stop></lineargradient></defs><circle cx="32" cy="32" fill="url(#ppG)" r="28"></circle><path d="M25 46l4-26h13c6 0 10 3.4 10 8.8 0 7.2-5.4 11.2-13.4 11.2h-6.2l-1 6H25zm9.1-12.2h4.5c4.1 0 6.6-1.8 6.6-5 0-2.2-1.5-3.5-4.3-3.5h-6.1l-0.7 8.5z" fill="#0b1220"></path></svg>
+</span>
+<span class="support-text"><span class="support-name">PayPal</span><span class="support-sub">Dzięki!</span></span>
+</a>
+</div>
+</div>
+<div class="footer-kpi" style="margin-top:12px; font-size:.88rem; opacity:.85"><span>🐛</span><span>Błąd? <a class="footer-link inline" href="https://github.com/OliOli2013/aio-iptv-projekt/issues" rel="noopener" target="_blank">Zgłoś na GitHub</a></span></div>
+</div>
+</div>
+<div class="footer-bottom">
+<div>© <span id="year"></span> AIO‑IPTV.pl • Paweł Pawełek</div>
+<div class="footer-legal">
+<a href="support.html">Wsparcie</a>
+<a href="contact.html">Kontakt</a>
+<a href="contact.html#opinia">Podziel się opinią</a>
+</div>
+</div>
+</div>
+</footer>
+<script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+<script src="assets/js/site.js?v=next1"></script>
+<script>
+(function(){
+  function normalize(s){ return String(s||'').toLowerCase().replace(/\s+/g,' ').trim(); }
+  function openFromHash(){
+    var h = (location.hash || '').replace('#','').trim();
+    if(!h) return;
+    var el = document.getElementById(h);
+    if(el && el.tagName && el.tagName.toLowerCase() === 'details'){
+      el.open = true;
+      setTimeout(function(){ el.scrollIntoView({block:'start', behavior:'smooth'}); }, 60);
+    }
+  }
+
+  function setupSearch(){
+    var input = document.getElementById('modelSearch');
+    var clear = document.getElementById('clearSearch');
+    var hint = document.getElementById('searchHint');
+    if(!input) return;
+
+    var items = Array.prototype.slice.call(document.querySelectorAll('details[data-model]'));
+    function apply(){
+      var q = normalize(input.value);
+      var visible = 0;
+      items.forEach(function(d){
+        var key = normalize(d.getAttribute('data-model'));
+        var title = normalize((d.querySelector('summary')||{}).textContent || '');
+        var ok = !q || key.indexOf(q) !== -1 || title.indexOf(q) !== -1;
+        d.style.display = ok ? '' : 'none';
+        if(ok) visible++;
+      });
+      if(hint){
+        hint.textContent = q ? ('Wyniki: ' + visible + ' • Szukasz: ' + input.value) : '';
+      }
+    }
+
+    input.addEventListener('input', apply);
+    if(clear){
+      clear.addEventListener('click', function(){
+        input.value = '';
+        apply();
+        input.focus();
+      });
+    }
+    apply();
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    setupSearch();
+    openFromHash();
+  });
+  window.addEventListener('hashchange', openFromHash);
+})();
+</script>
+
+<script src="assets/js/stats-nav.js" defer></script>
+</body>
+</html>
