@@ -101,7 +101,7 @@
       <div class="section-head">
         <div>
           <h2 class="section-title">OpenCamView v1.1</h2>
-          <p class="section-sub">Nowa wtyczka do Enigma2: podgląd kamer IP (pojedynczo i w siatce) bezpośrednio na ekranie TV.</p>
+          <p class="section-sub">Nowa wtyczka do Enigma2: podgląd kamer IP (pojedynczo oraz MultiView) bezpośrednio na ekranie TV.</p>
         </div>
       </div>
 
@@ -110,7 +110,7 @@
           <h3>Opis</h3>
           <p style="line-height:1.8">
             <strong>OpenCamView v1.1</strong> to zupełnie nowy projekt (w fazie rozwoju), ale już w pełni funkcjonalny.
-            Wtyczka umożliwia dodawanie kamer IP i podgląd obrazu: pojedynczo lub w siatce 4 kamer.
+            Wtyczka umożliwia dodawanie kamer IP i podgląd obrazu: pojedynczo lub w trybie <strong>MultiView</strong> (pełny ekran + PiP).
           </p>
           <p style="line-height:1.8">
             <strong>Ważne:</strong> największą uwagę trzeba poświęcić dodawaniu kamer i wpisywaniu poprawnej ścieżki RTSP.
@@ -118,7 +118,43 @@
           </p>
           <div class="link-row" style="margin-top:14px">
             <a class="btn primary" download href="pliki/enigma2-plugin-extensions-opencamview_1.1_all.ipk">⬇️ Pobierz OpenCamView v1.1 (.ipk)</a>
-            <a class="btn" href="https://github.com/OliOli2013/aio-iptv-projekt/tree/main/pliki" rel="noopener" target="_blank">GitHub / pliki</a>
+          </div>
+
+          <div style="margin-top:14px; line-height:1.9">
+            <h4 style="margin:0 0 8px">Co poprawiono i jak to działa (ważne informacje)</h4>
+            <ol style="margin:0; padding-left:18px">
+              <li style="margin:6px 0">
+                <strong>Wtyczka nie „włącza się na tle TV”</strong><br>
+                Ekran listy kamer zatrzymuje aktualnie oglądany kanał (tło jest czarne), dzięki czemu obsługa listy jest wygodna.
+                Po wyjściu z wtyczki kanał TV jest przywracany.
+              </li>
+              <li style="margin:6px 0">
+                <strong>Czarny ekran po wejściu w kamerę</strong><br>
+                Odtwarzacz (PlayerScreen) jest stabilniejszy: po wejściu do kamery zawsze zatrzymuje poprzednią usługę i uruchamia strumień RTSP,
+                a okno wideo jest jawnie pokazywane.
+              </li>
+              <li style="margin:6px 0">
+                <strong>Obcięty obraz (overscan / crop)</strong><br>
+                Zmieniono render wideo na tryb „safe area” (marginesy), co ogranicza problem ucinania obrazu na części telewizorów.
+                Marginesy są w pliku: <code>/etc/enigma2/opencamview_settings.json</code>.
+                Domyślnie: <code>safe_x = 40</code>, <code>safe_y = 30</code>.
+                Jeśli nadal ucina – zwiększ (np. <code>60/45</code>). Jeśli pojawiają się za duże ramki – zmniejsz.
+              </li>
+              <li style="margin:6px 0">
+                <strong>„Kilka kamer na raz” – MultiView działa realnie w Enigma2</strong><br>
+                W wielu tunerach Enigma2 nie da się stabilnie uruchomić 4 strumieni RTSP równocześnie.
+                Zamiast „pseudo 4‑okien” MultiView działa jako: <strong>Kamera 1</strong> (główne wideo, pełny ekran) + <strong>Kamera 2</strong> (PiP).
+                Sterowanie: <code>OK</code> – zamiana (główna ↔ PiP), <code>CH+</code>/<code>CH-</code> – zmiana kamery w PiP,
+                <code>EXIT</code> – wyjście i powrót do TV.
+                Jeśli soft/skin nie obsługuje PiP, wtyczka pokaże komunikat o braku MultiView.
+              </li>
+              <li style="margin:6px 0">
+                <strong>Funkcja „Domofon”</strong><br>
+                Na liście kamer: <code>0</code> – ustaw zaznaczoną kamerę jako DOMOFON, <code>1</code> – uruchom Domofon (zawsze ta wskazana kamera).
+                Kamera domofonu jest oznaczona jako <code>[DOMOFON]</code>.
+                Ustawienie zapisuje się w <code>/etc/enigma2/opencamview_settings.json</code> (pole <code>domofon_index</code>).
+              </li>
+            </ol>
           </div>
         </div>
 
@@ -186,11 +222,11 @@
           <div style="margin-top:10px; line-height:1.85">
             <ul>
               <li><strong>Podgląd jednej kamery:</strong> wybierz kamerę z listy i naciśnij OK. Wyjście: EXIT.</li>
-              <li><strong>Podgląd 4 kamer (MultiView):</strong> na liście kamer naciśnij INFO (na niektórych pilotach to EPG).</li>
+              <li><strong>MultiView (pełny ekran + PiP):</strong> na liście kamer naciśnij INFO (na niektórych pilotach to EPG).</li>
             </ul>
             <div style="margin-top:8px; color:var(--muted)">
-              Jeśli przy 4 kamerach obraz jest czarny lub się zacina, dekoder może nie wyrabiać z 4 strumieniami HD.
-              W takiej sytuacji ustaw w kamerze sub‑stream / niższą jakość.
+              Sterowanie MultiView: <strong>OK</strong> – zamiana główna ↔ PiP, <strong>CH+</strong>/<strong>CH-</strong> – zmiana kamery w PiP,
+              <strong>EXIT</strong> – wyjście (powrót do TV). Jeśli Twój skin nie obsługuje PiP, wtyczka pokaże komunikat o braku MultiView.
             </div>
           </div>
         </details>

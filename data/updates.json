@@ -1,5 +1,12 @@
 [
   {
+    "date": "2025-12-29",
+    "ts": 1766966400000,
+    "type": "feature",
+    "title": "Nowe Projekty: OpenCamView v1.1 (instrukcja + mini galeria)",
+    "details": "Dodano nową zakładkę „Nowe Projekty” oraz pierwszą publikację: OpenCamView v1.1. Na podstronie jest opis działania, najważniejsze informacje (safe area, MultiView PiP, Domofon) oraz mini galeria zrzutów + plik .ipk do pobrania."
+  },
+  {
     "date": "2025-12-22",
     "ts": 1766361600000,
     "type": "release",
