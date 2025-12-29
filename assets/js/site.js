@@ -31,6 +31,7 @@
   const dict = {
     pl: {
       nav_home: 'Start',
+      nav_new_projects: 'Nowe Projekty',
       updates: 'Nowości',
       marquee_text: 'Wesprzyj AIO‑IPTV — kawa pomaga rozwijać stronę i autorskie wtyczki.',
       marquee_text2: 'Wsparcie (kawa): Revolut i PayPal — dziękuję!',
@@ -51,6 +52,7 @@
     },
     en: {
       nav_home: 'Home',
+      nav_new_projects: 'New Projects',
       updates: 'Updates',
       marquee_text: 'Support AIO‑IPTV — coffee helps build the site.',
       marquee_text2: 'Coffee support: Revolut & PayPal — thank you!',
