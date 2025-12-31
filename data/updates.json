@@ -1,10 +1,10 @@
 [
   {
-    "date": "2025-12-30",
-    "ts": 1767052800000,
+    "date": "2025-12-31",
+    "ts": 1767139200000,
     "type": "release",
-    "title": "Nowe Projekty: OpenCamView v1.2.1 (eksport bukiet/M3U + skróty)",
-    "details": "Zaktualizowano OpenCamView do wersji 1.2.1. Dodano eksport kamer do bukietu Enigma2 (kanały 4097) z opcją tworzenia nowego bukietu lub dopisania do istniejącego, eksport do pliku M3U (/etc/enigma2/opencamview_cameras.m3u), skrót 4 z pomocą RTSP oraz lepsze podpowiedzi w kreatorze dodawania. Na stronie „Nowe Projekty” podmieniono opis i instrukcję na v1.2.x oraz dodano link do nowej paczki .ipk."
+    "title": "OpenCamView v1.3 — naprawy edycji + eksport wybranych kamer + poprawki GUI",
+    "details": "Dodano nową wersję OpenCamView v1.3 (enigma2-plugin-extensions-opencamview_1.3_all.ipk). Aktualizacja z v1.2.1 → v1.3 działa standardowo przez opkg (bez odinstalowywania). Naprawiono blue screen przy edycji kamery (konflikt tłumaczeń), dodano eksport wybranych/pojedynczych kamer, przyspieszono dodawanie kolejnych kamer (pamiętanie pól formularza) oraz przebudowano sekcję skrótów i stopkę (aktualna data z tunera, większa czcionka, poprawiona legenda kolorów)."
   },
   {
     "date": "2025-12-29",

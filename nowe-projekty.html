@@ -96,67 +96,84 @@
         </div>
       </div>
     </section>
-
     <section class="section">
       <div class="section-head">
         <div>
-          <h2 class="section-title">OpenCamView v1.2.1</h2>
-          <p class="section-sub">Wtyczka Enigma2 do szybkiego podglądu kamer IP (RTSP) bez edycji list kanałów + eksport do bukietu oraz M3U.</p>
+          <h2 class="section-title">OpenCamView v1.3</h2>
+          <p class="section-sub">
+            Wtyczka Enigma2 do szybkiego podglądu kamer IP (RTSP) bez edytowania list kanałów na PC.
+            Dodawanie/edycja/usuwanie kamer, podgląd jednym kliknięciem oraz eksport do bukietu Enigma2 lub do pliku M3U.
+          </p>
         </div>
       </div>
 
       <div class="grid">
         <div class="card">
-          <h3>Opis</h3>
+          <h3>Opis / status / kompatybilność</h3>
+
           <p style="line-height:1.8">
-            <strong>OpenCamView</strong> to wtyczka Enigma2 do szybkiego podglądu kamer IP po RTSP — bez potrzeby edytowania listy kanałów w zewnętrznych programach.
-            Pozwala <strong>dodawać / edytować / usuwać</strong> kamery z poziomu GUI, uruchamiać podgląd jednym kliknięciem oraz eksportować listę kamer
-            do <strong>bukietu Enigma2 (kanały 4097)</strong> lub do pliku <strong>M3U</strong>.
-          </p>
-          <p style="line-height:1.8; margin-top:10px">
-            <strong>Status:</strong> projekt w fazie rozwoju (<em>work in progress</em>). Wtyczka działa na obrazach Enigma2 z Python 2.7 oraz Python 3.x.
-            Domyślny język interfejsu to angielski, a dla systemów z językiem polskim automatycznie włącza się tłumaczenie PL.
+            <strong>OpenCamView</strong> to mój nowy projekt w fazie rozwoju (<em>work in progress</em>), rozwijany pod realne potrzeby użytkowników.
+            Wtyczka działa w klasycznych obrazach Enigma2 (OpenPLi, OpenATV, OpenViX i podobne).
           </p>
 
+          <div style="margin-top:10px; line-height:1.85">
+            <strong>Środowisko / wymagania</strong>
+            <ul style="margin:8px 0 0; padding-left:18px">
+              <li>Platforma: Enigma2</li>
+              <li>Język: Python (kompatybilny z Python 2.7 oraz Python 3.x)</li>
+              <li>Zależność pakietu: <code>enigma2</code></li>
+            </ul>
+          </div>
+
+          <div style="margin-top:10px; line-height:1.85">
+            <strong>Zachowanie językowe</strong>
+            <ul style="margin:8px 0 0; padding-left:18px">
+              <li>Domyślny język bazowy: angielski (EN).</li>
+              <li>Dołączone tłumaczenie polskie (PL).</li>
+              <li>Jeśli tuner ma język polski → wtyczka wyświetla się po polsku.</li>
+              <li>Jeśli tuner ma inny język → wtyczka wyświetla się po angielsku (fallback).</li>
+            </ul>
+          </div>
+
           <div class="link-row" style="margin-top:14px">
-            <a class="btn primary" download href="pliki/enigma2-plugin-extensions-opencamview_1.2.1_all.ipk">⬇️ Pobierz OpenCamView v1.2.1 (.ipk)</a>
-            <a class="btn" download href="pliki/enigma2-plugin-extensions-opencamview_1.1_all.ipk">Starsza wersja: v1.1</a>
+            <a class="btn primary" download href="pliki/enigma2-plugin-extensions-opencamview_1.3_all.ipk">⬇️ Pobierz OpenCamView v1.3 (.ipk)</a>
+            <a class="btn" download href="pliki/enigma2-plugin-extensions-opencamview_1.2.1_all.ipk">Poprzednia wersja: v1.2.1</a>
           </div>
 
           <div style="margin-top:14px; line-height:1.9">
-            <h4 style="margin:0 0 8px">Co nowego w v1.2.1 (względem v1.1)</h4>
+            <h4 style="margin:0 0 8px">[PL] Zmiany techniczne (względem v1.2.1)</h4>
             <ul style="margin:0; padding-left:18px">
-              <li style="margin:6px 0"><strong>Eksport do bukietu Enigma2</strong> (skrót <code>2</code>): utwórz nowy bukiet lub dopisz do istniejącego + możliwość wstawiania od wybranej pozycji.</li>
-              <li style="margin:6px 0"><strong>Eksport do pliku M3U</strong> (skrót <code>3</code>): zapis do <code>/etc/enigma2/opencamview_cameras.m3u</code>.</li>
-              <li style="margin:6px 0"><strong>Pomoc i przykłady RTSP</strong> (skrót <code>4</code>): szybkie podpowiedzi dla popularnych kamer/NVR.</li>
-              <li style="margin:6px 0"><strong>Lepsze podpowiedzi w GUI</strong>: kolejność wpisywania danych + przykłady ścieżek (Hikvision/BCS).</li>
-              <li style="margin:6px 0"><strong>Język PL/EN</strong>: domyślnie EN + dołączone tłumaczenie PL (automatyczny wybór wg języka tunera).</li>
+              <li style="margin:6px 0">
+                <strong>Podbicie wersji do 1.3</strong> – umożliwia standardową aktualizację przez <code>opkg</code> (bez odinstalowywania przy przejściu z 1.2.1 na 1.3).
+              </li>
+              <li style="margin:6px 0">
+                <strong>Naprawa „blue screen” przy edycji działającej kamery</strong> – usunięto konflikt funkcji tłumaczeń, który powodował wyjątek podczas edycji.
+              </li>
+              <li style="margin:6px 0">
+                <strong>Eksport wybranych kamer (zgodnie z sugestią użytkowników)</strong> – przed eksportem można zaznaczyć, które kamery mają zostać wyeksportowane (zamiast zawsze eksportować całą listę) oraz eksportować pojedyncze kamery.
+              </li>
+              <li style="margin:6px 0">
+                <strong>Szybsze dodawanie kolejnych kamer</strong> – formularz dodawania może korzystać z poprzednio wpisanych danych (np. port/login/hasło/ścieżka), dzięki czemu zwykle edytuje się tylko nazwę i IP.
+              </li>
+              <li style="margin:6px 0">
+                <strong>Zachowane i doprecyzowane skróty dla domofonu</strong> – <code>0</code> = ustaw domofon, <code>1</code> = otwórz domofon.
+              </li>
             </ul>
+          </div>
 
-            <h4 style="margin:14px 0 8px">Najważniejsze informacje (jak to działa)</h4>
-            <ol style="margin:0; padding-left:18px">
+          <div style="margin-top:14px; line-height:1.9">
+            <h4 style="margin:0 0 8px">[PL] Zmiany wizualne/GUI (względem v1.2.1)</h4>
+            <ul style="margin:0; padding-left:18px">
               <li style="margin:6px 0">
-                <strong>Wtyczka nie „wisi na tle TV”</strong><br>
-                Ekran listy kamer zatrzymuje aktualnie oglądany kanał (tło jest czarne), dzięki czemu obsługa listy jest wygodna.
-                Po wyjściu z wtyczki kanał TV jest przywracany.
+                <strong>Przebudowana sekcja skrótów dla lepszej czytelności</strong> – dodano napis „Wybierz klawisz:” oraz czytelny zapis klawiszy <code>0–4</code> nad stopką; uzupełniono brakującą informację o klawiszach <code>0</code> i <code>1</code> (domofon).
               </li>
               <li style="margin:6px 0">
-                <strong>Obcięty obraz (overscan / crop)</strong><br>
-                Wtyczka używa trybu „safe area” (marginesy), co ogranicza problem ucinania obrazu na części telewizorów.
-                Marginesy są w pliku: <code>/etc/enigma2/opencamview_settings.json</code> (domyślnie: <code>safe_x = 40</code>, <code>safe_y = 30</code>).
+                <strong>Poprawiona stopka</strong> – data w stopce jest aktualna (pobierana z czasu tunera) oraz powiększono czcionkę elementów na dole ekranu.
               </li>
               <li style="margin:6px 0">
-                <strong>MultiView (pełny ekran + PiP)</strong><br>
-                Tryb podglądu dwóch kamer naraz (główna + PiP) uruchomisz klawiszem <code>INFO</code>.
-                Sterowanie: <code>OK</code> – zamiana (główna ↔ PiP), <code>CH+</code>/<code>CH-</code> – zmiana kamery w PiP, <code>EXIT</code> – wyjście.
-                Jeśli system/skin nie obsługuje PiP, pojawi się komunikat o braku MultiView.
+                <strong>Legenda kolorowych przycisków zgodna z układem pilota</strong> – kolejność: czerwony / zielony / żółty / niebieski oraz czytelniejsze opisy.
               </li>
-              <li style="margin:6px 0">
-                <strong>Domofon (interkom)</strong><br>
-                Na liście kamer: <code>0</code> – ustaw zaznaczoną kamerę jako DOMOFON, <code>1</code> – uruchom Domofon (zawsze ta wskazana kamera).
-                Ustawienie zapisuje się w <code>/etc/enigma2/opencamview_settings.json</code> (pole <code>domofon_index</code>).
-              </li>
-            </ol>
+            </ul>
           </div>
         </div>
 
@@ -173,153 +190,132 @@
       </div>
 
       <div class="card" style="margin-top:14px">
-        <h3>Poradnik użytkownika (v1.2.x)</h3>
+        <h3>Poradnik użytkownika: OpenCamView (v1.2.x / v1.3)</h3>
         <p style="color:var(--muted); line-height:1.7">
-          OpenCamView pozwala dodać kamery w kilka minut. Najczęstszy problem to błędna ścieżka RTSP — dlatego poniżej masz gotowe przykłady.
+          OpenCamView pozwala trzymać listę kamer RTSP w jednym miejscu i uruchamiać podgląd bez modyfikowania list kanałów w zewnętrznych programach.
+          Dodatkowo możesz eksportować kamery do bukietu Enigma2 (kanały typu 4097) lub do pliku M3U.
         </p>
 
         <details class="details-note" open>
-          <summary>1) Wymagania i uruchomienie</summary>
+          <summary>1) Najważniejsze możliwości</summary>
           <div style="margin-top:10px; line-height:1.85">
-            <ul>
-              <li><strong>Odbiornik:</strong> Enigma2 (np. OpenPLi / OpenATV / OpenViX).</li>
-              <li><strong>Kompatybilność:</strong> obrazy Enigma2 na Python 2.7 oraz Python 3.x.</li>
-              <li><strong>Zależność pakietu:</strong> <code>enigma2</code>.</li>
-              <li><strong>Sieć:</strong> dostęp do LAN, w której pracują kamery.</li>
-              <li><strong>Kamera/NVR:</strong> RTSP (często warto też włączyć ONVIF).</li>
-              <li><strong>Dane:</strong> IP, port (zwykle 554), login/hasło oraz ścieżka RTSP.</li>
+            <ul style="margin:0; padding-left:18px">
+              <li>Lista kamer RTSP w jednej wtyczce (bez edycji list kanałów na PC).</li>
+              <li>Dodawanie kamery z GUI: Nazwa / IP / Port / Login / Hasło / Ścieżka.</li>
+              <li>Podgląd: wybierz kamerę i naciśnij <strong>OK</strong>.</li>
+              <li>Edycja i usuwanie wpisów kamer.</li>
+              <li>Skróty numeryczne i pomoc z przykładami RTSP.</li>
+              <li>Eksport kamer do bukietu Enigma2 oraz eksport do M3U.</li>
+              <li>Automatyczny język (PL gdy system jest PL, w przeciwnym razie EN).</li>
             </ul>
-            <div style="margin-top:10px">
-              Wejdź w: <strong>Menu → Wtyczki → OpenCamView</strong>. Zobaczysz listę kamer (na starcie pusta).
-            </div>
           </div>
         </details>
 
         <details class="details-note" open>
-          <summary>2) Dodawanie kamery (ręcznie) — najszybsza metoda</summary>
+          <summary>2) Obsługa pilotem i skróty numeryczne</summary>
           <div style="margin-top:10px; line-height:1.85">
-            <ol>
-              <li>Naciśnij <strong>ZIELONY</strong> (<em>Dodaj</em>).</li>
-              <li>Wpisuj dane w kolejności: <strong>Nazwa → IP → Port → Login → Hasło → Ścieżka</strong>.</li>
-              <li>Zapisz przyciskiem <strong>OK</strong>.</li>
+            <strong>Podstawowe klawisze</strong>
+            <ul style="margin:8px 0 0; padding-left:18px">
+              <li><strong>OK</strong> — uruchom podgląd zaznaczonej kamery</li>
+              <li><strong>ZIELONY</strong> — Dodaj kamerę</li>
+              <li><strong>ŻÓŁTY</strong> — Edytuj kamerę</li>
+              <li><strong>CZERWONY</strong> — Usuń kamerę</li>
+              <li><strong>EXIT</strong> — Wyjście</li>
+            </ul>
+
+            <div style="margin-top:10px">
+              <strong>Skróty numeryczne</strong>
+              <ul style="margin:8px 0 0; padding-left:18px">
+                <li><code>0</code> — ustaw zaznaczoną kamerę jako domofon (interkom)</li>
+                <li><code>1</code> — otwórz domofon (interkom)</li>
+                <li><code>2</code> — eksport do bukietu Enigma2 (nowy bukiet lub dopisanie do istniejącego; możliwość wstawiania od podanej pozycji)</li>
+                <li><code>3</code> — eksport do pliku M3U: <code>/etc/enigma2/opencamview_cameras.m3u</code></li>
+                <li><code>4</code> — pomoc / przykłady RTSP</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+
+        <details class="details-note">
+          <summary>3) Dodawanie kamery — kolejność danych i przykłady RTSP</summary>
+          <div style="margin-top:10px; line-height:1.85">
+            <strong>Kolejność wpisywania danych kamery</strong>
+            <ol style="margin:8px 0 0; padding-left:18px">
+              <li>Nazwa</li>
+              <li>IP</li>
+              <li>Port (zwykle 554)</li>
+              <li>Login</li>
+              <li>Hasło</li>
+              <li>Ścieżka RTSP</li>
             </ol>
 
             <div style="margin-top:10px">
-              <strong>Najczęściej używane ścieżki RTSP (wpisz JEDNĄ pasującą do urządzenia):</strong>
-              <ul>
+              <strong>Najczęstsze ścieżki RTSP (wpisz jedną pasującą do urządzenia)</strong>
+              <ul style="margin:8px 0 0; padding-left:18px">
                 <li><strong>Hikvision / HQvision:</strong> <code>/Streaming/Channels/101</code></li>
                 <li><strong>Dahua / BCS / Imou:</strong> <code>/cam/realmonitor?channel=1&subtype=0</code></li>
                 <li><strong>TP-Link Tapo:</strong> <code>/stream1</code></li>
-                <li><strong>No‑Name / chińskie:</strong> <code>/live/ch0</code> lub <code>/11</code> lub <code>/stream</code></li>
+                <li><strong>Chińskie / No-Name:</strong> <code>/live/ch0</code> lub <code>/11</code> lub <code>/stream</code></li>
               </ul>
-              <div style="color:var(--muted)">
-                Jeśli masz „czarny ekran”, w 90% przypadków winna jest ścieżka (albo dane logowania). Zweryfikuj RTSP w VLC na PC.
-              </div>
+            </div>
+
+            <div style="margin-top:10px; color:var(--muted)">
+              Przykład pełnego adresu RTSP: <code>rtsp://LOGIN:HASŁO@IP:PORT/ŚCIEŻKA</code>
             </div>
           </div>
         </details>
 
         <details class="details-note">
-          <summary>3) Skaner sieci (opcjonalnie) — szybkie dodanie IP/portu</summary>
+          <summary>4) Pliki konfiguracyjne</summary>
           <div style="margin-top:10px; line-height:1.85">
-            <ol>
-              <li>Wciśnij <strong>NIEBIESKI</strong> (<em>Skaner</em>).</li>
-              <li>Naciśnij <strong>ZIELONY</strong>, aby rozpocząć skanowanie.</li>
-              <li>Wybierz urządzenie z listy i naciśnij <strong>OK</strong>, aby dodać wpis do listy kamer.</li>
-              <li>Wróć do listy kamer i użyj <strong>ŻÓŁTY</strong> (<em>Edytuj</em>), aby uzupełnić login/hasło/ścieżkę.</li>
-            </ol>
-          </div>
-        </details>
-
-        <details class="details-note" open>
-          <summary>4) Podgląd, edycja i usuwanie</summary>
-          <div style="margin-top:10px; line-height:1.85">
-            <ul>
-              <li><strong>OK</strong> – uruchom podgląd zaznaczonej kamery.</li>
-              <li><strong>ŻÓŁTY</strong> – edytuj kamerę.</li>
-              <li><strong>CZERWONY</strong> – usuń kamerę (z potwierdzeniem).</li>
-              <li><strong>EXIT</strong> – wyjście.</li>
+            <ul style="margin:0; padding-left:18px">
+              <li>Lista kamer: <code>/etc/enigma2/opencamview.json</code></li>
+              <li>Eksport M3U: <code>/etc/enigma2/opencamview_cameras.m3u</code></li>
             </ul>
-            <div style="margin-top:8px; color:var(--muted)">
-              MultiView (pełny ekran + PiP): na liście kamer naciśnij <strong>INFO</strong>.
-            </div>
-          </div>
-        </details>
-
-        <details class="details-note" open>
-          <summary>5) Skróty numeryczne (0–4) — domofon i eksport</summary>
-          <div style="margin-top:10px; line-height:1.85">
-            <ul>
-              <li><strong>0</strong> – ustaw zaznaczoną kamerę jako <strong>DOMOFON</strong> (interkom).</li>
-              <li><strong>1</strong> – uruchom podgląd domofonu (zawsze ta ustawiona).</li>
-              <li><strong>2</strong> – eksport do bukietu Enigma2 (kanały 4097).</li>
-              <li><strong>3</strong> – eksport do pliku M3U: <code>/etc/enigma2/opencamview_cameras.m3u</code>.</li>
-              <li><strong>4</strong> – pomoc / przykłady RTSP.</li>
-            </ul>
-          </div>
-        </details>
-
-        <details class="details-note">
-          <summary>6) Eksport do bukietu Enigma2 (skrót 2)</summary>
-          <div style="margin-top:10px; line-height:1.85">
-            <p style="margin:0">
-              Ta opcja tworzy wpisy kamer jako kanały w Enigmie2 (typ 4097), dzięki czemu możesz mieć kamery w klasycznej liście kanałów.
-            </p>
-            <ul style="margin-top:8px">
-              <li>utworzenie nowego bukietu (dopinanego na koniec listy), albo</li>
-              <li>dopisanie do istniejącego bukietu, z możliwością wskazania pozycji startowej.</li>
-            </ul>
-            <div style="color:var(--muted)">
-              Po eksporcie czasem warto wykonać <strong>restart GUI</strong>, aby lista kanałów odświeżyła się w 100%.
+            <div style="margin-top:10px; color:var(--muted)">
+              W praktyce: możesz wykonać kopię bezpieczeństwa pliku <code>opencamview.json</code>, a po reinstalacji systemu wystarczy go przywrócić.
             </div>
           </div>
         </details>
 
         <details class="details-note">
-          <summary>7) Pliki konfiguracyjne i kopia zapasowa</summary>
-          <div style="margin-top:10px; line-height:1.85">
-            <ul>
-              <li><strong>Lista kamer:</strong> <code>/etc/enigma2/opencamview.json</code></li>
-              <li><strong>Ustawienia (safe area / domofon):</strong> <code>/etc/enigma2/opencamview_settings.json</code></li>
-              <li><strong>Eksport M3U:</strong> <code>/etc/enigma2/opencamview_cameras.m3u</code></li>
-            </ul>
-            <div style="color:var(--muted)">
-              W praktyce wystarczy zrobić kopię pliku <code>opencamview.json</code> — po reinstalacji systemu wklejasz go z powrotem i masz listę kamer.
-            </div>
-          </div>
-        </details>
-
-        <details class="details-note">
-          <summary>8) Najczęstsze problemy i rozwiązania</summary>
+          <summary>5) Najczęstsze problemy i rozwiązania</summary>
           <div style="margin-top:10px; line-height:1.85">
             <strong>1) Kamera nie działa, a dane są poprawne</strong>
-            <ul>
-              <li>sprawdź RTSP w VLC na PC,</li>
-              <li>zweryfikuj port (zwykle 554, czasem inny),</li>
+            <ul style="margin:8px 0 0; padding-left:18px">
+              <li>sprawdź RTSP w sieci (np. VLC na PC),</li>
+              <li>zweryfikuj port (zwykle 554, ale bywa inny),</li>
               <li>upewnij się, że ścieżka RTSP jest właściwa dla modelu urządzenia.</li>
             </ul>
-            <strong>2) Obraz się tnie lub nie ładuje</strong>
-            <ul>
-              <li>sprawdź Wi‑Fi/LAN i obciążenie sieci,</li>
-              <li>obniż parametry strumienia (substream) w kamerze/NVR,</li>
-              <li>spróbuj lżejszego kanału (np. 102 zamiast 101), jeśli urządzenie to wspiera.</li>
-            </ul>
-            <strong>3) Po eksporcie do bukietu nie widzę kamer w liście kanałów</strong>
-            <ul>
-              <li>wykonaj restart GUI,</li>
-              <li>upewnij się, że eksport trafił do właściwego bukietu,</li>
-              <li>sprawdź, czy w Enigma2 wyświetlają się bukiety użytkownika.</li>
-            </ul>
+
+            <div style="margin-top:10px">
+              <strong>2) Obraz się tnie lub nie ładuje</strong>
+              <ul style="margin:8px 0 0; padding-left:18px">
+                <li>sprawdź Wi‑Fi/LAN i obciążenie sieci,</li>
+                <li>obniż parametry streamu (substream) w kamerze/NVR,</li>
+                <li>użyj lżejszego kanału (np. 102 zamiast 101, jeśli urządzenie to wspiera).</li>
+              </ul>
+            </div>
+
+            <div style="margin-top:10px">
+              <strong>3) Po eksporcie do bukietu nie widzę kamer w liście kanałów</strong>
+              <ul style="margin:8px 0 0; padding-left:18px">
+                <li>wykonaj restart GUI,</li>
+                <li>upewnij się, że eksport trafił do właściwego bukietu,</li>
+                <li>sprawdź, czy w Enigma2 wyświetlają się bukiety użytkownika.</li>
+              </ul>
+            </div>
           </div>
         </details>
 
         <details class="details-note">
-          <summary>9) Dobre praktyki (wygodny bukiet „KAMERY”)</summary>
+          <summary>6) Dobre praktyki</summary>
           <div style="margin-top:10px; line-height:1.85">
-            <ul>
+            Jeśli chcesz mieć kamery zawsze łatwo dostępne:
+            <ul style="margin:8px 0 0; padding-left:18px">
               <li>utwórz bukiet o nazwie np. <strong>KAMERY</strong>,</li>
-              <li>eksportuj do niego listę i ustaw dopinanie na końcu,</li>
-              <li>dzięki temu kamery zawsze masz szybko pod ręką.</li>
+              <li>eksportuj do tego bukietu i ustaw, aby był dopinany na końcu,</li>
+              <li>wtedy po wciśnięciu „wstecz” w liście kanałów zwykle wracasz blisko końca i masz szybki podgląd.</li>
             </ul>
           </div>
         </details>

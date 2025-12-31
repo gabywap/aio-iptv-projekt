@@ -85,6 +85,9 @@ a{color:inherit} a:hover{color:var(--accent)}
 }
 .nav-inner{display:flex; align-items:center; gap:8px; padding:10px 0; overflow:auto; scrollbar-width:none}
 .nav-inner::-webkit-scrollbar{display:none}
+
+/* Hide AI-Chat tab in top navigation (keep only in side drawer) */
+.nav .nav-inner a[href="ai-chat.html"]{display:none}
 .nav a{
   padding:9px 12px;
   border-radius:12px;
