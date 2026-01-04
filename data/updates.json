@@ -1,5 +1,12 @@
 [
   {
+    "date": "2026-01-04",
+    "ts": 1767484800000,
+    "type": "release",
+    "title": "AIO Panel v6.0 — aktualizacja wtyczki",
+    "details": "Dodano nową paczkę do pobrania: enigma2-plugin-extensions-panelaio_6.0_all.ipk (zakładka /pliki). Zmiany: Konfiguracja IPTV – zależności (ServiceApp, ExtPlayer3, ffmpeg, youtube-dl, yt-dlp, wrappery, streamlinksrv), Rozbudowana Diagnostyka Sieci (IP tunera/publiczne, ping, speedtest DL/UL), Auto RAM Cleaner (pamiętanie ustawień po restarcie), Super Konfigurator (domyślna lista „Paweł Pawełek 13E”), stabilizacja „oscam.dvbapi – zarządzaj”."
+  },
+  {
     "date": "2025-12-31",
     "ts": 1767139200000,
     "type": "release",
@@ -40,13 +47,6 @@
     "type": "feature",
     "title": "UI: przycisk „Do góry” + szybkie odświeżenie cache",
     "details": "Pojawia się po przewinięciu strony; dodatkowo w panelu aktualizacji dodano przycisk do czyszczenia cache UI."
-  },
-  {
-    "date": "2025-12-19",
-    "ts": 1766102400000,
-    "type": "release",
-    "title": "AIO Panel v5.0 — aktualizacja wtyczki",
-    "details": "Dodano nową paczkę do pobrania: enigma2-plugin-extensions-panelaio_5.0_all.ipk (repozytorium strony)."
   },
   {
     "date": "2025-12-16",
