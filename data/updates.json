@@ -1,5 +1,12 @@
 [
   {
+    "date": "2026-01-12",
+    "ts": 1768176000000,
+    "type": "feature",
+    "title": "Nowy poradnik: OpenATV 7.6 — konfiguracja krok po kroku (PDF)",
+    "details": "Dodano nową zakładkę w Poradnikach: OpenATV 7.6. PDF z rzeczywistymi zrzutami ekranu (1–27) jest dostępny do podglądu i pobrania (guides.html#openatv76)."
+  },
+  {
     "date": "2026-01-09",
     "ts": 1767916800000,
     "type": "release",
