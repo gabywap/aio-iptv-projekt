@@ -1,0 +1,54 @@
+name: Translate HTML to HU and EN
+
+# Manual workflow dispatch and also on push to main (optional)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'index.html'
+      - '*.html'
+      - 'docs/**'
+      - 'pliki/**'
+
+permissions:
+  contents: write  # allow commit/push via GITHUB_TOKEN
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install beautifulsoup4 requests
+
+      - name: Run translation to HU and EN
+        env:
+          DEEPL_AUTH_KEY: ${{ secrets.DEEPL_AUTH_KEY }}
+        run: |
+          # create output folders
+          mkdir -p translated/hu translated/en
+          # translate all top-level HTML files and files under docs/
+          python3 scripts/translate_html.py --dir . --out translated --langs HU EN || true
+          # copy translated files into docs/<lang> preserving structure
+          for lang in hu en; do
+            mkdir -p docs/$lang
+            rsync -a --prune-empty-dirs --include '*/' --include '*.html' --exclude '*' translated/$lang/ docs/$lang/
+          done
+
+      - name: Commit translated files to branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b translate/auto || git checkout translate/auto
+          git add docs/hu docs/en || true
+          git commit -m "Auto: add translated HTML (HU + EN)" || echo "No changes to commit"
+          git push --set-upstream origin translate/auto
