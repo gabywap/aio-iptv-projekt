@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<title>Instalacja Image — AIO-IPTV.pl</title>
+<link href="pliki/logo.png" rel="icon">
+<link href="assets/css/site.css?v=next1" rel="stylesheet">
+</link></link></head>
+<body data-page="next">
+<div class="topbar">
+<div class="container">
+<div class="topbar-inner">
+<a aria-label="AIO-IPTV.pl" class="brand" href="index.html">
+<img alt="AIO-IPTV.pl" src="pliki/logo.png"/>
+<div>
+<div class="name">AIO‑IPTV.pl</div>
+<span class="tag">Enigma2 • IPTV • Tools • AI</span>
+</div>
+</a>
+<a class="pill pill-accent" download="" href="pliki/enigma2-plugin-extensions-panelaio_6.0_all.ipk">
+<span data-i18n="cta_update">Aktualizacja: AIO Panel v6.0</span>
+<strong data-i18n="cta_download">Pobierz teraz</strong>
+</a>
+<div class="spacer"></div>
+<div class="notif">
+<button aria-label="Updates" class="icon-btn" id="bellBtn">🔔</button>
+<div aria-live="polite" class="notif-panel" id="notifPanel"></div>
+</div>
+<button aria-label="Menu" class="icon-btn" id="navToggle">☰</button>
+</div>
+</div>
+<div class="nav">
+<div class="container">
+<div class="nav-inner nav">
+<a data-i18n="nav_home" href="index.html">Start</a>
+<a data-i18n="nav_ai" href="ai-chat.html">AI-Chat Enigma2</a>
+<a data-i18n="nav_plugins" href="plugins.html">Wtyczki</a>
+<a data-i18n="nav_lists" href="channel-lists.html">Listy kanałów</a>
+<a data-i18n="nav_guides" href="guides.html">Poradniki</a>
+<a data-i18n="nav_tools" href="tools.html">Narzędzia</a>
+<a data-i18n="nav_downloads" href="downloads.html">Pobieranie</a>
+<a data-i18n="nav_systems" href="systems.html">Systemy</a>
+<a data-i18n="nav_contact" href="contact.html">Kontakt</a>
+<a data-i18n="nav_opinion" href="contact.html#opinia">Podziel się opinią</a>
+<a data-i18n="nav_support" href="support.html">Wsparcie</a>
+</div>
+</div>
+</div>
+</div>
+<div class="drawer-backdrop" data-drawer-close="" id="drawerBackdrop"></div>
+<aside aria-hidden="true" class="drawer" id="mobileDrawer">
+<div class="drawer-head">
+<div class="drawer-title">Menu</div>
+<button aria-label="Close" class="icon-btn" data-drawer-close="">✕</button>
+</div>
+<a href="index.html">🏠 <span data-i18n="nav_home">Start</span></a>
+<a href="ai-chat.html">🤖 <span data-i18n="nav_ai">AI-Chat Enigma2</span></a>
+<a href="plugins.html">🧩 <span data-i18n="nav_plugins">Wtyczki</span></a>
+<a href="channel-lists.html">📺 <span data-i18n="nav_lists">Listy kanałów</span></a>
+<a href="guides.html">📘 <span data-i18n="nav_guides">Poradniki</span></a>
+<a href="tools.html">🛠 <span data-i18n="nav_tools">Narzędzia</span></a>
+<a href="downloads.html">⬇️ <span data-i18n="nav_downloads">Pobieranie</span></a>
+<a href="systems.html">💿 <span data-i18n="nav_systems">Systemy</span></a>
+<a href="contact.html">✉️ <span data-i18n="nav_contact">Kontakt</span></a>
+<a href="contact.html#opinia">💬 <span data-i18n="nav_opinion">Podziel się opinią</span></a>
+<a href="stats.html">Statystyki</a><a href="support.html">☕ <span data-i18n="nav_support">Wsparcie</span></a>
+</aside>
+<main class="container">
+<section class="section">
+<div class="section-head">
+<div>
+<h2 class="section-title">Instalacja Image</h2>
+<p class="section-sub">Instrukcje dla początkujących: wgrywanie czystego systemu (image) oraz instalacja gotowego backupu (np. OpenATV). Każdy tuner jest opisany osobno — wybierz markę i model.</p>
+</div>
+</div>
+</section>
+<div class="card" id="start">
+<h2>Zanim zaczniesz (ważne)</h2>
+<ul class="file-list">
+<li><span class="file-desc"><strong>Dobierz plik dokładnie pod model tunera.</strong> Zły image może spowodować brak startu urządzenia.</span></li>
+<li><span class="file-desc"><strong>Użyj pendrive FAT32</strong> (najczęściej 4–8 GB; czasem działa 16 GB). Najpewniejsze są proste pendrive USB 2.0.</span></li>
+<li><span class="file-desc"><strong>Nie odłączaj zasilania</strong> w trakcie flashowania. Proces może trwać kilkanaście minut.</span></li>
+<li><span class="file-desc">Po wgraniu systemu zwykle potrzebny jest <strong>Restart GUI</strong> lub pełny restart tunera (zależnie od modelu).</span></li>
+</ul>
+<p style="margin-top:12px; opacity:.9;">
+    Wskazówka: możesz linkować do konkretnego modelu, np. <span class="code-snippet">image-installation.html#octagon-sf8008-combo</span> — strona otworzy właściwą instrukcję.
+  </p>
+</div>
+<div class="card" id="wybor">
+<h2>Wybierz markę</h2>
+<p>Skocz do odpowiedniej sekcji lub wyszukaj model.</p>
+<div style="display:flex; flex-wrap:wrap; gap:10px; margin:12px 0 18px;">
+<a class="file-link" href="#ustym"><span class="icon">📦</span> Ustym</a>
+<a class="file-link" href="#octagon"><span class="icon">📦</span> Octagon</a>
+<a class="file-link" href="#ax"><span class="icon">📦</span> AX 4K BOX</a>
+<a class="file-link" href="#gigablue"><span class="icon">📦</span> GigaBlue</a>
+<a class="file-link" href="#vuplus"><span class="icon">📦</span> Vu+</a>
+<a class="file-link" href="#zgemma"><span class="icon">📦</span> Zgemma</a>
+<a class="file-link" href="#mutant"><span class="icon">📦</span> Mutant</a>
+<a class="file-link" href="#formuler"><span class="icon">📦</span> Formuler</a>
+<a class="file-link" href="#ariva"><span class="icon">📦</span> Ariva</a>
+<a class="file-link" href="#qviart"><span class="icon">📦</span> Qviart</a>
+<a class="file-link" href="#pulse"><span class="icon">📦</span> PULSE</a>
+<a class="file-link" href="#medialink"><span class="icon">📦</span> Medialink</a>
+<a class="file-link" href="#protek"><span class="icon">📦</span> Protek</a>
+<a class="file-link" href="#dinobot"><span class="icon">📦</span> Dinobot</a>
+<a class="file-link" href="#amiko"><span class="icon">📦</span> Amiko</a>
+<a class="file-link" href="#dreambox"><span class="icon">📦</span> Dreambox</a>
+<a class="file-link" href="#nbox"><span class="icon">📦</span> Nbox</a>
+</div>
+<div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+<input id="modelSearch" placeholder="Szukaj modelu (np. H9, Solo2, SF8008, Ustym)..." style="flex:1; min-width:260px; padding:12px 14px; border-radius:14px; border:1px solid rgba(148,163,184,.2); background:rgba(15,23,42,.55); color:#e2e8f0;" type="text"/>
+<button class="pill" id="clearSearch" style="border:none; cursor:pointer;" type="button">Wyczyść</button>
+</div>
+<p id="searchHint" style="margin-top:10px; color:rgba(226,232,240,.8); font-size:.92rem;"></p>
+</div>
+<!-- ========================= -->
+<!-- ========================= -->
+<!-- USTYM -->
+<!-- ========================= -->
+<div class="card" id="ustym">
+<h2>Ustym</h2>
+<p>Instrukcje dla modeli <strong>Ustym 4K Pro</strong> oraz <strong>Ustym Twin</strong>: instalacja gotowego backupu OpenATV z poziomu menu oraz wgranie czystego image z pendrive.</p>
+<details class="details-note" data-model="ustym 4k pro ustym pro ustym twin ustym combo" id="ustym-4kpro-twin">
+<summary><strong>Ustym 4K Pro / Twin</strong> — backup OpenATV (menu) oraz czysty image (USB)</summary>
+<h3 style="margin-top:12px;">1) Instalacja backupu OpenATV (z poziomu menu)</h3>
+<p style="margin-top:10px;"><strong>Przygotowanie:</strong> włóż pendrive do portu USB w dekoderze (plik backupu pozostaje spakowany).</p>
+<h4 style="margin-top:10px;">Wgrywanie softu (backup OpenATV)</h4>
+<ol>
+<li>Naciśnij <strong>NIEBIESKI</strong> przycisk na pilocie.</li>
+<li>Wejdź w <strong>Menedżer oprogramowania</strong>.</li>
+<li>Wybierz <strong>Instalacja systemu online</strong>.</li>
+<li>Wybierz <strong>Kopia zapasowa systemu</strong>.</li>
+<li>Wybierz plik backupu <strong>openatv-…</strong></li>
+<li>Wybierz <strong>Slot 1</strong>.</li>
+<li>Na pytanie: <strong>Czy chcesz wykonać kopię zapasową?</strong> wybierz <strong>NIE</strong>.</li>
+<li>Wybierz: <strong>Zainstaluj – tylko obraz kopii zapasowej</strong>.</li>
+<li>Poczekaj na rozpakowanie i wgrywanie (kilkanaście minut).</li>
+<li>Po zakończeniu dekoder uruchomi się ponownie z nowym softem.</li>
+</ol>
+<h3 style="margin-top:14px;">2) Wgranie czystego image (USB)</h3>
+<p><strong>Uwaga:</strong> pliki z archiwum wypakuj <strong>bezpośrednio na pendrive</strong> (bez dodatkowego katalogu).</p>
+<ol>
+<li>Wypakuj zawartość image na pendrive (FAT32) <strong>bez tworzenia katalogu</strong>.</li>
+<li>Włóż pendrive do portu USB <strong>z tyłu</strong> dekodera.</li>
+<li>Podłącz dekoder do prądu, jednocześnie trzymając przycisk <strong>POWER</strong> z przodu.</li>
+<li>Poczekaj aż na wyświetlaczu pojawi się <strong>UPTD - NECO</strong>, następnie puść <strong>POWER</strong>.</li>
+<li>Pilotem na ekranie TV wybierz <strong>drugą opcję od góry</strong> i naciśnij <strong>OK</strong> <strong>2 razy</strong>.</li>
+<li>System wgra się automatycznie, a tuner uruchomi się samoczynnie po zakończeniu.</li>
+</ol>
+</details>
+</div>
+<!-- OCTAGON -->
+<!-- ========================= -->
+<div class="card" id="octagon">
+<h2>Octagon</h2>
+<p>Instrukcje wgrywania czystego image z pendrive.</p>
+<details class="details-note" data-model="octagon sf8008 combo twin supreme" id="octagon-sf8008-combo">
+<summary><strong>Octagon SF8008 COMBO / TWIN / SUPREME</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Wymagania pendrive</h3>
+<ul>
+<li>Pendrive najlepiej <strong>do 8 GB</strong> (czasem działa 16 GB).</li>
+<li>Format: <strong>FAT32</strong>.</li>
+</ul>
+<h3>Przygotowanie plików</h3>
+<ol>
+<li>Pobrany soft <strong>wypakuj na pendrive</strong> (FAT32).</li>
+<li><strong>Ważne:</strong> pliki mają trafić <strong>bezpośrednio</strong> na pendrive — <strong>bez dodatkowego katalogu</strong> (czyli po wypakowaniu wszystko ma być w głównym katalogu pendrive).</li>
+</ol>
+<h3>Wgrywanie (flash)</h3>
+<ol>
+<li>Włóż pendrive do portu USB <strong>z tyłu</strong> tunera.</li>
+<li>Podłącz tuner do prądu, jednocześnie trzymając przycisk <strong>POWER</strong> na przednim panelu.</li>
+<li>Poczekaj, aż na wyświetlaczu pojawi się <strong>UPTD - NECO</strong>, następnie puść <strong>POWER</strong>.</li>
+<li>Pilotem na ekranie TV wybierz <strong>drugą opcję od góry</strong> i naciśnij <strong>OK</strong> <strong>2 razy</strong>.</li>
+<li>Poczekaj na wgranie systemu. Tuner uruchomi się samoczynnie po zakończeniu.</li>
+</ol>
+</details>
+<details class="details-note" data-model="octagon sf4008 sf4008 uhd" id="octagon-sf4008">
+<summary><strong>Octagon SF4008 UHD</strong> — aktualizacja / wgranie image (USB)</summary>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Rozpakuj pobrane oprogramowanie (image).</li>
+<li>Skopiuj na pendrive cały folder <strong>sf4008</strong>.</li>
+<li>Wyłącz tuner przełącznikiem z tyłu (odetnij zasilanie).</li>
+<li>Włóż pendrive do portu USB (<strong>najlepiej z przodu</strong> — zgodnie z instrukcją producenta).</li>
+<li>Włącz tuner przełącznikiem z tyłu.</li>
+<li>Naciśnij przycisk <strong>POWER</strong> na panelu przednim — rozpocznie się flashowanie.</li>
+<li>Poczekaj ok. <strong>2–3 min</strong>. Po zakończeniu tuner uruchomi się ponownie.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> podczas flashowania <strong>nie odłączaj zasilania</strong>.</p>
+</details>
+<details class="details-note" data-model="octagon sf138 sf 138" id="octagon-sf138">
+<summary><strong>Octagon SF138</strong> — wgranie czystego image (USB)</summary>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Rozpakuj image i skopiuj na pendrive folder <strong>sf138</strong>.</li>
+<li>Wyłącz tuner przełącznikiem z tyłu.</li>
+<li>Włóż pendrive do portu USB (<strong>z przodu</strong>).</li>
+<li>Naciśnij i <strong>przytrzymaj POWER</strong> na panelu przednim.</li>
+<li>Włącz tuner przełącznikiem z tyłu i trzymaj POWER jeszcze ok. <strong>5–10 sekund</strong>.</li>
+<li>Rozpocznie się flashowanie (ok. <strong>5 min</strong>), po czym tuner uruchomi się ponownie.</li>
+</ol>
+</details>
+<details class="details-note" data-model="octagon sf128 sf 128" id="octagon-sf128">
+<summary><strong>Octagon SF128</strong> — wgranie czystego image (USB)</summary>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Rozpakuj image i skopiuj na pendrive folder <strong>sf128</strong>.</li>
+<li>Wyłącz tuner przełącznikiem z tyłu.</li>
+<li>Włóż pendrive do portu USB (<strong>z przodu</strong>).</li>
+<li>Naciśnij i <strong>przytrzymaj POWER</strong> na panelu przednim.</li>
+<li>Włącz tuner przełącznikiem z tyłu i trzymaj POWER jeszcze ok. <strong>5–10 sekund</strong>.</li>
+<li>Rozpocznie się flashowanie (ok. <strong>5 min</strong>), po czym tuner uruchomi się ponownie.</li>
+</ol>
+</details>
+<details class="details-note" data-model="octagon sf228 sf 228" id="octagon-sf228">
+<summary><strong>Octagon SF228</strong> — wgranie czystego image (USB)</summary>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Rozpakuj image i skopiuj na pendrive folder <strong>sf228</strong>.</li>
+<li>Wyłącz tuner przełącznikiem z tyłu.</li>
+<li>Włóż pendrive do portu USB (<strong>lewy port USB</strong> — zgodnie z instrukcją producenta).</li>
+<li>Włącz tuner przełącznikiem z tyłu.</li>
+<li>Gdy pojawi się komunikat na wyświetlaczu, naciśnij przycisk <strong>CH+</strong> na górnej pokrywie obudowy, aby rozpocząć flashowanie.</li>
+<li>Wgrywanie trwa ok. <strong>5 min</strong>. Po zakończeniu tuner uruchomi się ponownie.</li>
+</ol>
+</details>
+<!-- ========================= -->
+<!-- AX -->
+<!-- ========================= -->
+<div class="card" id="ax">
+<h2>AX (4K BOX)</h2>
+<p>Instrukcje wgrywania czystego image na modele AX. Uwaga: kroki mogą się różnić zależnie od bootloadera — wykonuj dokładnie wg instrukcji dla modelu.</p>
+<details class="details-note" data-model="ax 4k box hd51 ax hd51" id="ax-hd51">
+<summary><strong>AX 4K BOX HD51</strong> — wgranie czystego image (USB)</summary>
+<ol style="margin-top:10px;">
+<li>Po pobraniu rozpakuj plik i wgraj na pendrive katalog <strong>hd51</strong>.</li>
+<li>Wyłącz tuner (odłącz zasilanie).</li>
+<li>Włóż pendrive do dowolnego gniazda USB.</li>
+<li>Wciśnij i trzymaj <strong>POWER</strong> z przodu, a następnie podłącz zasilanie.</li>
+<li>Puszczasz przycisk po pojawieniu się komunikatu <strong>„flashing”</strong> na wyświetlaczu.</li>
+<li>Po aktualizacji tuner uruchomi się sam.</li>
+</ol>
+</details>
+<details class="details-note" data-model="ax 4k box hd61 ax hd61" id="ax-hd61">
+<summary><strong>AX 4K BOX HD61</strong> — wgranie czystego image (bootmenu)</summary>
+<ol style="margin-top:10px;">
+<li>Wgraj obraz na pendrive sformatowany w <strong>FAT32</strong>.</li>
+<li>Wyłącz tuner.</li>
+<li>Włóż pendrive do dowolnego gniazda USB.</li>
+<li>Włącz tuner przełącznikiem z tyłu.</li>
+<li>Przytrzymaj <strong>POWER</strong> na przednim panelu — po chwili na wyświetlaczu pojawi się <strong>„rCUY”</strong>.</li>
+<li>Po chwili na TV pojawi się szare menu → wybierz <strong>Bootmenu</strong>.</li>
+<li>Wybierz <strong>Flash local image</strong> → wybierz nazwę pendrive → wskaż wgrany plik.</li>
+<li>Wybierz <strong>Linux 1</strong> i potwierdź.</li>
+<li>Po zakończeniu wyłącz i włącz tuner.</li>
+</ol>
+</details>
+</div>
+<!-- ========================= -->
+<!-- MUTANT -->
+<!-- ========================= -->
+<div class="card" id="mutant">
+<h2>Mutant</h2>
+<p>Modele: <strong>HD51 / HD60 / HD66SE</strong>, <strong>HD2400</strong>, <strong>HD1500</strong>, <strong>HD1200</strong>, <strong>HD500C</strong>. Metoda: USB Flash.</p>
+<details class="details-note" data-model="mutant hd51 hd60 hd66se" id="mutant-hd51-hd60-hd66se">
+<summary><strong>Mutant (HD51 / HD60 / HD66SE)</strong> — USB Flash</summary>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Skopiuj folder <strong>/mutant/</strong> z plikami <strong>kernel.bin</strong> i <strong>rootfs.bin</strong>.</li>
+<li>Włóż pendrive do tunera.</li>
+<li>Włącz zasilanie.</li>
+<li>Po wykryciu aktualizacji <strong>potwierdź OK</strong> (na pilocie / panelu) i poczekaj na zakończenie.</li>
+</ol>
+</details>
+<details class="details-note" data-model="mutant hd2400" id="mutant-hd2400">
+<summary><strong>Mutant HD2400</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie pendrive</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image dla <strong>HD2400</strong> i rozpakuj na komputerze.</li>
+<li>W rozpakowanych plikach znajdziesz folder <strong>hd2400</strong> — skopiuj cały folder <strong>hd2400</strong> bezpośrednio na pendrive (do katalogu głównego).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Odłącz tuner od prądu (lub wyłącz przełącznikiem, jeśli model go posiada).</li>
+<li>Upewnij się, że do tunera nie są podłączone inne urządzenia USB.</li>
+<li>Włóż pendrive z image do portu USB w tunerze.</li>
+<li>Podłącz zasilanie.</li>
+<li>Gdy na wyświetlaczu pojawi się komunikat <strong>„Image Found”</strong>, naciśnij przycisk <strong>UP</strong> na panelu przednim, aby rozpocząć flashowanie.</li>
+<li>Po zakończeniu tuner uruchomi się ponownie automatycznie.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> podczas flashowania <strong>nie odłączaj zasilania</strong>.</p>
+</details>
+<details class="details-note" data-model="mutant hd1500" id="mutant-hd1500">
+<summary><strong>Mutant HD1500</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie pendrive</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image dla <strong>HD1500</strong> i rozpakuj na komputerze.</li>
+<li>W rozpakowanych plikach znajdziesz folder <strong>hd1500</strong> — skopiuj cały folder <strong>hd1500</strong> bezpośrednio na pendrive (do katalogu głównego).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner (najlepiej odłącz zasilanie).</li>
+<li>Upewnij się, że do tunera nie są podłączone inne urządzenia USB.</li>
+<li>Włóż pendrive z image do <strong>tylnego</strong> portu USB (jeśli to możliwe).</li>
+<li>Włącz zasilanie tunera.</li>
+<li>Gdy na wyświetlaczu pojawi się komunikat <strong>„USB”</strong>, naciśnij przycisk <strong>X / STANDBY</strong> na panelu przednim, aby rozpocząć flashowanie.</li>
+<li>Po zakończeniu tuner zrestartuje się automatycznie.</li>
+<li>Wyjmij pendrive po restarcie.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> podczas flashowania <strong>nie odłączaj zasilania</strong>.</p>
+</details>
+<details class="details-note" data-model="mutant hd1200" id="mutant-hd1200">
+<summary><strong>Mutant HD1200</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie pendrive</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image dla <strong>HD1200</strong> i rozpakuj na komputerze.</li>
+<li>W rozpakowanych plikach znajdziesz folder <strong>hd1200</strong> — skopiuj cały folder <strong>hd1200</strong> bezpośrednio na pendrive (do katalogu głównego).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner.</li>
+<li>Odłącz inne urządzenia USB (jeśli są).</li>
+<li>Włóż pendrive z image do <strong>tylnego</strong> portu USB.</li>
+<li>Włącz zasilanie tunera.</li>
+<li>Gdy na wyświetlaczu pojawi się <strong>„USB”</strong>, naciśnij przycisk <strong>STANDBY</strong> na panelu przednim, aby rozpocząć flashowanie.</li>
+<li>Jeśli wszystko przebiegnie poprawnie, <strong>czerwona dioda zgaśnie</strong>, a tuner uruchomi się ponownie.</li>
+<li>Wyjmij pendrive po restarcie.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> podczas flashowania <strong>nie odłączaj zasilania</strong>.</p>
+</details>
+<details class="details-note" data-model="mutant hd500c hd 500c" id="mutant-hd500c">
+<summary><strong>Mutant HD500C</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie pendrive</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image dla <strong>HD500C</strong> i rozpakuj na komputerze.</li>
+<li>W rozpakowanych plikach znajdziesz folder <strong>hd500c</strong> — skopiuj cały folder <strong>hd500c</strong> bezpośrednio na pendrive (do katalogu głównego).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner.</li>
+<li>Upewnij się, że nie masz podłączonych innych urządzeń USB.</li>
+<li>Włóż pendrive z image do <strong>tylnego</strong> portu USB.</li>
+<li>Włącz zasilanie.</li>
+<li>Gdy na wyświetlaczu pojawi się <strong>„USB”</strong>, naciśnij przycisk <strong>STANDBY</strong> na panelu przednim, aby rozpocząć flashowanie.</li>
+<li>Po udanym flashowaniu <strong>czerwona dioda zgaśnie</strong>, a tuner zrestartuje się automatycznie.</li>
+<li>Wyjmij pendrive po restarcie.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> podczas flashowania <strong>nie odłączaj zasilania</strong>.</p>
+</details>
+</div>
+<!-- ========================= -->
+<!-- GIGABLUE -->
+<!-- ========================= -->
+<div class="card" id="gigablue">
+<h2>GigaBlue</h2>
+<p>Wgrywanie czystego image przez USB. W zależności od modelu mogą występować różne pliki startowe.</p>
+<details class="details-note" data-model="gigablue uhd trio 4k trio4k" id="gigablue-uhd-trio-4k">
+<summary><strong>GigaBlue UHD Trio 4K</strong> — wgranie czystego image (USB)</summary>
+<ol style="margin-top:10px;">
+<li>Z pliku ZIP na pendrive (FAT32) przekopiuj pliki: <strong>apploader.bin</strong>, <strong>bootargs.bin</strong>, <strong>fastboot.bin</strong>, <strong>usb_update.bin</strong>.</li>
+<li>Wyłącz tuner przełącznikiem na tylnym panelu.</li>
+<li>Wciśnij i przytrzymaj <strong>POWER</strong> na przednim panelu i włącz tuner przełącznikiem. Trzymaj POWER do momentu, aż pojawi się <strong>UPdt</strong> na wyświetlaczu.</li>
+<li>W menu wybierz (zależnie od bootloadera) <strong>Recovery From USB</strong> lub <strong>Flash Recovery Image</strong>.</li>
+<li>W trakcie aktualizacji pulsuje czerwona dioda; postęp widać na ekranie TV.</li>
+<li>Po zakończeniu tuner zrestartuje się i uruchomi z wgranym oprogramowaniem.</li>
+</ol>
+</details>
+<details class="details-note" data-model="gigablue ue 4k quad 4k uhd" id="gigablue-ue-quad-uhd">
+<summary><strong>GigaBlue (UE 4K / Quad 4K / UHD)</strong> — USB Flash</summary>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Skopiuj folder <strong>/gigablue/</strong> z plikami <strong>kernel.bin</strong> i <strong>rootfs.bin</strong>.</li>
+<li>Wyłącz tuner, włóż pendrive, a następnie włącz zasilanie.</li>
+<li>Po wykryciu aktualizacji <strong>potwierdź flash przyciskiem OK</strong>.</li>
+<li>Poczekaj na zakończenie i restart tunera.</li>
+</ol>
+</details>
+<details class="details-note" data-model="gigablue uhd quad 4k pro quad 4k pro recovery web ip" id="gigablue-uhd-quad-4k-pro-recovery">
+<summary><strong>GigaBlue UHD Quad 4K Pro</strong> — wejście w Recovery Mode (Web)</summary>
+<h3 style="margin-top:12px;">Recovery Mode (krok po kroku)</h3>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner całkowicie.</li>
+<li>Wyłącz zasilanie przełącznikiem z tyłu (odetnij prąd).</li>
+<li>Wciśnij i trzymaj przycisk <strong>POWER</strong> na panelu przednim.</li>
+<li>Włącz tuner przełącznikiem z tyłu, nadal trzymając <strong>POWER</strong>.</li>
+<li>Na wyświetlaczu pojawi się odliczanie <strong>3… 2… 1…</strong> — wciąż trzymaj <strong>POWER</strong>.</li>
+<li>Po zakończeniu odliczania uruchomi się <strong>Recovery Mode</strong> — możesz puścić <strong>POWER</strong>.</li>
+<li>Na wyświetlaczu pojawi się <strong>adres IP</strong> (zwykle nadany z routera przez DHCP).</li>
+<li>Wpisz ten adres IP w przeglądarce (komputer/telefon/tablet) — otworzy się strona Recovery.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Wskazówka:</strong> jeśli Recovery nie startuje, odłącz dysk twardy oraz inne urządzenia USB i spróbuj ponownie.</p>
+</details>
+<details class="details-note" data-model="gigablue hd x3 h gbx3h x3h" id="gigablue-hd-x3h">
+<summary><strong>GigaBlue HD X3 H</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie USB</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image i rozpakuj na komputerze.</li>
+<li>Skopiuj cały folder <strong>gigablue</strong> na pendrive (do katalogu głównego).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner.</li>
+<li>Odłącz inne urządzenia USB (na czas flashowania).</li>
+<li>Włóż pendrive do USB (zalecany tylny port, jeśli jest).</li>
+<li>Włącz tuner.</li>
+<li>Gdy zacznie migać <strong>niebieska dioda LED</strong>, naciśnij przycisk <strong>STANDBY</strong> na panelu przednim, aby rozpocząć flashowanie.</li>
+<li>Po zakończeniu tuner zrestartuje się samoczynnie. Wyjmij pendrive.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> nie odłączaj zasilania podczas aktualizacji.</p>
+</details>
+<details class="details-note" data-model="gigablue hd x3 gbx3 x3" id="gigablue-hd-x3">
+<summary><strong>GigaBlue HD X3</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie USB</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image i rozpakuj na komputerze.</li>
+<li>Skopiuj cały folder <strong>gigablue</strong> na pendrive (do katalogu głównego).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner.</li>
+<li>Odłącz inne urządzenia USB (na czas flashowania).</li>
+<li>Włóż pendrive do USB (zalecany tylny port, jeśli jest).</li>
+<li>Włącz tuner.</li>
+<li>Gdy zacznie migać <strong>niebieska dioda LED</strong>, naciśnij przycisk <strong>STANDBY</strong> na panelu przednim, aby rozpocząć flashowanie.</li>
+<li>Po zakończeniu tuner zrestartuje się samoczynnie. Wyjmij pendrive.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> nie odłączaj zasilania podczas aktualizacji.</p>
+</details>
+<details class="details-note" data-model="gigablue hd ultra ue gbultraue" id="gigablue-hd-ultra-ue">
+<summary><strong>GigaBlue HD ULTRA UE</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie USB</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image i rozpakuj na komputerze.</li>
+<li>Skopiuj cały folder <strong>gigablue</strong> na pendrive (do katalogu głównego).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner.</li>
+<li>Odłącz inne urządzenia USB (na czas flashowania).</li>
+<li>Włóż pendrive do USB (zalecany tylny port, jeśli jest).</li>
+<li>Włącz tuner.</li>
+<li>Gdy tuner o to poprosi (na wyświetlaczu), naciśnij przycisk <strong>OK</strong> (zwykle pod klapką z przodu), aby rozpocząć flashowanie.</li>
+<li>Po zakończeniu tuner uruchomi się ponownie. Wyjmij pendrive.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> nie odłączaj zasilania podczas aktualizacji.</p>
+</details>
+<details class="details-note" data-model="gigablue hd x1 gbx1 x1" id="gigablue-hd-x1">
+<summary><strong>GigaBlue HD X1</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie USB</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image i rozpakuj na komputerze.</li>
+<li>Skopiuj cały folder <strong>gigablue</strong> na pendrive (do katalogu głównego).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner.</li>
+<li>Odłącz inne urządzenia USB (na czas flashowania).</li>
+<li>Włóż pendrive do USB (zalecany tylny port, jeśli jest).</li>
+<li>Włącz tuner.</li>
+<li>Gdy zacznie migać <strong>niebieska dioda LED</strong>, naciśnij przycisk <strong>STANDBY</strong> na panelu przednim, aby rozpocząć flashowanie.</li>
+<li>Po zakończeniu tuner zrestartuje się samoczynnie. Wyjmij pendrive.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> nie odłączaj zasilania podczas aktualizacji.</p>
+</details>
+<details class="details-note" data-model="gigablue hd quad plus gbquadplus quadplus" id="gigablue-hd-quad-plus">
+<summary><strong>GigaBlue HD Quad Plus</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie USB</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image i rozpakuj na komputerze.</li>
+<li>Skopiuj cały folder <strong>gigablue</strong> na pendrive (do katalogu głównego).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Upewnij się, że tuner jest w <strong>Deep Standby</strong> (lub wyłącz go przełącznikiem z tyłu).</li>
+<li>Wyłącz tuner przełącznikiem z tyłu.</li>
+<li>Upewnij się, że nie ma podłączonych innych urządzeń USB.</li>
+<li>Włóż pendrive do portu USB (często wygodny jest port przedni).</li>
+<li>Włącz tuner przełącznikiem z tyłu.</li>
+<li>Na wyświetlaczu (nie na TV) pojawi się informacja o wykryciu aktualizacji — <strong>szybko</strong> naciśnij przycisk <strong>OK</strong> (zwykle pod klapką z przodu), aby rozpocząć flashowanie.</li>
+<li>Podczas flashowania dioda może migać na niebiesko/czerwono (fiolet). Po zakończeniu tuner zrestartuje się sam.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> jeśli nie zdążysz nacisnąć OK, tuner uruchomi stary system — wtedy wyłącz i spróbuj ponownie.</p>
+</details>
+<details class="details-note" data-model="gigablue hd quad gbquad quad" id="gigablue-hd-quad">
+<summary><strong>GigaBlue HD Quad</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie USB</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image i rozpakuj na komputerze.</li>
+<li>Skopiuj cały folder <strong>gigablue</strong> na pendrive (do katalogu głównego).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner przełącznikiem z tyłu.</li>
+<li>Upewnij się, że nie ma podłączonych innych urządzeń USB.</li>
+<li>Włóż pendrive do portu USB.</li>
+<li>Włącz tuner przełącznikiem z tyłu.</li>
+<li>Na wyświetlaczu (nie na TV) pojawi się informacja o wykryciu aktualizacji — <strong>szybko</strong> naciśnij przycisk <strong>OK</strong> (zwykle pod klapką z przodu), aby rozpocząć flashowanie.</li>
+<li>Podczas flashowania dioda może migać na niebiesko/fioletowo. Po zakończeniu tuner zrestartuje się sam.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> jeśli nie zdążysz nacisnąć OK, tuner uruchomi stary system — wtedy wyłącz i spróbuj ponownie.</p>
+</details>
+<details class="details-note" data-model="gigablue hd 800 ue plus gb800ueplus 800ueplus" id="gigablue-hd-800-ue-plus">
+<summary><strong>GigaBlue HD 800 UE PLUS</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie USB</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image i rozpakuj na komputerze.</li>
+<li>Skopiuj cały folder <strong>gigablue</strong> na pendrive (do katalogu głównego).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner i odłącz go od prądu (wyjmij wtyczkę).</li>
+<li>Upewnij się, że nie ma podłączonych innych urządzeń USB.</li>
+<li>Włóż pendrive do portu USB.</li>
+<li>Podłącz zasilanie i włącz tuner.</li>
+<li>Gdy tuner poprosi na wyświetlaczu — naciśnij przycisk <strong>OK</strong> (zwykle pod klapką z przodu), aby rozpocząć flashowanie.</li>
+<li>Po zakończeniu tuner uruchomi się ponownie. Wyjmij pendrive.</li>
+</ol>
+</details>
+<details class="details-note" data-model="gigablue hd 800 ue gb800ue 800ue" id="gigablue-hd-800-ue">
+<summary><strong>GigaBlue HD 800 UE</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie USB</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image i rozpakuj na komputerze.</li>
+<li>Skopiuj cały folder <strong>gigablue</strong> na pendrive (do katalogu głównego).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner i odłącz go od prądu (wyjmij wtyczkę).</li>
+<li>Upewnij się, że nie ma podłączonych innych urządzeń USB.</li>
+<li>Włóż pendrive do portu USB.</li>
+<li>Podłącz zasilanie i włącz tuner.</li>
+<li>Na wyświetlaczu pojawi się kolejno <strong>USB</strong>, a następnie <strong>CONF</strong>.</li>
+<li>Gdy zobaczysz <strong>CONF</strong>, naciśnij przycisk <strong>OK</strong> (zwykle pod klapką z przodu), aby rozpocząć flashowanie.</li>
+<li>Po zakończeniu tuner uruchomi się ponownie. Wyjmij pendrive.</li>
+</ol>
+</details>
+<details class="details-note" data-model="gigablue hd 800 solo gb800solo 800solo" id="gigablue-hd-800-solo">
+<summary><strong>GigaBlue HD 800 SOLO</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie USB</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image i rozpakuj na komputerze.</li>
+<li>Skopiuj cały folder <strong>gigablue</strong> na pendrive (do katalogu głównego).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner i odłącz go od prądu (wyjmij wtyczkę).</li>
+<li>Upewnij się, że nie ma podłączonych innych urządzeń USB.</li>
+<li>Włóż pendrive do portu USB.</li>
+<li>Podłącz zasilanie i włącz tuner.</li>
+<li>Na wyświetlaczu pojawi się kolejno <strong>USB</strong>, a następnie <strong>CONF</strong>.</li>
+<li>Gdy zobaczysz <strong>CONF</strong>, naciśnij przycisk <strong>OK</strong> (zwykle pod klapką z przodu), aby rozpocząć flashowanie.</li>
+<li>Po zakończeniu tuner uruchomi się ponownie. Wyjmij pendrive.</li>
+</ol>
+</details>
+</div>
+<!-- ========================= -->
+<!-- FORMULER -->
+<!-- ========================= -->
+<div class="card" id="formuler">
+<h2>Formuler</h2>
+<p>Modele: <strong>F1 / F3 / F4 / F4 Turbo</strong>. Metoda: USB Flash.</p>
+<details class="details-note" data-model="formuler f1 f3 f4 f4 turbo" id="formuler-f1-f3-f4">
+<summary><strong>Formuler (F1 / F3 / F4 / F4 Turbo)</strong> — USB Flash</summary>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Rozpakuj obraz i skopiuj folder <strong>/formuler/</strong> z plikami <strong>kernel.bin</strong> i <strong>rootfs.bin</strong>.</li>
+<li>Włóż pendrive do tunera.</li>
+<li>Uruchom tuner i poczekaj na wykrycie aktualizacji.</li>
+<li>Gdy pojawi się komunikat o aktualizacji — potwierdź (OK) i poczekaj na zakończenie.</li>
+</ol>
+</details>
+</div>
+<!-- ========================= -->
+<!-- ARIVA ATV -->
+<!-- ========================= -->
+<div class="card" id="ariva">
+<h2>Ariva ATV (Enigma2)</h2>
+<p>Instrukcja uruchomienia i instalacji Enigma2 na urządzeniach Ariva ATV.</p>
+<details class="details-note" data-model="ariva atv combo tt enigma2 e2" id="ariva-atv-combo-tt">
+<summary><strong>ENIGMA2 (Ariva ATV Combo / Ariva ATV TT)</strong> — instalacja/uruchomienie</summary>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive na <strong>FAT32</strong>.</li>
+<li>Pobierz odpowiedni obraz dla swojego modelu.</li>
+<li>Trzy pliki z archiwum umieść na USB w folderze <strong>e2/update</strong>.</li>
+<li>W aplikacji <strong>LiveTV</strong> włącz używanie Enigma2: <strong>Setup → Misc → Preference → Use E2: [Enable]</strong>.</li>
+<li>Włóż pendrive do Arivy i podczas uruchamiania <strong>klikaj ZIELONY</strong> przycisk na pilocie.</li>
+<li>Po pojawieniu się planszy z wyborem systemu naciśnij <strong>NIEBIESKI</strong> przycisk na pilocie.</li>
+<li>Poczekaj na instalację i uruchomienie Enigma2.</li>
+</ol>
+</details>
+</div>
+<!-- ========================= -->
+<!-- QVIART DUAL -->
+<!-- ========================= -->
+<div class="card" id="qviart">
+<h2>Qviart Dual</h2>
+<p>Model z dual-boot: Linux Enigma2 oraz Android. Poniżej masz instrukcje instalacji Enigma2 (restore), przełączania systemów oraz trybów odzyskiwania.</p>
+<details class="details-note" data-model="qviart dual enigma2 e2up restore openatv" id="qviart-dual-e2-usb">
+<summary><strong>Qviart Dual</strong> — instalacja Enigma2 (Linux E2) przez USB (OpenATV „restore”)</summary>
+<h3 style="margin-top:12px;">Przygotowanie USB</h3>
+<ol>
+<li>Sformatuj pamięć USB w systemie <strong>FAT32</strong>.</li>
+<li>Pobierz najnowszy obraz OpenATV: wariant <strong>„restore”</strong>.</li>
+<li>Rozpakuj ZIP — powstanie folder <strong>dual</strong> (z plikami w środku). Skopiuj folder <strong>dual</strong> na USB.</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie (E2UP)</h3>
+<ol>
+<li>Wyłącz dekoder przełącznikiem z tyłu.</li>
+<li>Podłącz USB do portu przedniego lub tylnego.</li>
+<li>Naciśnij i przytrzymaj <strong>POWER ON</strong> na panelu przednim i włącz dekoder przełącznikiem z tyłu.</li>
+<li>Na wyświetlaczu pojawią się opcje — przełączaj je przyciskiem <strong>POWER ON</strong> aż trafisz na <strong>„E2UP”</strong>.</li>
+<li>Gdy na wyświetlaczu będzie <strong>E2UP</strong>, aktualizacja ruszy automatycznie (zwykle do 5 minut).</li>
+<li>Po zakończeniu tuner uruchomi się z nowym softem, a na TV pojawi się kreator pierwszej konfiguracji.</li>
+</ol>
+</details>
+<details class="details-note" data-model="qviart dual przełączanie android enigma2 pilot boot" id="qviart-dual-switch-remote">
+<summary><strong>Qviart Dual</strong> — szybka zmiana systemu pilotem (Android ↔ Enigma2)</summary>
+<h3 style="margin-top:12px;">Start Enigma2 (Android → E2)</h3>
+<ol>
+<li>Wyłącz i włącz dekoder przełącznikiem z tyłu.</li>
+<li>Gdy na wyświetlaczu pojawi się <strong>„Boot”</strong> — naciśnij i przytrzymaj <strong>1</strong> na pilocie przez 10–15 sekund.</li>
+</ol>
+<h3 style="margin-top:12px;">Start Android (E2 → Android)</h3>
+<ol>
+<li>Wyłącz i włącz dekoder przełącznikiem z tyłu.</li>
+<li>Gdy na wyświetlaczu pojawi się <strong>„Boot”</strong> — naciśnij i przytrzymaj <strong>0</strong> na pilocie przez 10–15 sekund.</li>
+</ol>
+<h3 style="margin-top:12px;">Przełączanie „w obie strony”</h3>
+<ol>
+<li>Wyłącz i włącz dekoder przełącznikiem z tyłu.</li>
+<li>Na <strong>Boot</strong> przytrzymaj <strong>POWER ON</strong> na pilocie 10–15 sekund.</li>
+<li>Jeśli ostatnio był Android — przełączy na Enigma2 i odwrotnie.</li>
+</ol>
+</details>
+<details class="details-note" data-model="qviart dual dual mode menu" id="qviart-dual-switch-menu">
+<summary><strong>Qviart Dual</strong> — zmiana systemu z poziomu menu (Dual Mode)</summary>
+<ol style="margin-top:10px;">
+<li>Będąc w Enigma2 wejdź: <strong>Menu → Standby/Restart → Dual Mode</strong>.</li>
+<li>Potwierdź <strong>TAK</strong> — dekoder przejdzie do Android.</li>
+<li>W Android w menu „E2” wybierz np. <strong>Go back last time booted</strong> albo <strong>Slot 1</strong>, aby wrócić do Enigma2.</li>
+</ol>
+</details>
+<details class="details-note" data-model="qviart dual android aktualizacja ota usb" id="qviart-dual-android-update">
+<summary><strong>Qviart Dual</strong> — aktualizacja Android (USB lub OTA)</summary>
+<h3 style="margin-top:12px;">USB</h3>
+<ol>
+<li>Sformatuj USB w <strong>FAT32</strong>.</li>
+<li>Pobierz oprogramowanie Android i skopiuj plik <strong>.bin</strong> na USB.</li>
+<li>Wejdź: <strong>Ustawienia główne → Aktualizacji → Aktualizacji USB</strong> i wybierz plik do instalacji.</li>
+</ol>
+<h3 style="margin-top:12px;">OTA (aktualizacja sieciowa)</h3>
+<ol>
+<li>Wejdź: <strong>Ustawienia główne → Aktualizacji → Aktualizacji sieciowej</strong>.</li>
+<li>Jeśli jest nowsza wersja, pojawi się opcja pobrania i instalacji.</li>
+</ol>
+</details>
+<details class="details-note" data-model="qviart dual recovery android romupdate" id="qviart-dual-recovery-android">
+<summary><strong>Qviart Dual</strong> — odzyskiwanie Android (USB)</summary>
+<ol style="margin-top:10px;">
+<li>Sformatuj USB w <strong>FAT32</strong>.</li>
+<li>Pobierz oprogramowanie i zmień nazwę pliku na <strong>RomUpdate.bin</strong>.</li>
+<li>Utwórz folder <strong>RomUpdate</strong> w katalogu głównym USB i skopiuj tam <strong>RomUpdate.bin</strong>.</li>
+<li>Wyłącz dekoder przełącznikiem z tyłu.</li>
+<li>Podłącz USB, włącz dekoder i przytrzymaj <strong>POWER ON</strong> na panelu przednim.</li>
+<li>Na wyświetlaczu wybierz opcję <strong>„UPDT”</strong> (przełączasz POWER ON) — aktualizacja ruszy automatycznie.</li>
+<li>Po zakończeniu dekoder uruchomi Android.</li>
+</ol>
+</details>
+<details class="details-note" data-model="qviart dual problem boot slot 2 3 4 android 2.0" id="qviart-dual-warning">
+<summary><strong>Uwaga</strong>: problem ze starszym Android 2.0 (blokada po wyborze Slot #2/#3/#4)</summary>
+<p style="margin-top:10px;">Jeśli wybierzesz slot bez zainstalowanego obrazu E2, dekoder może utknąć na „Boot”.</p>
+<ol style="margin-top:10px;">
+<li>Wyłącz dekoder przełącznikiem z tyłu.</li>
+<li>Włącz ponownie.</li>
+<li>Gdy zobaczysz obraz startowy na TV, przytrzymaj <strong>0</strong> na pilocie przez 10–15 sekund.</li>
+<li>Wrócisz do Android, skąd możesz uruchomić poprawny slot E2.</li>
+</ol>
+</details>
+</div>
+<!-- ========================= -->
+<!-- ========================= -->
+<!-- PULSE -->
+<!-- ========================= -->
+<div class="card" id="pulse">
+<h2>PULSE</h2>
+<p>Instrukcja instalacji obrazu (USB). Modele: <strong>PULSE 4K</strong> oraz <strong>PULSE 4K mini</strong>.</p>
+<details class="details-note" data-model="pulse 4k pulse4k" id="pulse-4k">
+<summary><strong>PULSE 4K</strong> — instalacja przez USB</summary>
+<h3 style="margin-top:12px;">Co będzie potrzebne</h3>
+<ul style="margin-top:10px;">
+<li>Pendrive sformatowany w <strong>FAT32</strong> (dla lepszej zgodności).</li>
+<li>Wybrany image dla PULSE 4K.</li>
+<li>Program do rozpakowania (np. 7-Zip / WinRAR / WinZip).</li>
+</ul>
+<h3 style="margin-top:12px;">Przygotowanie pendrive</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image i <strong>rozpakuj</strong> na komputerze.</li>
+<li>Po rozpakowaniu zwykle powstaną 3 pliki: <strong>force_pulse4k.txt</strong>, plik informacyjny (np. „Citaj...”) oraz plik ZIP z obrazem (np. <strong>openatv-..._copy_to_usb_root.zip</strong>).</li>
+<li>Skopiuj <strong>force_pulse4k.txt</strong> oraz plik ZIP z obrazem (np. <strong>openatv-..._copy_to_usb_root.zip</strong>) <strong>bezpośrednio do katalogu głównego</strong> pendrive (bez dodatkowych folderów).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Włóż pendrive do tunera.</li>
+<li>Uruchom tuner i postępuj zgodnie z komunikatami na ekranie (jeśli pojawi się pytanie o aktualizację — <strong>potwierdź OK</strong>).</li>
+<li>Proces trwa zwykle około <strong>2–5 minut</strong>.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> podczas flashowania <strong>nie odłączaj zasilania</strong> — grozi to uszkodzeniem oprogramowania.</p>
+</details>
+<details class="details-note" data-model="pulse 4k mini pulse4k mini" id="pulse-4k-mini">
+<summary><strong>PULSE 4K mini</strong> — instalacja przez USB</summary>
+<p style="margin-top:10px;">Instrukcja jest taka sama jak dla PULSE 4K:</p>
+<ol style="margin-top:10px;">
+<li>Pendrive <strong>FAT32</strong>.</li>
+<li>Rozpakuj paczkę z image na komputerze.</li>
+<li>Skopiuj <strong>force_pulse4k.txt</strong> oraz plik ZIP z obrazem (np. <strong>openatv-..._copy_to_usb_root.zip</strong>) do katalogu głównego pendrive.</li>
+<li>Włóż pendrive do tunera, uruchom i w razie pytania <strong>potwierdź OK</strong>.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> w trakcie flashowania nie odłączaj zasilania.</p>
+</details>
+</div>
+<!-- ========================= -->
+<!-- MEDIALINK -->
+<!-- ========================= -->
+<div class="card" id="medialink">
+<h2>Medialink</h2>
+<p>Model: <strong>Ixuss Zero</strong>. Metoda: wgranie czystego image z pendrive (USB).</p>
+<details class="details-note" data-model="medialink ixuss zero ixusszero" id="medialink-ixuss-zero">
+<summary><strong>Medialink Ixuss Zero</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie pendrive</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image i rozpakuj na komputerze.</li>
+<li>W rozpakowanych plikach znajdziesz folder <strong>medialink</strong> — skopiuj cały folder <strong>medialink</strong> bezpośrednio na pendrive (do katalogu głównego).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Odłącz tuner od prądu.</li>
+<li>Upewnij się, że do tunera nie są podłączone inne urządzenia USB.</li>
+<li>Włóż pendrive z image do jednego z portów USB.</li>
+<li>Podłącz zasilanie i poczekaj na komunikaty na wyświetlaczu.</li>
+<li>Podczas startu na wyświetlaczu może pojawić się skrócony komunikat typu <strong>„If you w”</strong> — wtedy naciśnij przycisk <strong>UP</strong> na panelu przednim.</li>
+<li>W trakcie wgrywania zobaczysz komunikat <strong>„upgrading”</strong>. <strong>Nie odłączaj zasilania.</strong></li>
+<li>Po zakończeniu pojawi się komunikat typu <strong>„Please R”</strong> (prośba o restart) — oznacza to, że flashowanie zakończyło się poprawnie.</li>
+<li>Odłącz zasilanie, odczekaj około <strong>10 sekund</strong> i włącz tuner ponownie, aby uruchomić konfigurację.</li>
+</ol>
+</details>
+</div>
+<!-- ========================= -->
+<!-- PROTEK -->
+<!-- ========================= -->
+<div class="card" id="protek">
+<h2>Protek</h2>
+<p>Model: <strong>Protek 9911 LX</strong>. Metoda: USB Flash (pendrive FAT32).</p>
+<details class="details-note" data-model="protek 9911 lx protek9911" id="protek-9911-lx">
+<summary><strong>Protek 9911 LX</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie pendrive</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>. Zalecany jest mały pendrive (często lepiej działają starsze USB 2.0).</li>
+<li>Rozpakuj image na komputerze.</li>
+<li>Skopiuj na pendrive folder z paczki (np. <strong>„Protek 4K”</strong>) wraz z zawartością — bezpośrednio do katalogu głównego pendrive.</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner przełącznikiem z tyłu (jeśli jest).</li>
+<li>Włóż pendrive do portu USB (zgodnie z opisem modelu — często sprawdza się lewy port).</li>
+<li>Przytrzymaj przycisk <strong>POWER</strong> na panelu przednim.</li>
+<li>Włącz tuner przełącznikiem z tyłu i nadal trzymaj POWER.</li>
+<li>Poczekaj, aż na wyświetlaczu pojawi się informacja o rozpoczęciu flashowania — wtedy puść POWER.</li>
+<li>Po zakończeniu tuner uruchomi się w trybie instalacji/kreatora.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> nie odłączaj zasilania podczas flashowania.</p>
+</details>
+</div>
+<!-- ========================= -->
+<!-- DINOBOT -->
+<!-- ========================= -->
+<div class="card" id="dinobot">
+<h2>Dinobot</h2>
+<p>Modele: <strong>Dinobot 4K SE</strong> oraz <strong>Dinobot 4K PLUS</strong>. Metoda: USB Flash.</p>
+<details class="details-note" data-model="dinobot 4k se dinobot4k" id="dinobot-4k-se">
+<summary><strong>Dinobot 4K SE</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie pendrive</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image dla Dinobot 4K SE i rozpakuj na komputerze.</li>
+<li>Skopiuj folder <strong>dinobot</strong> (z rozpakowanej paczki) na pendrive (do katalogu głównego).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Włóż pendrive do portu USB z boku tunera.</li>
+<li>Włącz tuner.</li>
+<li>Jeśli na wyświetlaczu pojawi się komunikat <strong>„Menu”</strong>, naciśnij <strong>ZIELONY</strong> przycisk na pilocie, aby rozpocząć aktualizację.</li>
+<li>Poczekaj na zakończenie — tuner uruchomi się z nowym oprogramowaniem.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> podczas flashowania nie odłączaj zasilania.</p>
+</details>
+<details class="details-note" data-model="dinobot 4k plus dinobot4k plus" id="dinobot-4k-plus">
+<summary><strong>Dinobot 4K PLUS</strong> — wgranie czystego image (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie pendrive</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image dla Dinobot 4K PLUS i rozpakuj na komputerze.</li>
+<li>Skopiuj folder <strong>dinobot</strong> (z rozpakowanej paczki) na pendrive (do katalogu głównego).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Włóż pendrive do portu USB z boku tunera.</li>
+<li>Włącz tuner.</li>
+<li>Jeśli na wyświetlaczu pojawi się komunikat <strong>„Menu”</strong>, naciśnij <strong>ZIELONY</strong> przycisk na pilocie, aby rozpocząć aktualizację.</li>
+<li>Poczekaj na zakończenie — tuner uruchomi się z nowym oprogramowaniem.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> podczas flashowania nie odłączaj zasilania.</p>
+</details>
+</div>
+<!-- ========================= -->
+<!-- AMIKO -->
+<!-- ========================= -->
+<div class="card" id="amiko">
+<h2>Amiko</h2>
+<p>Model: <strong>Amiko Viper 4K</strong>. Metoda: wgrywanie przez <strong>Recovery from USB</strong> (tryb <em>UPDT</em>).</p>
+<details class="details-note" data-model="amiko viper 4k viper4k" id="amiko-viper-4k">
+<summary><strong>Amiko Viper 4K</strong> — wgranie czystego image (USB / Recovery)</summary>
+<h3 style="margin-top:12px;">Co będzie potrzebne</h3>
+<ul style="margin-top:10px;">
+<li>Pendrive sformatowany w <strong>FAT32</strong> (najpewniejszy jest prosty USB 2.0).</li>
+<li>Image dla modelu <strong>Viper 4K</strong> (np. OpenATV/OpenViX).</li>
+<li>Program do rozpakowania (np. 7‑Zip / WinRAR).</li>
+</ul>
+<h3 style="margin-top:12px;">Przygotowanie pendrive</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong>.</li>
+<li>Pobierz image i rozpakuj na komputerze.</li>
+<li>W rozpakowanych plikach zobaczysz folder <strong>amiko</strong> oraz pliki: <strong>apploader.bin</strong>, <strong>bootargs.bin</strong>, <strong>fastboot.bin</strong> (oraz inne pliki z paczki, jeśli występują).</li>
+<li>Skopiuj <strong>folder amiko</strong> oraz powyższe pliki <strong>bezpośrednio do katalogu głównego</strong> pendrive.</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie (Recovery from USB)</h3>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner z prądu.</li>
+<li>Odłącz inne urządzenia USB (dyski/adaptery) — zostaw tylko pendrive z image.</li>
+<li>Włóż pendrive do portu USB (zalecany <strong>tylny</strong> port USB, jeśli jest dostępny).</li>
+<li>Wciśnij i trzymaj przycisk <strong>RESET</strong> z tyłu obudowy, a następnie podłącz zasilanie (włącz tuner).</li>
+<li>Puszczasz <strong>RESET</strong>, gdy na wyświetlaczu pojawi się <strong>„updt”</strong>.</li>
+<li>Poczekaj na pojawienie się menu Recovery na ekranie TV.</li>
+<li>Wybierz <strong>Recovery from USB</strong> i zatwierdź <strong>OK</strong>.</li>
+<li>Poczekaj na zakończenie — postęp widać na ekranie. Po wszystkim tuner uruchomi się ponownie.</li>
+<li>Wyjmij pendrive po restarcie.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Ostrzeżenie:</strong> podczas aktualizacji nie odłączaj zasilania. Po zakończeniu poczekaj kilka sekund i dopiero wtedy wyłącz/włącz tuner, jeśli to konieczne.</p>
+</details>
+</div>
+<!-- DREAMBOX -->
+<!-- ========================= -->
+<div class="card" id="dreambox">
+<h2>Dreambox</h2>
+<p>Programowanie odbywa się przez webinterface. Potrzebujesz komputera/laptopa oraz połączenia kablowego z routerem.</p>
+<details class="details-note" data-model="dreambox webinterface flash ip firmware upload" id="dreambox-webif">
+<summary><strong>Dreambox</strong> — wgrywanie image przez WebInterface</summary>
+<ol style="margin-top:10px;">
+<li>Połącz Dreambox kablem LAN z routerem.</li>
+<li>Wejdź w tryb serwisowy: w starszych modelach przytrzymaj <strong>POWER</strong> lub <strong>strzałkę w górę</strong> (zależnie od bootloadera) i włącz tuner.</li>
+<li>Trzymaj przycisk do momentu, aż na ekranie pojawi się <strong>adres IP</strong>.</li>
+<li>Wpisz ten adres IP w przeglądarce na komputerze — otworzy się strona programowania Dreamboxa.</li>
+<li>Wybierz <strong>Firmware upload</strong> → <strong>Przeglądaj</strong> i wskaż plik image.</li>
+<li>Odznacz checkboxy zachowujące stare ustawienia (jeśli chcesz „czysty start”).</li>
+<li>Kliknij <strong>GO</strong> i poczekaj na zakończenie.</li>
+<li>Po zakończeniu kliknij <strong>Click here to reboot</strong> — tuner uruchomi się z nowym softem.</li>
+</ol>
+</details>
+</div>
+<!-- ========================= -->
+<!-- NBOX -->
+<!-- ========================= -->
+<div class="card" id="nbox">
+<h2>Nbox</h2>
+<p>Instrukcja wgrania softu przez pendrive (Enigma2) — tryb PROG.</p>
+<details class="details-note" data-model="nbox enigma2 prog update.img rootfs.img kernel.img" id="nbox-usb">
+<summary><strong>Nbox</strong> — wgranie softu przez pendrive (PROG)</summary>
+<ol style="margin-top:10px;">
+<li>Użyj pendrive <strong>nie większego niż 4 GB</strong> i sformatuj go na <strong>FAT32</strong>.</li>
+<li>Skopiuj na pendrive trzy pliki: <strong>update.img</strong>, <strong>rootfs.img</strong>, <strong>kernel.img</strong>.</li>
+<li>Wciśnij <strong>POWER</strong> na panelu frontowym i podłącz tuner do prądu.</li>
+<li>Po chwili pojawi się <strong>boot</strong>, a następnie <strong>PROG</strong> — wtedy puść POWER.</li>
+<li>Jeśli pojawi się <strong>FAIL</strong> — oznacza problem z plikami/pendrive.</li>
+<li>Podczas aktualizacji zobaczysz komunikaty: <strong>L-1/S-1</strong> (kernel), <strong>L-2/S-2</strong> (rootfs). Zakończenie poprawne: <strong>OK</strong>.</li>
+<li>Po wgraniu wyłącz tuner z prądu, wyjmij pendrive i włącz ponownie.</li>
+<li>Sprawdź, czy tuner uruchamia się z <strong>NAND</strong> — jeśli nie, użyj strzałek na panelu po napisie boot, wybierz NAND i zatwierdź OK.</li>
+</ol>
+</details>
+</div>
+</div>
+<!-- ========================= -->
+<!-- VU+ -->
+<!-- ========================= -->
+<div class="card" id="vuplus">
+<h2>Vu+</h2>
+<p>Wgrywanie czystego image z pendrive (USB). Instrukcje różnią się zależnie od modelu.</p>
+<details class="details-note" data-model="vuplus vu+ przygotowanie" id="vuplus-przygotowanie">
+<summary><strong>Vu+ — przygotowanie pendrive (wspólne dla modeli)</strong></summary>
+<ol style="margin-top:10px;">
+<li>Plik ZIP rozpakuj.</li>
+<li>Na czysty pendrive (FAT32) wgraj katalog <strong>vuplus</strong> z podkatalogiem i plikami.</li>
+<li>Włóż pendrive do <strong>wyłączonego</strong> tunera.</li>
+</ol>
+</details>
+<details class="details-note" data-model="vuplus zero zero4k solo solose" id="vuplus-zero-solo">
+<summary><strong>Vu+ Zero / Zero 4K / Solo / Solo SE</strong> — wgranie czystego image</summary>
+<ol style="margin-top:10px;">
+<li>Włącz tuner. Aktualizacja rozpocznie się automatycznie.</li>
+<li>O aktualizacji informuje dioda, która narastająco zmienia jasność świecenia.</li>
+<li>Po zakończeniu dioda zacznie pulsować — wtedy wyłącz tuner, wyjmij pendrive i włącz ponownie.</li>
+<li>Urządzenie uruchomi się z nowym oprogramowaniem.</li>
+</ol>
+</details>
+<details class="details-note" data-model="vuplus solo2" id="vuplus-solo2">
+<summary><strong>Vu+ Solo2</strong> — wgranie czystego image</summary>
+<ol style="margin-top:10px;">
+<li>Włącz tuner.</li>
+<li>Gdy na wyświetlaczu pojawi się komunikat <em>„Update, press power”</em> — dotknij/naciśnij <strong>POWER</strong> na panelu przednim.</li>
+<li>Po komunikacie <em>„Update complete”</em> wyłącz tuner, wyjmij pendrive i włącz ponownie.</li>
+</ol>
+</details>
+<details class="details-note" data-model="vuplus duo4k solo4k ultimo4k uno4k uno4kse" id="vuplus-4k-series">
+<summary><strong>Vu+ Duo 4K / Solo 4K / Ultimo 4K / Uno 4K SE</strong> — wgranie czystego image</summary>
+<ol style="margin-top:10px;">
+<li>Włącz tuner.</li>
+<li>Po pojawieniu się komunikatu na ekranie wciśnij/dotknij <strong>POWER</strong> — rozpocznie się aktualizacja.</li>
+<li>Po zakończeniu tuner zrestartuje się i uruchomi z wgranym oprogramowaniem.</li>
+</ol>
+</details>
+</div>
+<!-- ========================= -->
+<!-- ZGEMMA -->
+<!-- ========================= -->
+<div class="card" id="zgemma">
+<h2>Zgemma</h2>
+<p>Najczęściej spotykane modele — instrukcje czystego image lub gotowego systemu (bez backupu), zgodnie z opisem.</p>
+<details class="details-note" data-model="zgemma h11s" id="zgemma-h11s">
+<summary><strong>Zgemma H11s</strong> — instalacja czystego i gotowego softu (bez backupu)</summary>
+<ol style="margin-top:10px;">
+<li>Pobierz plik i <strong>skopiuj na pendrive (nie wypakowywać)</strong>.</li>
+<li>Włóż pendrive do dekodera.</li>
+<li>Podłącz tuner do prądu, jednocześnie trzymając <strong>dowolny przycisk na pilocie</strong> skierowanym w stronę dekodera.</li>
+<li>Wybierz <strong>boot menu</strong> → <strong>flash local image</strong>.</li>
+<li>Wybierz plik i zatwierdź.</li>
+</ol>
+</details>
+<details class="details-note" data-model="zgemma h5" id="zgemma-h5">
+<summary><strong>Zgemma H5</strong> — wgranie softu (USB)</summary>
+<ol style="margin-top:10px;">
+<li>Sformatuj pamięć USB w systemie plików <strong>FAT32</strong>.</li>
+<li>Rozpakuj plik ZIP i umieść zawartość na USB.</li>
+<li>Podłącz pamięć USB do portu USB na tylnym panelu.</li>
+<li>Włącz zasilanie.</li>
+<li>Naciśnij przycisk zasilania na panelu przednim, gdy na wyświetlaczu pojawi się <strong>„USB”</strong>.</li>
+<li>Na wyświetlaczu pojawi się <strong>„Flash”</strong> — poczekaj na zakończenie.</li>
+<li>Po zakończeniu tuner uruchomi się samoczynnie; po starcie wyjmij USB.</li>
+</ol>
+</details>
+<details class="details-note" data-model="zgemma h7s" id="zgemma-h7s">
+<summary><strong>Zgemma H7s</strong> — wgranie czystego image</summary>
+<ol style="margin-top:10px;">
+<li>Wypakuj plik na pendrive tak, aby znajdował się tam katalog <strong>zgemma</strong>, a w nim <strong>h7s</strong>.</li>
+<li>Podłącz pendrive do dekodera.</li>
+<li>Wciśnij przycisk odpowiedzialny za wgrywanie oprogramowania (z przodu pod klapką karty) i podłącz dekoder do prądu.</li>
+<li>Gdy pojawi się <strong>USB</strong> / <strong>FLSH</strong> — czekaj kilka minut.</li>
+<li>Dekoder uruchomi się ponownie z nowym softem.</li>
+</ol>
+</details>
+<details class="details-note" data-model="zgemma h8.2h h82h" id="zgemma-h82h">
+<summary><strong>Zgemma H8.2H</strong> — instalacja czystego i gotowego softu (bez backupu)</summary>
+<ol style="margin-top:10px;">
+<li>Pobierz i wypakuj na pendrive plik tak, aby był tam katalog <strong>h8</strong> oraz dodatkowy plik (zgodnie z paczką).</li>
+<li>Włóż pendrive do dekodera.</li>
+<li>Podłącz tuner do prądu, jednocześnie trzymając <strong>dowolny przycisk na pilocie</strong> skierowanym w stronę dekodera.</li>
+<li>Trzymaj przycisk do momentu, aż dioda zacznie mrugać.</li>
+<li>Po wgraniu oprogramowania dekoder uruchomi się ponownie.</li>
+</ol>
+</details>
+<details class="details-note" data-model="zgemma h9 twin" id="zgemma-h9-twin">
+<summary><strong>Zgemma H9 Twin</strong> — instalacja czystego i gotowego softu (bez backupu)</summary>
+<ol style="margin-top:10px;">
+<li>Pobierz plik i <strong>skopiuj na pendrive (nie wypakowywać)</strong>.</li>
+<li>Włóż pendrive do dekodera.</li>
+<li>Podłącz tuner do prądu, trzymając <strong>dowolny przycisk na pilocie</strong> skierowanym w stronę dekodera.</li>
+<li>W boot menu wybierz <strong>flash local image</strong> → wybierz plik → <strong>OK</strong>.</li>
+<li>Domyślnie wybierz <strong>Linux_1</strong> i potwierdź.</li>
+<li>Poczekaj na komunikat <em>„flashing complete”</em>, a następnie poczekaj aż tuner wróci do bootmenu.</li>
+<li>Wybierz zainstalowany soft (2 pozycja od góry) i <strong>OK</strong>.</li>
+</ol>
+</details>
+<details class="details-note" data-model="zgemma h9 twin se" id="zgemma-h9-twin-se">
+<summary><strong>Zgemma H9 Twin SE</strong> — instalacja czystego i gotowego softu (bez backupu)</summary>
+<ol style="margin-top:10px;">
+<li>Pobierz plik i <strong>skopiuj na pendrive (nie wypakowywać)</strong>.</li>
+<li>Włóż pendrive do dekodera.</li>
+<li>Podłącz tuner do prądu, trzymając <strong>dowolny przycisk na pilocie</strong> skierowanym w stronę dekodera.</li>
+<li>W boot menu wybierz <strong>flash local image</strong> → wybierz plik → <strong>OK</strong>.</li>
+<li>Domyślnie wybierz <strong>Linux_1</strong> i potwierdź.</li>
+<li>Po <em>„flashing complete”</em> poczekaj na powrót do bootmenu i wybierz zainstalowany soft.</li>
+</ol>
+</details>
+<details class="details-note" data-model="zgemma h9.2s h9 2s" id="zgemma-h9-2s">
+<summary><strong>Zgemma H9.2s</strong> — instalacja czystego i gotowego softu (bez backupu)</summary>
+<ol style="margin-top:10px;">
+<li>Rozpakuj soft.</li>
+<li>Na pendrive skopiuj cały katalog <strong>h9</strong> oraz pliki <strong>bootargs</strong>, <strong>fastboot</strong> (zgodnie z paczką).</li>
+<li>Wyłącz dekoder z prądu, podłącz pendrive.</li>
+<li>Z tyłu znajduje się czarny przycisk <strong>RESET</strong> — wciśnij go, podłącz tuner do prądu i trzymaj do momentu, aż logo <strong>A</strong> zacznie mrugać na czerwono.</li>
+<li>Puszczasz przycisk i czekasz na uruchomienie dekodera z nowym softem.</li>
+</ol>
+</details>
+<details class="details-note" data-model="zgemma h9s" id="zgemma-h9s">
+<summary><strong>Zgemma H9s</strong> — instalacja czystego lub gotowego softu (bez backupu)</summary>
+<ol style="margin-top:10px;">
+<li>Rozpakuj soft.</li>
+<li>Na pendrive skopiuj katalog <strong>h9</strong> oraz pliki <strong>bootargs</strong>, <strong>fastboot</strong> (zgodnie z paczką).</li>
+<li>Wyłącz dekoder z prądu, podłącz pendrive.</li>
+<li>Wciśnij tylny przycisk <strong>RESET</strong>, podłącz zasilanie i trzymaj do momentu mrugania logo <strong>A</strong> na czerwono.</li>
+<li>Puszczasz RESET i czekasz na uruchomienie dekodera.</li>
+</ol>
+</details>
+<details class="details-note" data-model="zgemma h9s se" id="zgemma-h9s-se">
+<summary><strong>Zgemma H9s SE</strong> — instalacja czystego/gotowego softu (bez backupu)</summary>
+<ol style="margin-top:10px;">
+<li>Pobierz plik i <strong>skopiuj na pendrive (nie wypakowywać)</strong>.</li>
+<li>Włóż pendrive do dekodera.</li>
+<li>Podłącz tuner do prądu, trzymając <strong>dowolny przycisk na pilocie</strong>.</li>
+<li>W boot menu wybierz <strong>flash local image</strong> i wskaż plik.</li>
+<li>Domyślnie instaluj na partycji <strong>Linux_1</strong>.</li>
+<li>Po zakończeniu wybierz zainstalowany soft i zatwierdź <strong>OK</strong>.</li>
+</ol>
+</details>
+<details class="details-note" data-model="zgemma stra 2s" id="zgemma-stra-2s">
+<summary><strong>Zgemma Stra 2s</strong> — wgranie softu (USB)</summary>
+<ol style="margin-top:10px;">
+<li>Rozpakuj soft. Na pendrive ma trafić katalog <strong>zgemma</strong>.</li>
+<li>Wyłącz tuner z prądu.</li>
+<li>Włóż pendrive do USB i podłącz tuner do prądu.</li>
+<li>Gdy pojawi się <strong>USB</strong>, naciśnij przycisk zasilania z przodu (<strong>POWER</strong>) i trzymaj do napisu <strong>flash</strong>, potem puść.</li>
+<li>Poczekaj do uruchomienia dekodera.</li>
+</ol>
+</details>
+<details class="details-note" data-model="zgemma h10 combo h10" id="zgemma-h10-combo">
+<summary><strong>Zgemma H10 Combo</strong> — recovery + flash image do slotu (USB)</summary>
+<h3 style="margin-top:12px;">Przygotowanie pendrive</h3>
+<ol style="margin-top:10px;">
+<li>Sformatuj pendrive w <strong>FAT32</strong> (zalecane: tablica partycji <strong>MBR</strong>).</li>
+<li>Pobierz wybrany image (np. OpenATV, OpenPLi, OpenSPA).</li>
+<li>Jeśli paczka zawiera <strong>recovery</strong> oraz właściwy <strong>image</strong>: rozpakuj na pendrive tylko pliki <strong>recovery</strong>, a plik image pozostaw <strong>spakowany</strong> (ZIP) — zgodnie z opisem paczki.</li>
+</ol>
+<h3 style="margin-top:12px;">Uruchomienie trybu recovery</h3>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner (z tyłu) i włóż pendrive do USB.</li>
+<li>Włącz tuner przełącznikiem z tyłu i <strong>przytrzymaj przycisk POWER na pilocie</strong>.</li>
+<li>Poczekaj, aż tuner przejdzie do <strong>trybu recovery</strong> (proces może być widoczny w zachowaniu urządzenia).</li>
+</ol>
+<h3 style="margin-top:12px;">Wgrywanie image</h3>
+<ol style="margin-top:10px;">
+<li>W trybie recovery wybierz <strong>Flash local image</strong>.</li>
+<li>Wskaż plik image (ZIP) z pendrive.</li>
+<li>Wybierz slot (zwykle dostępne są <strong>4 sloty</strong>) i rozpocznij flashowanie.</li>
+<li>Po zakończeniu wybierz slot, z którego tuner ma się uruchomić.</li>
+</ol>
+<p style="margin-top:10px;"><strong>Uwaga:</strong> w trakcie flashowania nie odłączaj zasilania.</p>
+</details>
+</div>
+<!-- ========================= -->
+<!-- AX 4K BOX -->
+<!-- ========================= -->
+<div class="card" id="ax">
+<h2>AX 4K BOX</h2>
+<p>Instrukcje wgrywania czystego image z pendrive (USB) dla modeli HD51 i HD61.</p>
+<details class="details-note" data-model="ax 4k box hd51 ax hd51" id="ax-hd51">
+<summary><strong>AX 4K BOX HD51</strong> — wgranie czystego image (USB)</summary>
+<ol style="margin-top:10px;">
+<li>Po pobraniu rozpakuj plik i wgraj katalog <strong>hd51</strong> na pendrive (FAT32).</li>
+<li>Wyłącz tuner, wyciągając wtyczkę z gniazda zasilacza.</li>
+<li>Włóż pendrive do dowolnego gniazda USB.</li>
+<li>Wciśnij i trzymaj przycisk <strong>POWER</strong> z przodu, a następnie (trzymając go) włóż wtyk zasilacza do gniazda.</li>
+<li>Puść przycisk po pojawieniu się komunikatu <strong>„flashing”</strong> na wyświetlaczu.</li>
+<li>Po aktualizacji tuner sam się uruchomi.</li>
+</ol>
+</details>
+<details class="details-note" data-model="ax 4k box hd61 ax hd61" id="ax-hd61">
+<summary><strong>AX 4K BOX HD61</strong> — wgranie czystego image (bootmenu → flash local image)</summary>
+<ol style="margin-top:10px;">
+<li>Wgraj pobrany soft na pendrive sformatowany w <strong>FAT32</strong>.</li>
+<li>Wyłącz tuner.</li>
+<li>Włóż pendrive do dowolnego gniazda USB.</li>
+<li>Włącz tuner przełącznikiem z tyłu odbiornika.</li>
+<li>Przytrzymaj <strong>POWER</strong> na przednim panelu — po chwili na wyświetlaczu pojawi się <strong>„rCUY”</strong>.</li>
+<li>Po chwili na telewizorze pojawi się szare menu.</li>
+<li>Wybierz <strong>Bootmenu</strong>.</li>
+<li>Wybierz <strong>Flash local image</strong>.</li>
+<li>Wybierz nazwę pendrive’a.</li>
+<li>Wybierz wgrany plik.</li>
+<li>Wybierz <strong>Linux 1</strong>.</li>
+<li>Pojawi się pasek postępu aktualizacji (Flashing).</li>
+<li>Po zakończeniu wyłącz i włącz tuner.</li>
+</ol>
+</details>
+</div>
+<!-- ========================= -->
+<!-- GIGABLUE -->
+<!-- ========================= -->
+<div class="card" id="gigablue">
+<h2>GigaBlue</h2>
+<p>Instrukcje wgrywania czystego image z pendrive (USB).</p>
+<details class="details-note" data-model="gigablue uhd trio 4k gigablue trio 4k" id="gigablue-uhd-trio-4k">
+<summary><strong>GigaBlue UHD Trio 4K</strong> — wgranie czystego image (USB)</summary>
+<ol style="margin-top:10px;">
+<li>Z pliku ZIP na pendrive (FAT32) przekopiuj pliki: <strong>apploader.bin</strong>, <strong>bootargs.bin</strong>, <strong>fastboot.bin</strong>, <strong>usb_update.bin</strong>.</li>
+<li>Wyłącz tuner przełącznikiem na tylnym panelu.</li>
+<li>Wciśnij i trzymaj przycisk <strong>POWER</strong> na przednim panelu, po czym włącz tuner przełącznikiem z tyłu.</li>
+<li>Przycisk trzymaj do momentu, aż na wyświetlaczu pojawi się <strong>UPdt</strong>.</li>
+<li>Po pojawieniu się menu wybierz (w zależności od bootloadera) opcję <strong>4 Recovery From USB</strong> lub <strong>Flash Recovery Image</strong>.</li>
+<li>Rozpocznie się aktualizacja — czerwona dioda na panelu będzie pulsować, a postęp będzie widoczny na ekranie TV.</li>
+<li>Po zakończeniu tuner zrestartuje się i uruchomi z nowym oprogramowaniem.</li>
+</ol>
+</details>
+</div>
+<!-- ========================= -->
+<!-- DREAMBOX -->
+<!-- ========================= -->
+<div class="card" id="dreambox">
+<h2>Dreambox</h2>
+<p>Wgrywanie image odbywa się przez <strong>webinterface</strong> (przeglądarkę internetową). Potrzebujesz komputera/laptopa oraz połączenia Dreamboxa z routerem najlepiej kablem LAN.</p>
+<details class="details-note" data-model="dreambox dm webinterface flash" id="dreambox-webflash">
+<summary><strong>Dreambox</strong> — wgrywanie image przez przeglądarkę (webinterface)</summary>
+<h3 style="margin-top:12px;">Co jest potrzebne</h3>
+<ul style="margin-top:10px;">
+<li>Komputer lub laptop w tej samej sieci.</li>
+<li>Połączenie Dreamboxa z routerem (najlepiej <strong>LAN</strong>).</li>
+<li>Plik image do wgrania (z oficjalnej strony lub zaufanego źródła, np. <a href="http://dreamboxupdate.com" rel="noopener" target="_blank">dreamboxupdate.com</a>).</li>
+</ul>
+<h3>Tryb serwisowy (Rescue/Service mode)</h3>
+<p style="margin-top:10px;">Sposób wejścia może się różnić w zależności od modelu/bootloadera. Najczęściej:</p>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner przełącznikiem (jeśli jest) lub odłącz zasilanie.</li>
+<li>Przytrzymaj przycisk <strong>POWER</strong> (czasem <strong>strzałkę w górę</strong>) na panelu.</li>
+<li>Włącz tuner (podłącz zasilanie / przełącznik), trzymając przycisk do momentu, aż na ekranie pojawi się <strong>adres IP</strong>.</li>
+</ol>
+<h3>Wgrywanie image</h3>
+<ol style="margin-top:10px;">
+<li>Na komputerze wpisz wyświetlony adres IP w przeglądarce.</li>
+<li>Wybierz <strong>Firmware upload</strong>.</li>
+<li>Kliknij <strong>Browse/Przeglądaj</strong> i wskaż plik image.</li>
+<li><strong>Odznacz</strong> checkboxy zachowujące stare ustawienia (żeby wgrać „czysto”).</li>
+<li>Kliknij <strong>GO</strong> i poczekaj na zakończenie.</li>
+<li>Na końcu kliknij <strong>Click here to reboot</strong> — tuner uruchomi się z nowym oprogramowaniem.</li>
+</ol>
+</details>
+</div>
+<!-- ========================= -->
+<!-- NBOX -->
+<!-- ========================= -->
+<div class="card" id="nbox">
+<h2>Nbox</h2>
+<p>Instrukcja wgrywania softu przez pendrive (dla początkujących — krok po kroku). Używaj <strong>właściwych plików</strong> pod swój model.</p>
+<details class="details-note" data-model="nbox n-box nbox usb flash" id="nbox-usb-flash">
+<summary><strong>Nbox</strong> — wgranie softu przez pendrive (update.img / rootfs.img / kernel.img)</summary>
+<h3 style="margin-top:12px;">Przygotowanie pendrive</h3>
+<ol style="margin-top:10px;">
+<li>Użyj pendrive <strong>nie większego niż 4 GB</strong> i sformatuj go w <strong>FAT32</strong>.</li>
+<li>Skopiuj na pendrive (do katalogu głównego) trzy pliki: <strong>update.img</strong>, <strong>rootfs.img</strong>, <strong>kernel.img</strong>.</li>
+</ol>
+<h3>Wgrywanie</h3>
+<ol style="margin-top:10px;">
+<li>Wciśnij przycisk <strong>POWER</strong> na panelu przednim.</li>
+<li>Trzymając POWER, podłącz tuner do prądu.</li>
+<li>Po chwili pojawi się <strong>boot</strong>, a następnie <strong>PROG</strong>.</li>
+<li>Puść przycisk POWER, gdy pokaże się <strong>PROG</strong>.</li>
+<li>Poczekaj do zakończenia procesu (na wyświetlaczu pojawi się <strong>OK</strong>).</li>
+</ol>
+<h3>Komunikaty na wyświetlaczu (co oznaczają)</h3>
+<ul style="margin-top:10px;">
+<li><strong>L–1</strong> — ładowanie <strong>kernel.img</strong> do pamięci</li>
+<li><strong>S–1</strong> — zapis <strong>kernel.img</strong> do NAND</li>
+<li><strong>E–1</strong> — błąd w fazie L–1</li>
+<li><strong>L–2</strong> — ładowanie <strong>rootfs.img</strong> do pamięci</li>
+<li><strong>S–2</strong> — zapis <strong>rootfs.img</strong> do NAND</li>
+<li><strong>E–2</strong> — błąd w fazie L–2</li>
+<li><strong>FAIL</strong> — problem z plikami/pendrive (sprawdź FAT32, rozmiar pendrive, nazwy plików)</li>
+</ul>
+<h3>Po wgraniu</h3>
+<ol style="margin-top:10px;">
+<li>Wyłącz tuner z prądu i wyjmij pendrive.</li>
+<li>Włącz ponownie tuner i poczekaj na start.</li>
+<li>Jeśli tuner nie uruchamia się z NAND: po napisie <strong>boot</strong> użyj strzałek na panelu, wybierz <strong>NAND</strong> i potwierdź <strong>OK</strong>.</li>
+</ol>
+</details>
+</div>
+<div class="card" id="faq">
+<h2>Najczęstsze problemy (szybka pomoc)</h2>
+<details class="details-note" data-model="problem usb" id="faq-usb">
+<summary><strong>Tuner nie widzi pendrive / nie startuje flash</strong></summary>
+<ul style="margin-top:10px;">
+<li>Spróbuj innego pendrive (prosty USB 2.0) i ponownie sformatuj <strong>FAT32</strong>.</li>
+<li>Upewnij się, że pliki/katalogi są <strong>w głównym katalogu pendrive</strong> (nie w dodatkowym folderze po rozpakowaniu ZIP).</li>
+<li>Spróbuj innego portu USB (często lepiej działa tylny).</li>
+</ul>
+</details>
+<details class="details-note" data-model="problem czas" id="faq-czas">
+<summary><strong>Po wgraniu softu coś „dziwnie działa”</strong></summary>
+<ul style="margin-top:10px;">
+<li>Po pierwszym uruchomieniu ustaw <strong>czas</strong> i <strong>sieć</strong>.</li>
+<li>Wykonaj <strong>Restart GUI</strong> po instalacji większych dodatków.</li>
+<li>Jeśli tuner wchodzi w bootmenu — wybierz zainstalowany system (np. Linux_1).</li>
+</ul>
+</details>
+</div>
+</main>
+<footer class="site-footer">
+<div class="footer-inner">
+<div class="footer-grid">
+<div>
+<div class="footer-brand-row">
+<img alt="AIO-IPTV.pl" class="footer-logo" src="pliki/logo.png"/>
+<div>
+<div class="footer-brand-name">AIO-IPTV.pl</div>
+<div class="footer-brand-tag">Enigma2 • IPTV • Tools • AI</div>
+</div>
+</div>
+<div class="footer-note">
+          Nowoczesne centrum Enigma2: wtyczki, listy, poradniki, narzędzia oraz AI‑Chat. Dostępne po polsku i po angielsku.
+        </div>
+</div>
+<div>
+<div class="footer-title">Nawigacja</div>
+<a class="footer-link" href="index.html">Start</a>
+<a class="footer-link" href="ai-chat.html">AI‑Chat</a>
+<a class="footer-link" href="downloads.html">Pobieranie</a>
+<a class="footer-link" href="guides.html">Poradniki</a>
+</div>
+<div>
+<div class="footer-title">Sekcje</div>
+<a class="footer-link" href="plugins.html">Wtyczki</a>
+<a class="footer-link" href="channel-lists.html">Listy kanałów</a>
+<a class="footer-link" href="tools.html">Narzędzia</a>
+<a class="footer-link" href="systems.html">Systemy</a>
+</div>
+<div>
+<div class="footer-title">Kontakt i wsparcie</div>
+<div class="footer-kpi"><span>📧</span><span>Email: <a class="footer-link inline" href="mailto:msisystem@t.pl">msisystem@t.pl</a></span></div>
+<div class="footer-kpi"><span>✈️</span><span>Telegram: <a class="footer-link inline" href="https://t.me/PawelPawelek" rel="noopener" target="_blank">t.me/PawelPawelek</a></span></div>
+<div class="footer-kpi"><span>💬</span><span>Messenger: <a class="footer-link inline" href="https://m.me/100064704540847" rel="noopener" target="_blank">Napisz wiadomość</a></span></div>
+<div class="footer-support">
+<div class="footer-title" data-i18n="support" style="margin-bottom:10px">Wesprzyj projekt</div>
+<div class="footer-support-row">
+<a aria-label="Revolut" class="support-btn support-revolut" href="https://revolut.me/pawelz75" rel="noopener" target="_blank">
+<span class="support-logo">
+<svg aria-hidden="true" focusable="false" role="img" viewbox="0 0 64 64"><defs><lineargradient id="revG" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#3b82f6"></stop><stop offset="1" stop-color="#22d3ee"></stop></lineargradient></defs><circle cx="32" cy="32" fill="url(#revG)" r="28"></circle><path d="M22 46V18h13.6c7 0 11.4 3.5 11.4 9.5 0 4.8-3 8-8.2 8.8L46 46h-7.6l-6.2-9.2h-3.8V46H22zm6.4-14.6h6.4c3.4 0 5.3-1.4 5.3-4s-1.9-4-5.3-4h-6.4v8z" fill="#0b1220"></path></svg>
+</span>
+<span class="support-text"><span class="support-name">Revolut</span><span class="support-sub">Dzięki!</span></span>
+</a>
+<a aria-label="PayPal" class="support-btn support-paypal" data-paypal="aHR0cHM6Ly93d3cucGF5cGFsLmNvbS9zZW5kP3JlY2lwaWVudD1wYXdlbHphcnp5Y2tpNjFAZ21haWwuY29tJmN1cnJlbmN5Q29kZT1QTE4=" href="#" id="paypalSupportBtn" rel="noopener" target="_blank">
+<span class="support-logo">
+<svg aria-hidden="true" focusable="false" role="img" viewbox="0 0 64 64"><defs><lineargradient id="ppG" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#60a5fa"></stop><stop offset="1" stop-color="#a78bfa"></stop></lineargradient></defs><circle cx="32" cy="32" fill="url(#ppG)" r="28"></circle><path d="M25 46l4-26h13c6 0 10 3.4 10 8.8 0 7.2-5.4 11.2-13.4 11.2h-6.2l-1 6H25zm9.1-12.2h4.5c4.1 0 6.6-1.8 6.6-5 0-2.2-1.5-3.5-4.3-3.5h-6.1l-0.7 8.5z" fill="#0b1220"></path></svg>
+</span>
+<span class="support-text"><span class="support-name">PayPal</span><span class="support-sub">Dzięki!</span></span>
+</a>
+</div>
+</div>
+<div class="footer-kpi" style="margin-top:12px; font-size:.88rem; opacity:.85"><span>🐛</span><span>Błąd? <a class="footer-link inline" href="https://github.com/OliOli2013/aio-iptv-projekt/issues" rel="noopener" target="_blank">Zgłoś na GitHub</a></span></div>
+</div>
+</div>
+<div class="footer-bottom">
+<div>© <span id="year"></span> AIO‑IPTV.pl • Paweł Pawełek</div>
+<div class="footer-legal">
+<a href="support.html">Wsparcie</a>
+<a href="contact.html">Kontakt</a>
+<a href="contact.html#opinia">Podziel się opinią</a>
+</div>
+</div>
+</div>
+</footer>
+<script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+<script src="assets/js/site.js?v=next1"></script>
+<script>
+(function(){
+  function normalize(s){
+    return String(s || '').toLowerCase().replace(/\s+/g,' ').trim();
+  }
+
+  function openFromHash(){
+    var h = (location.hash || '').replace('#','').trim();
+    if(!h) return;
+
+    // Alias mapping (kompatybilność ze starszymi linkami / skrótami)
+    var alias = {
+      'ustym-combo': 'ustym-4kpro-twin',
+      'ustym-twin': 'ustym-4kpro-twin',
+      'ustym-4kpro': 'ustym-4kpro-twin',
+      'octagon-sf8008': 'octagon-sf8008-combo',
+      'octagon-sf8008-twin': 'octagon-sf8008-combo',
+      'octagon-sf8008-supreme': 'octagon-sf8008-combo',
+      'octagon-sf4008': 'octagon-sf4008',
+      'ax-hd51': 'ax-hd51',
+      'ax-hd61': 'ax-hd61',
+      'mutant': 'mutant-hd51-hd60-hd66se',
+      'gigablue': 'gigablue-ue-quad-uhd',
+      'formuler': 'formuler-f1-f3-f4',
+      'ariva': 'ariva-atv-combo-tt',
+      'qviart': 'qviart-dual-e2-usb',
+      'dreambox': 'dreambox-webif',
+      'nbox': 'nbox-usb'
+    };
+
+    var targetId = alias[h] || h;
+    var el = document.getElementById(targetId);
+
+    // Jeśli hash wskazuje na <details>, otwórz go
+    if(el && el.tagName && el.tagName.toLowerCase() === 'details'){
+      el.open = true;
+      setTimeout(function(){ el.scrollIntoView({block:'start', behavior:'smooth'}); }, 60);
+      return;
+    }
+
+    // Jeśli hash wskazuje na element wewnątrz, otwórz najbliższy <details>
+    if(el && el.closest){
+      var d = el.closest('details');
+      if(d){
+        d.open = true;
+        setTimeout(function(){ d.scrollIntoView({block:'start', behavior:'smooth'}); }, 60);
+      }
+    }
+  }
+
+  function setupSearch(){
+    var input = document.getElementById('modelSearch');
+    var clear = document.getElementById('clearSearch');
+    var hint = document.getElementById('searchHint');
+    if(!input) return;
+
+    var items = Array.prototype.slice.call(document.querySelectorAll('details[data-model]'));
+
+    function apply(){
+      var q = normalize(input.value);
+      var visible = 0;
+
+      items.forEach(function(d){
+        var key = normalize(d.getAttribute('data-model'));
+        var title = normalize((d.querySelector('summary') || {}).textContent || '');
+        var ok = !q || key.indexOf(q) !== -1 || title.indexOf(q) !== -1;
+        d.style.display = ok ? '' : 'none';
+        if(ok) visible++;
+      });
+
+      if(hint){
+        hint.textContent = q ? ('Wyniki: ' + visible + ' • Szukasz: ' + input.value) : '';
+      }
+    }
+
+    input.addEventListener('input', apply);
+
+    if(clear){
+      clear.addEventListener('click', function(){
+        input.value = '';
+        apply();
+        input.focus();
+      });
+    }
+
+    apply();
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    setupSearch();
+    openFromHash();
+  });
+
+  window.addEventListener('hashchange', openFromHash);
+})();
+</script>
+
+<script defer="" src="assets/js/stats-nav.js"></script>
+</body>
+</html>

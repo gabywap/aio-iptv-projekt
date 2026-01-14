@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<title>AIO-IPTV.pl — Statystyki</title>
+<link href="assets/css/site.css" rel="stylesheet">
+<link href="assets/css/stats.css" rel="stylesheet">
+<script defer="" src="assets/js/site.js"></script>
+<script defer="" src="assets/js/stats.js"></script>
+<script defer="" src="assets/js/stats-nav.js"></script>
+</link></link></head>
+<body>
+<header class="topbar">
+<div class="container topbar-inner">
+<a aria-label="AIO-IPTV.pl" class="brand" href="index.html">
+<img alt="AIO-IPTV.pl" class="brand-logo" src="logo.png"/>
+<div class="brand-txt">
+<span class="brand-title">AIO-IPTV.pl</span>
+<span class="brand-tag">Enigma2 • IPTV • Tools • AI</span>
+</div>
+</a>
+<button aria-label="Menu" class="icon-btn" id="navToggle">☰</button>
+</div>
+</header>
+<div class="nav">
+<div class="container">
+<div class="nav-inner nav">
+<a data-i18n="nav_home" href="index.html">Start</a>
+<a data-i18n="nav_ai" href="ai-chat.html">AI-Chat Enigma2</a>
+<a data-i18n="nav_plugins" href="plugins.html">Wtyczki</a>
+<a data-i18n="nav_lists" href="channel-lists.html">Listy kanałów</a>
+<a data-i18n="nav_guides" href="guides.html">Poradniki</a>
+<a data-i18n="nav_tools" href="tools.html">Narzędzia</a>
+<a data-i18n="nav_systems" href="systems.html">Systemy</a>
+<a data-i18n="nav_contact" href="contact.html">Kontakt</a>
+<a data-i18n="nav_opinion" href="contact.html#opinia">Podziel się opinią</a>
+<a class="active-link" href="stats.html" id="statsNavLink">Statystyki</a>
+<a data-i18n="nav_support" href="support.html">Wsparcie</a>
+</div>
+</div>
+</div>
+<main class="container">
+<section class="hero" style="padding-top: 24px;">
+<h1 id="statsTitle">Statystyki</h1>
+<p class="muted" id="statsSub">
+        Panel statystyk (Google Analytics 4) osadzony z Looker Studio.
+      </p>
+<div class="card" style="margin-top: 16px;">
+<div class="card-body">
+<div class="notice" id="statsNotice" style="display:none;"></div>
+<div class="stats-frame-wrap">
+<iframe class="stats-frame" id="statsFrame" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Statystyki"></iframe>
+</div>
+<div class="muted" style="margin-top: 10px; font-size: 13px;">
+<span id="statsHint"></span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<div class="backdrop" id="drawerBackdrop"></div>
+<aside aria-hidden="true" class="drawer" id="mobileDrawer">
+<div class="drawer-head">
+<div class="drawer-title">Menu</div>
+<button aria-label="Close" class="icon-btn" data-drawer-close="">✕</button>
+</div>
+<nav class="drawer-links">
+<a href="index.html">🏠 <span data-i18n="nav_home">Start</span></a>
+<a href="ai-chat.html">🤖 <span data-i18n="nav_ai">AI-Chat Enigma2</span></a>
+<a href="plugins.html">🧩 <span data-i18n="nav_plugins">Wtyczki</span></a>
+<a href="channel-lists.html">📺 <span data-i18n="nav_lists">Listy kanałów</span></a>
+<a href="guides.html">📘 <span data-i18n="nav_guides">Poradniki</span></a>
+<a href="tools.html">🛠 <span data-i18n="nav_tools">Narzędzia</span></a>
+<a href="systems.html">💿 <span data-i18n="nav_systems">Systemy</span></a>
+<a href="contact.html">✉️ <span data-i18n="nav_contact">Kontakt</span></a>
+<a href="contact.html#opinia">💬 <span data-i18n="nav_opinion">Podziel się opinią</span></a>
+<a href="stats.html">📈 <span>Statystyki</span></a>
+<a href="support.html">☕ <span data-i18n="nav_support">Wsparcie</span></a>
+</nav>
+</aside>
+</body>
+</html>

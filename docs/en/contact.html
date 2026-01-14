@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<title>Kontakt — AIO-IPTV.pl</title>
+<link href="pliki/logo.png" rel="icon">
+<link href="assets/css/site.css?v=next1" rel="stylesheet">
+</link></link></head>
+<body data-page="next">
+<div class="topbar">
+<div class="container">
+<div class="topbar-inner">
+<a aria-label="AIO-IPTV.pl" class="brand" href="index.html">
+<img alt="AIO-IPTV.pl" src="pliki/logo.png"/>
+<div>
+<div class="name">AIO‑IPTV.pl</div>
+<span class="tag">Enigma2 • IPTV • Tools • AI</span>
+</div>
+</a>
+<a class="pill pill-accent" download="" href="pliki/enigma2-plugin-extensions-panelaio_6.0_all.ipk">
+<span data-i18n="cta_update">Aktualizacja: AIO Panel v6.0</span>
+<strong data-i18n="cta_download">Pobierz teraz</strong>
+</a>
+<div class="spacer"></div>
+<div class="notif">
+<button aria-label="Updates" class="icon-btn" id="bellBtn">🔔</button>
+<div aria-live="polite" class="notif-panel" id="notifPanel"></div>
+</div>
+<button aria-label="Menu" class="icon-btn" id="navToggle">☰</button>
+</div>
+</div>
+<div class="nav">
+<div class="container">
+<div class="nav-inner nav">
+<a data-i18n="nav_home" href="index.html">Start</a>
+<a data-i18n="nav_ai" href="ai-chat.html">AI-Chat Enigma2</a>
+<a data-i18n="nav_plugins" href="plugins.html">Wtyczki</a>
+<a data-i18n="nav_lists" href="channel-lists.html">Listy kanałów</a>
+<a data-i18n="nav_guides" href="guides.html">Poradniki</a>
+<a data-i18n="nav_tools" href="tools.html">Narzędzia</a>
+<a data-i18n="nav_systems" href="systems.html">Systemy</a>
+<a data-i18n="nav_contact" href="contact.html">Kontakt</a>
+<a data-i18n="nav_opinion" href="contact.html#opinia">Podziel się opinią</a>
+<a data-i18n="nav_support" href="support.html">Wsparcie</a>
+</div>
+</div>
+</div>
+</div>
+<div class="drawer-backdrop" data-drawer-close="" id="drawerBackdrop"></div>
+<aside aria-hidden="true" class="drawer" id="mobileDrawer">
+<div class="drawer-head">
+<div class="drawer-title">Menu</div>
+<button aria-label="Close" class="icon-btn" data-drawer-close="">✕</button>
+</div>
+<a href="index.html">🏠 <span data-i18n="nav_home">Start</span></a>
+<a href="ai-chat.html">🤖 <span data-i18n="nav_ai">AI-Chat Enigma2</span></a>
+<a href="plugins.html">🧩 <span data-i18n="nav_plugins">Wtyczki</span></a>
+<a href="channel-lists.html">📺 <span data-i18n="nav_lists">Listy kanałów</span></a>
+<a href="guides.html">📘 <span data-i18n="nav_guides">Poradniki</span></a>
+<a href="tools.html">🛠 <span data-i18n="nav_tools">Narzędzia</span></a>
+<a href="systems.html">💿 <span data-i18n="nav_systems">Systemy</span></a>
+<a href="contact.html">✉️ <span data-i18n="nav_contact">Kontakt</span></a>
+<a href="contact.html#opinia">💬 <span data-i18n="nav_opinion">Podziel się opinią</span></a>
+<a href="stats.html">Statystyki</a><a href="support.html">☕ <span data-i18n="nav_support">Wsparcie</span></a>
+</aside>
+<main class="container">
+<section class="section"><div class="section-head"><div><h2 class="section-title">Kontakt</h2><p class="section-sub">Kanały kontaktu oraz szybkie linki.</p></div></div></section>
+<div class="card" data-aos="fade-up" id="kontakt">
+<h2>Kontakt</h2>
+<p>Masz pytania lub problem? Napisz do mnie.</p>
+<!-- Kontakt: formularz i szybkie kanały. -->
+<div class="contact-grid">
+<div class="contact-card">
+<h2 class="contact-title">Napisz do mnie</h2>
+<p class="contact-subtitle">Masz pytania lub problem z Enigma2? Opisz krótko sytuację, podaj model tunera i image (OpenATV/OpenPLi).</p>
+<form action="https://formspree.io/f/xeoyreyk" class="contact-form" id="opinia" method="POST">
+<label class="contact-label" for="contactEmail">Twój e-mail (do odpowiedzi)</label>
+<input autocomplete="email" id="contactEmail" name="email" placeholder="np. twoj@email.com" required="" type="email"/>
+<label class="contact-label" for="contactMessage">Wiadomość</label>
+<textarea id="contactMessage" name="message" placeholder="Np. model tunera, image, opis problemu, błąd z logu…" required="" rows="6"></textarea>
+<div class="contact-actions">
+<button class="btn btn-primary" type="submit">Wyślij wiadomość</button>
+<span class="contact-note">Formularz działa przez Formspree. Twoje dane służą tylko do odpowiedzi.</span>
+</div>
+</form>
+</div>
+<aside class="contact-card contact-side">
+<h2 class="contact-title">Szybki kontakt</h2>
+<div class="contact-links">
+<a class="contact-link contact-link-telegram" href="https://t.me/PawelPawelek" rel="noopener" target="_blank">Telegram</a>
+<a class="contact-link contact-link-messenger" href="https://m.me/100064704540847" rel="noopener" target="_blank">Messenger</a>
+<a class="contact-link contact-link-mail" href="mailto:msisystem@t.pl">msisystem@t.pl</a>
+</div>
+<div class="contact-divider"></div>
+<h3 class="contact-mini-title">Wsparcie projektu</h3>
+<p class="contact-subtitle">Jeśli chcesz pomóc w rozwoju strony i wtyczek: „Postaw kawę”.</p>
+<a class="btn btn-ghost" href="support.html">Przejdź do wsparcia</a>
+<div class="contact-divider"></div>
+<h3 class="contact-mini-title">Technologie</h3>
+<p class="contact-subtitle">
+      AI‑Chat w trybie ONLINE może korzystać z prywatnego endpointu (np. Supabase Edge Functions).
+    </p>
+<!-- Supabase (https://supabase.com/) – backend dla trybu ONLINE (Edge Functions). Nie umieszczaj kluczy prywatnych w GitHub Pages. -->
+<a class="contact-link contact-link-supabase" href="https://supabase.com/" rel="noopener" target="_blank">Supabase</a>
+</aside>
+</div>
+<hr class="contact-hr"/>
+<h2>Informacje Prawne</h2>
+<p style="margin-bottom: 15px;">Kliknij poniżej, aby rozwinąć szczegóły.</p>
+<div class="accordion-item" id="polityka-prywatnosci">
+<button class="accordion-header">Polityka prywatności</button>
+<div class="accordion-content">
+<p>
+                        Niniejsza strona ma charakter informacyjny i hobbystyczny. Administratorem danych osobowych
+                        jest właściciel projektu AIO-IPTV.pl – Paweł Pawełek, kontakt:
+                        <a href="mailto:msisystem@t.pl">msisystem@t.pl</a>.
+                    </p>
+<p>
+                        Nie profiluję użytkowników. GitHub Pages może zbierać logi techniczne. Linki zewnętrzne mają własne zasady.
+                    </p>
+</div>
+</div>
+<div class="accordion-item" id="rodo">
+<button class="accordion-header">RODO</button>
+<div class="accordion-content">
+<p>
+                        Przetwarzam Twój email tylko, żeby odpisać na wiadomość. Obsługuje to Formspree.
+                        Masz prawo wglądu i usunięcia danych.
+                    </p>
+</div>
+</div>
+</div>
+</main>
+<footer class="site-footer">
+<div class="footer-inner">
+<div class="footer-grid">
+<div>
+<div class="footer-brand-row">
+<img alt="AIO-IPTV.pl" class="footer-logo" src="pliki/logo.png"/>
+<div>
+<div class="footer-brand-name">AIO-IPTV.pl</div>
+<div class="footer-brand-tag">Enigma2 • IPTV • Tools • AI</div>
+</div>
+</div>
+<div class="footer-note">
+          Nowoczesne centrum Enigma2: wtyczki, listy, poradniki, narzędzia oraz AI‑Chat. Dostępne po polsku i po angielsku.
+        </div>
+</div>
+<div>
+<div class="footer-title">Nawigacja</div>
+<a class="footer-link" href="index.html">Start</a>
+<a class="footer-link" href="ai-chat.html">AI‑Chat</a>
+<a class="footer-link" href="plugins.html#pobieranie">Pobieranie</a>
+<a class="footer-link" href="guides.html">Poradniki</a>
+</div>
+<div>
+<div class="footer-title">Sekcje</div>
+<a class="footer-link" href="plugins.html">Wtyczki</a>
+<a class="footer-link" href="channel-lists.html">Listy kanałów</a>
+<a class="footer-link" href="tools.html">Narzędzia</a>
+<a class="footer-link" href="systems.html">Systemy</a>
+</div>
+<div>
+<div class="footer-title">Kontakt i wsparcie</div>
+<div class="footer-kpi"><span>📧</span><span>Email: <a class="footer-link inline" href="mailto:msisystem@t.pl">msisystem@t.pl</a></span></div>
+<div class="footer-kpi"><span>✈️</span><span>Telegram: <a class="footer-link inline" href="https://t.me/PawelPawelek" rel="noopener" target="_blank">t.me/PawelPawelek</a></span></div>
+<div class="footer-kpi"><span>💬</span><span>Messenger: <a class="footer-link inline" href="https://m.me/100064704540847" rel="noopener" target="_blank">Napisz wiadomość</a></span></div>
+<div class="footer-support">
+<div class="footer-title" data-i18n="support" style="margin-bottom:10px">Wesprzyj projekt</div>
+<div class="footer-support-row">
+<a aria-label="Revolut" class="support-btn support-revolut" href="https://revolut.me/pawelz75" rel="noopener" target="_blank">
+<span class="support-logo">
+<svg aria-hidden="true" focusable="false" role="img" viewbox="0 0 64 64"><defs><lineargradient id="revG" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#3b82f6"></stop><stop offset="1" stop-color="#22d3ee"></stop></lineargradient></defs><circle cx="32" cy="32" fill="url(#revG)" r="28"></circle><path d="M22 46V18h13.6c7 0 11.4 3.5 11.4 9.5 0 4.8-3 8-8.2 8.8L46 46h-7.6l-6.2-9.2h-3.8V46H22zm6.4-14.6h6.4c3.4 0 5.3-1.4 5.3-4s-1.9-4-5.3-4h-6.4v8z" fill="#0b1220"></path></svg>
+</span>
+<span class="support-text"><span class="support-name">Revolut</span><span class="support-sub">Dzięki!</span></span>
+</a>
+<a aria-label="PayPal" class="support-btn support-paypal" data-paypal="aHR0cHM6Ly93d3cucGF5cGFsLmNvbS9zZW5kP3JlY2lwaWVudD1wYXdlbHphcnp5Y2tpNjFAZ21haWwuY29tJmN1cnJlbmN5Q29kZT1QTE4=" href="#" id="paypalSupportBtn" rel="noopener" target="_blank">
+<span class="support-logo">
+<svg aria-hidden="true" focusable="false" role="img" viewbox="0 0 64 64"><defs><lineargradient id="ppG" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#60a5fa"></stop><stop offset="1" stop-color="#a78bfa"></stop></lineargradient></defs><circle cx="32" cy="32" fill="url(#ppG)" r="28"></circle><path d="M25 46l4-26h13c6 0 10 3.4 10 8.8 0 7.2-5.4 11.2-13.4 11.2h-6.2l-1 6H25zm9.1-12.2h4.5c4.1 0 6.6-1.8 6.6-5 0-2.2-1.5-3.5-4.3-3.5h-6.1l-0.7 8.5z" fill="#0b1220"></path></svg>
+</span>
+<span class="support-text"><span class="support-name">PayPal</span><span class="support-sub">Dzięki!</span></span>
+</a>
+</div>
+</div>
+<div class="footer-kpi" style="margin-top:12px; font-size:.88rem; opacity:.85"><span>🐛</span><span>Błąd? <a class="footer-link inline" href="https://github.com/OliOli2013/aio-iptv-projekt/issues" rel="noopener" target="_blank">Zgłoś na GitHub</a></span></div>
+</div>
+</div>
+<div class="footer-bottom">
+<div>© <span id="year"></span> AIO‑IPTV.pl • Paweł Pawełek</div>
+<div class="footer-legal">
+<a href="support.html">Wsparcie</a>
+<a href="contact.html">Kontakt</a>
+<a href="contact.html#opinia">Podziel się opinią</a>
+</div>
+</div>
+</div>
+</footer>
+<script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+<script src="assets/js/site.js?v=next1"></script>
+</body>
+</html>
